@@ -7,6 +7,8 @@ import android.content.Context
  */
 interface AppContainer {
     val itemsRepository: ItemsRepository
+    val listaRepository: ListaRepository
+    val tipoRepository: TipoRepository
 }
 
 /**
@@ -18,5 +20,13 @@ class AppDataContainer(private val context: Context) : AppContainer {
      */
     override val itemsRepository: ItemsRepository by lazy {
         OfflineItemsRepository(InventoryDatabase.getDatabase(context).itemDao())
+    }
+
+    override val listaRepository: ListaRepository by lazy {
+        OfflineListaRepository(InventoryDatabase.getDatabase(context).listaDao())
+    }
+
+    override val tipoRepository: TipoRepository by lazy {
+        OfflineTipoRepository(InventoryDatabase.getDatabase(context).tipoDao())
     }
 }

@@ -9,13 +9,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.veramed.inventario.ui.home.HomeDestination
+import com.veramed.inventario.ui.home.HomeLista
+import com.veramed.inventario.ui.home.HomeListaDestino
 import com.veramed.inventario.ui.home.HomeScreen
 import com.veramed.inventario.ui.item.ItemDetailsDestination
 import com.veramed.inventario.ui.item.ItemDetailsScreen
 import com.veramed.inventario.ui.item.ItemEntryDestination
 import com.veramed.inventario.ui.item.ItemEntryScreen
-import com.veramed.inventorio.ui.item.ItemEditDestination
-import com.veramed.inventorio.ui.item.ItemEditScreen
+import com.veramed.inventario.ui.item.ItemEditDestination
+import com.veramed.inventario.ui.item.ItemEditScreen
+import com.veramed.inventario.ui.lista.ListaEntryDestination
+import com.veramed.inventario.ui.lista.ListaEntryScreen
 
 
 /**
@@ -28,9 +32,18 @@ fun InventoryNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = HomeDestination.route,
+        startDestination = HomeListaDestino.route,
         modifier = modifier
     ) {
+
+        composable(route = HomeListaDestino.route) {
+            HomeLista(
+                navigateToListaEntry = { navController.navigate(ListaEntryDestination.route) },
+                navigateToItemUpdate = {
+                    navController.navigate("${ItemDetailsDestination.route}/${it}")
+                }
+            )
+        }
         composable(route = HomeDestination.route) {
             HomeScreen(
                 navigateToItemEntry = { navController.navigate(ItemEntryDestination.route) },
@@ -67,5 +80,14 @@ fun InventoryNavHost(
                 onNavigateUp = { navController.navigateUp() }
             )
         }
+
+        composable(route =ListaEntryDestination.route) {
+            ListaEntryScreen(
+                navigateBack = { navController.popBackStack() },
+                onNavigateUp = { navController.navigateUp() }
+            )
+        }
+
+
     }
 }

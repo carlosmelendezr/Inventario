@@ -1,6 +1,6 @@
 
 
-package com.veramed.inventorio.ui.item
+package com.veramed.inventario.ui.item
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
@@ -13,8 +13,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.veramed.inventario.InventoryTopAppBar
 import com.veramed.inventario.R
 import com.veramed.inventario.ui.AppViewModelProvider
-import com.veramed.inventario.ui.item.ItemEditViewModel
-import com.veramed.inventario.ui.item.ItemEntryBody
 import com.veramed.inventario.ui.navigation.NavigationDestination
 import com.veramed.inventario.ui.theme.InventoryTheme
 
