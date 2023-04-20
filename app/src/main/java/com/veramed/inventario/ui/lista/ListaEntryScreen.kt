@@ -1,8 +1,11 @@
 package com.veramed.inventario.ui.lista
 
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -99,8 +102,9 @@ fun ItemInputForm(
     onValueChange: (ListaDetalles) -> Unit = {},
     enabled: Boolean = true
 ) {
-
+    val list = listOf("one", "two", "three", "four", "five")
     var expanded by remember { mutableStateOf(false) }
+    val currentValue = remember { mutableStateOf(list[0]) }
 
     Column(modifier = modifier.fillMaxWidth().padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(32.dp)) {
@@ -112,33 +116,36 @@ fun ItemInputForm(
             enabled = enabled,
             singleLine = true
         )
+Box(modifier = Modifier.fillMaxWidth()) {
+    Row(modifier = Modifier.clickable {
+        expanded = !expanded
+    }.align(Alignment.Center)) {
 
-        Box(Modifier.fillMaxWidth()) {
+        Text(text = currentValue.value)
+        Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = null)
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.fillMaxWidth()
+        ) {
 
-            OutlinedTextField(
-                value = listaDetalles.descrip,
-                onValueChange = { onValueChange(listaDetalles.copy(descrip = it)) },
-                label = { Text(stringResource(R.string.lista_descrip)) },
-                modifier = Modifier.fillMaxWidth(),
-                enabled = enabled,
-                singleLine = true
-            )
-            DropdownMenu(
-                expanded = true,
-                onDismissRequest = { expanded = false },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                DropdownMenuItem(onClick = {}) {
-                    Text("Opcion 1")
-                }
 
-                DropdownMenuItem(onClick = {}) {
-                    Text("Opcion 2")
+            list.forEach {
+
+                DropdownMenuItem(onClick = {
+                    currentValue.value = it
+                    expanded = false
+                }) {
+
+                    Text(text = it)
+
                 }
             }
 
         }
+    }
 
+    }
 
 
     }
