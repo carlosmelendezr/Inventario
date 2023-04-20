@@ -121,7 +121,17 @@ Box(modifier = Modifier.fillMaxWidth()) {
         expanded = !expanded
     }.align(Alignment.Center)) {
 
-        Text(text = currentValue.value)
+        OutlinedTextField(
+            value = currentValue.value,
+            onValueChange = {/**/},
+            label={Text("Tipo de Movimiento")},
+            modifier = Modifier.fillMaxWidth().clickable {
+                expanded = !expanded
+            },
+            enabled = false,
+            readOnly = true,
+            singleLine = true)
+
         Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = null)
         DropdownMenu(
             expanded = expanded,
@@ -137,7 +147,7 @@ Box(modifier = Modifier.fillMaxWidth()) {
                     expanded = false
                 }) {
 
-                    Text(text = it)
+                    Text(modifier = Modifier.fillMaxWidth(),text = it)
 
                 }
             }
