@@ -102,7 +102,12 @@ fun ItemInputForm(
     onValueChange: (ListaDetalles) -> Unit = {},
     enabled: Boolean = true
 ) {
-    val list = listOf("one", "two", "three", "four", "five")
+    val list = listOf("1-TOMA DE INVENTARIO",
+        "2-CONTEO CICLICO",
+        "3-LISTA",
+        "4-TRASLADO ALMACEN TIENDA",
+        "5-TRASLADO ENTRE TIENDAS")
+
     var expanded by remember { mutableStateOf(false) }
     val currentValue = remember { mutableStateOf(list[0]) }
 
@@ -122,8 +127,8 @@ Box(modifier = Modifier.fillMaxWidth()) {
     }.align(Alignment.Center)) {
 
         OutlinedTextField(
-            value = currentValue.value,
-            onValueChange = {/**/},
+            value = listaDetalles.tipo,
+            onValueChange = {onValueChange(listaDetalles.copy(tipo = it))},
             label={Text("Tipo de Movimiento")},
             modifier = Modifier.fillMaxWidth().clickable {
                 expanded = !expanded
@@ -143,7 +148,7 @@ Box(modifier = Modifier.fillMaxWidth()) {
             list.forEach {
 
                 DropdownMenuItem(onClick = {
-                    currentValue.value = it
+                    onValueChange(listaDetalles.copy(tipo=it))
                     expanded = false
                 }) {
 
@@ -170,7 +175,7 @@ private fun ItemEntryScreenPreview() {
     InventoryTheme {
         ItemEntryBody(
             listaUiState = ListaUiState(
-                ListaDetalles(1,1,"Toma de Prueba",0,"","19/04/2023",1,1
+                ListaDetalles(1,1,"Toma de Prueba",0,"","19/04/2023","",1
 
                 )
             ),

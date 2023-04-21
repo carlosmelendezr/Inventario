@@ -7,6 +7,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.veramed.inventario.data.Lista
 import com.veramed.inventario.data.ListaRepository
+import java.text.DateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 
 /**
@@ -42,7 +46,7 @@ class ListaEntryViewModel(private val listaRepository: ListaRepository) : ViewMo
 
     private fun validateInput(uiState: ListaDetalles = listaUiState.listaDetails): Boolean {
         return with(uiState) {
-            descrip.isNotBlank() && tipo==0
+            descrip.isNotBlank() && tipo.isNotBlank()
         }
     }
 }
@@ -63,7 +67,7 @@ data class ListaDetalles(
     val color: Int = 0,
     val fecha:String = "",
     val feccrea: String = "",
-    val tipo: Int = 0,
+    val tipo: String = "",
     val centro: Int = 0
 
 )
@@ -74,10 +78,10 @@ fun ListaDetalles.toItem(): Lista = Lista(
     idusuario = idusuario,
     descrip=descrip,
     color=color,
-    feccrea=feccrea,
-    tipo=tipo,
+    feccrea=DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(Date()),
+    tipo=tipo.substring(0,tipo.indexOf("-")).toInt(),
     centro=centro,
-    fecha=fecha.toLongOrNull()?:0
+    fecha= Date().time
 )
 
 /**
@@ -97,7 +101,7 @@ fun Lista.toListaDetails(): ListaDetalles = ListaDetalles(
     descrip=descrip,
     color=color,
     feccrea=feccrea,
-    tipo=tipo,
+    tipo=tipo.toString(),
     centro=centro,
 
 )
