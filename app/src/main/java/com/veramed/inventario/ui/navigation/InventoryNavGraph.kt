@@ -20,6 +20,8 @@ import com.veramed.inventario.ui.item.ItemEditDestination
 import com.veramed.inventario.ui.item.ItemEditScreen
 import com.veramed.inventario.ui.lista.ListaEntryDestination
 import com.veramed.inventario.ui.lista.ListaEntryScreen
+import com.veramed.inventario.ui.usuario.UsuarioEntryDestination
+import com.veramed.inventario.ui.usuario.UsuarioEntryScreen
 
 
 /**
@@ -83,6 +85,18 @@ fun InventoryNavHost(
 
         composable(route =ListaEntryDestination.route) {
             ListaEntryScreen(
+                navigateBack = { navController.popBackStack() },
+                onNavigateUp = { navController.navigateUp() }
+            )
+        }
+
+        composable(
+            route = UsuarioEntryDestination.routeWithArgs,
+            arguments = listOf(navArgument(UsuarioEntryDestination.usuarioIdArg) {
+                type = NavType.IntType
+            })
+        ) {
+            UsuarioEntryScreen(
                 navigateBack = { navController.popBackStack() },
                 onNavigateUp = { navController.navigateUp() }
             )

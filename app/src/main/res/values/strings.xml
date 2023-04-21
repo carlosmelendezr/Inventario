@@ -41,4 +41,12 @@
     <string name="lista_fecha">Fecha</string>
     <string name="lista_entry">Crear Lista</string>
     <string name="lista_tipo">Tipo de Movimiento</string>
+
+    <string name="usuario_entry">Registrar Usuario</string>
+    <string name="usuario_nombre_req">Nombre *</string>
+    <string name="usuario_cedula_req">Cédula *</string>
+    <string name="usuario_password_req">Contraseña *</string>
+    <string name="register_action">Registrarse</string>
+
+
 </resources>

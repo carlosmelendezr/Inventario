@@ -15,6 +15,7 @@ import com.veramed.inventario.ui.item.ItemDetailsViewModel
 import com.veramed.inventario.ui.item.ItemEditViewModel
 import com.veramed.inventario.ui.item.ItemEntryViewModel
 import com.veramed.inventario.ui.lista.ListaEntryViewModel
+import com.veramed.inventario.ui.usuario.UsuarioEntryViewModel
 
 
 /**
@@ -53,6 +54,11 @@ object AppViewModelProvider {
         // Initializer for HomeListaViewModel
         initializer {
             HomeListaViewModel(inventoryApplication().container.listaRepository)
+        }
+
+        // Initializer for HomeListaViewModel
+        initializer {
+            UsuarioEntryViewModel(inventoryApplication().container.usuarioRepository)
         }
     }
 }

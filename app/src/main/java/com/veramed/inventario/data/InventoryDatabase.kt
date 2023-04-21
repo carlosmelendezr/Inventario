@@ -16,6 +16,7 @@ abstract class InventoryDatabase : RoomDatabase() {
     abstract fun itemDao(): ItemDao
     abstract fun listaDao(): ListaDao
     abstract fun tipoDao(): TipoDao
+    abstract fun usuarioDao(): UsuarioDao
 
     companion object {
         @Volatile
