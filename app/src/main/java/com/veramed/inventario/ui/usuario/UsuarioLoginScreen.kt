@@ -33,7 +33,7 @@ object UsuarioLoginDestination : NavigationDestination {
 @Composable
 fun UsuarioLoginScreen(
     navigateToUsuarioEntry: () -> Unit,
-    navigateUp: () -> Unit,
+    navigateToListaEntry: () -> Unit,
     modifier: Modifier = Modifier,
     canNavigateBack: Boolean = true,
     viewModel: UsuarioLoginViewModel = viewModel(factory = AppViewModelProvider.Factory)
@@ -43,8 +43,8 @@ fun UsuarioLoginScreen(
         topBar = {
             InventoryTopAppBar(
                 title = stringResource(UsuarioEntryDestination.titleRes),
-                canNavigateBack = canNavigateBack,
-                navigateUp = navigateUp
+                canNavigateBack = canNavigateBack
+
             )
         }
     ) { innerPadding ->
@@ -60,17 +60,12 @@ fun UsuarioLoginScreen(
                     // be cancelled - since the scope is bound to composition.
                     coroutineScope.launch {
                         viewModel.buscarUsuario()
-                        navigateUp()
+                        navigateToListaEntry()
                     }
                 },
                 onRegisterClick = {
-                    // Note: If the user rotates the screen very fast, the operation may get cancelled
-                    // and the item may not be saved in the Database. This is because when config
-                    // change occurs, the Activity will be recreated and the rememberCoroutineScope will
-                    // be cancelled - since the scope is bound to composition.
                     coroutineScope.launch {
-                        //viewModel.registarUsuario()
-                        navigateToUsuarioEntry()
+                           navigateToUsuarioEntry()
                     }
                 },
                 modifier = modifier.padding(innerPadding)
@@ -108,7 +103,8 @@ fun UsuarioLoginBody(
 
         Button(
             onClick = onRegisterClick,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !usuarioUiState.existe,
         ) {
             Text(stringResource(R.string.usuario_entry))
         }

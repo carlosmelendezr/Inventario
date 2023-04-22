@@ -43,30 +43,7 @@ class UsuarioEntryViewModel(private val usuarioRepository: UsuarioRepository) : 
             usuarioRepository.insertUsuario(usuarioUiState.usuarioDetails.toItem())
         }
     }
-    fun registarUsuario() {
 
-       /* if (validateLoginInput()) {
-            val idusr = usuarioUiState.usuarioDetails.toItem().id
-            Log.d("Login","ID usuario ="+idusr)
-            val usuario:Usuario? = usuarioRepository.getUsuario(idusr).first()
-            if (usuario == null) {
-                usuarioUiState = UsuarioUiState(
-                    usuarioDetails = UsuarioUiState().usuarioDetails, isEntryValid = false, existe = true
-                )
-
-
-            }
-        }*/
-    }
-
-
-
-
-    private fun validateLoginInput(uiState: UsuarioDetails = usuarioUiState.usuarioDetails): Boolean {
-        return with(uiState) {
-            id.isNotBlank() && password.isNotBlank()
-        }
-    }
 
     private fun validateInput(uiState: UsuarioDetails = usuarioUiState.usuarioDetails): Boolean {
         return with(uiState) {

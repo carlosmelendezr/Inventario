@@ -17,6 +17,11 @@
 package com.veramed.inventario
 
 import android.app.Application
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import com.veramed.inventario.data.AppContainer
 import com.veramed.inventario.data.AppDataContainer
 
@@ -27,6 +32,7 @@ class InventoryApplication : Application() {
      * AppContainer instance used by the rest of classes to obtain dependencies
      */
     lateinit var container: AppContainer
+
     override fun onCreate() {
         super.onCreate()
         container = AppDataContainer(this)

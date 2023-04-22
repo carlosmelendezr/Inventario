@@ -26,7 +26,7 @@ import java.util.Locale
 
 object UsuarioEntryDestination : NavigationDestination {
     override val route = "usuario_entry"
-    override val titleRes = R.string.usuario_login
+    override val titleRes = R.string.register_action
 
 }
 
@@ -87,7 +87,7 @@ fun UsuarioEntryBody(
         UsuarioRegisterForm(usuarioDetails = usuarioUiState.usuarioDetails, onValueChange = onUsuarioValueChange)
         Button(
             onClick = onSaveClick,
-            enabled = usuarioUiState.existe,
+            enabled = usuarioUiState.isEntryValid,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(stringResource(R.string.usuario_login))

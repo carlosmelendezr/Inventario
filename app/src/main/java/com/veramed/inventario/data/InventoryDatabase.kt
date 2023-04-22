@@ -9,7 +9,7 @@ import androidx.room.TypeConverters
 /**
  * Database class with a singleton INSTANCE object.
  */
-@Database(entities = [Item::class,Lista::class,Tipo::class, Usuario::class], version = 2, exportSchema = false)
+@Database(entities = [Item::class,Lista::class,Tipo::class, Usuario::class, Sesion::class], version = 3, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class InventoryDatabase : RoomDatabase() {
 
@@ -17,6 +17,7 @@ abstract class InventoryDatabase : RoomDatabase() {
     abstract fun listaDao(): ListaDao
     abstract fun tipoDao(): TipoDao
     abstract fun usuarioDao(): UsuarioDao
+    abstract fun sesionDao(): SesionDao
 
     companion object {
         @Volatile

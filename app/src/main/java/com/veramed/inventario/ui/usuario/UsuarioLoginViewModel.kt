@@ -1,18 +1,18 @@
 package com.veramed.inventario.ui.usuario
 
 import android.util.Log
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.datastore.dataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.veramed.inventario.data.Usuario
-
 import com.veramed.inventario.data.UsuarioRepository
-import com.veramed.inventario.ui.item.toItemUiState
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+
 
 
 /**
@@ -44,9 +44,8 @@ class UsuarioLoginViewModel(private val usuarioRepository: UsuarioRepository) : 
                     .filterNotNull()
                     .first()
                     .toUsuarioUiState(true,existe=true)
+
             }
-
-
 
             }
         }
@@ -58,6 +57,7 @@ class UsuarioLoginViewModel(private val usuarioRepository: UsuarioRepository) : 
 
     }
 }
+
 
 
 

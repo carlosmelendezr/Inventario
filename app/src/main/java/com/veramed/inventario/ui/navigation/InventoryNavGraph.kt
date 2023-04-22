@@ -101,7 +101,7 @@ fun InventoryNavHost(
 
         composable(route = UsuarioLoginDestination.route) {
             UsuarioLoginScreen(
-                navigateUp= { navController.navigateUp() },
+                navigateToListaEntry  = { navController.navigate(HomeListaDestino.route) },
                 navigateToUsuarioEntry = { navController.navigate(UsuarioEntryDestination.route) }
             )
         }
