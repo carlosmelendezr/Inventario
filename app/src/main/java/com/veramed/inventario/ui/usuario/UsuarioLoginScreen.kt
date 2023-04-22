@@ -32,8 +32,8 @@ object UsuarioLoginDestination : NavigationDestination {
 
 @Composable
 fun UsuarioLoginScreen(
-    navigateBack: () -> Unit,
-    onNavigateUp: () -> Unit,
+    navigateToUsuarioEntry: () -> Unit,
+    navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
     canNavigateBack: Boolean = true,
     viewModel: UsuarioLoginViewModel = viewModel(factory = AppViewModelProvider.Factory)
@@ -44,7 +44,7 @@ fun UsuarioLoginScreen(
             InventoryTopAppBar(
                 title = stringResource(UsuarioEntryDestination.titleRes),
                 canNavigateBack = canNavigateBack,
-                navigateUp = onNavigateUp
+                navigateUp = navigateUp
             )
         }
     ) { innerPadding ->
@@ -60,7 +60,7 @@ fun UsuarioLoginScreen(
                     // be cancelled - since the scope is bound to composition.
                     coroutineScope.launch {
                         viewModel.buscarUsuario()
-                        navigateBack()
+                        navigateUp()
                     }
                 },
                 onRegisterClick = {
@@ -70,7 +70,7 @@ fun UsuarioLoginScreen(
                     // be cancelled - since the scope is bound to composition.
                     coroutineScope.launch {
                         //viewModel.registarUsuario()
-                        navigateBack()
+                        navigateToUsuarioEntry()
                     }
                 },
                 modifier = modifier.padding(innerPadding)
