@@ -5,9 +5,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.veramed.inventario.data.Usuario
 
 import com.veramed.inventario.data.UsuarioRepository
+import com.veramed.inventario.ui.item.toItemUiState
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 
 /**
@@ -40,10 +45,10 @@ class UsuarioEntryViewModel(private val usuarioRepository: UsuarioRepository) : 
     }
     fun registarUsuario() {
 
-        if (validateLoginInput()) {
+       /* if (validateLoginInput()) {
             val idusr = usuarioUiState.usuarioDetails.toItem().id
             Log.d("Login","ID usuario ="+idusr)
-            val usuario:Usuario? = usuarioRepository.getUsuario(idusr)
+            val usuario:Usuario? = usuarioRepository.getUsuario(idusr).first()
             if (usuario == null) {
                 usuarioUiState = UsuarioUiState(
                     usuarioDetails = UsuarioUiState().usuarioDetails, isEntryValid = false, existe = true
@@ -51,22 +56,11 @@ class UsuarioEntryViewModel(private val usuarioRepository: UsuarioRepository) : 
 
 
             }
-        }
+        }*/
     }
 
-    suspend fun buscarUsuario() {
-
-        if (validateLoginInput()) {
-            val usuario:Usuario? = usuarioRepository.getUsuario(usuarioUiState.usuarioDetails.toItem().id)
-            if (usuario != null) {
-                usuarioUiState = UsuarioUiState(
-                    usuarioDetails = usuario.toUsuarioDetails(), isEntryValid = true, existe = true
-                )
 
 
-            }
-        }
-    }
 
     private fun validateLoginInput(uiState: UsuarioDetails = usuarioUiState.usuarioDetails): Boolean {
         return with(uiState) {
@@ -116,9 +110,10 @@ fun UsuarioDetails.toItem(): Usuario = Usuario(
 /**
  * Eusuariotension function to convert [Item] to [ItemUiState]
  */
-fun Usuario.toUsuarioUiState(isEntryValid: Boolean = false): UsuarioUiState = UsuarioUiState(
+fun Usuario.toUsuarioUiState(isEntryValid: Boolean = false, existe: Boolean=false): UsuarioUiState = UsuarioUiState(
     usuarioDetails = this.toUsuarioDetails(),
-    isEntryValid = isEntryValid
+    isEntryValid = isEntryValid,
+    existe = existe
 )
 
 /**

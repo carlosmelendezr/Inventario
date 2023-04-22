@@ -12,7 +12,7 @@ interface UsuarioDao {
     fun getItem(id: Int): Flow<Usuario>
 
     @Query("SELECT * from usuario WHERE id = :id")
-    fun getUsuario(id: Int): Usuario
+    fun getUsuario(id: Int): Flow<Usuario>
 
     // Specify the conflict strategy as IGNORE, when the user tries to add an
     // existing Item into the database Room ignores the conflict.
