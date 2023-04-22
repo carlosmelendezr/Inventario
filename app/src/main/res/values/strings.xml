@@ -42,6 +42,7 @@
     <string name="lista_entry">Crear Lista</string>
     <string name="lista_tipo">Tipo de Movimiento</string>
 
+    <string name="usuario_login">Iniciar Sesion</string>
     <string name="usuario_entry">Registrar Usuario</string>
     <string name="usuario_nombre_req">Nombre *</string>
     <string name="usuario_cedula_req">Cédula *</string>

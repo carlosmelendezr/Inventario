@@ -1,5 +1,6 @@
 package com.veramed.inventario.ui.usuario
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -24,9 +25,9 @@ class UsuarioEntryViewModel(private val usuarioRepository: UsuarioRepository) : 
      * Updates the [usuarioUiState] with the value provided in the argument. This method also triggers
      * a validation for input values.
      */
-    fun updateUiState(itemDetails: UsuarioDetails) {
+    fun updateUiState(usuarioDetails: UsuarioDetails) {
         usuarioUiState =
-            UsuarioUiState(usuarioDetails = itemDetails, isEntryValid = validateInput(itemDetails))
+            UsuarioUiState(usuarioDetails = usuarioDetails, isEntryValid = validateInput(usuarioDetails))
     }
 
     /**
@@ -35,6 +36,41 @@ class UsuarioEntryViewModel(private val usuarioRepository: UsuarioRepository) : 
     suspend fun saveItem() {
         if (validateInput()) {
             usuarioRepository.insertUsuario(usuarioUiState.usuarioDetails.toItem())
+        }
+    }
+    fun registarUsuario() {
+
+        if (validateLoginInput()) {
+            val idusr = usuarioUiState.usuarioDetails.toItem().id
+            Log.d("Login","ID usuario ="+idusr)
+            val usuario:Usuario? = usuarioRepository.getUsuario(idusr)
+            if (usuario == null) {
+                usuarioUiState = UsuarioUiState(
+                    usuarioDetails = UsuarioUiState().usuarioDetails, isEntryValid = false, existe = true
+                )
+
+
+            }
+        }
+    }
+
+    suspend fun buscarUsuario() {
+
+        if (validateLoginInput()) {
+            val usuario:Usuario? = usuarioRepository.getUsuario(usuarioUiState.usuarioDetails.toItem().id)
+            if (usuario != null) {
+                usuarioUiState = UsuarioUiState(
+                    usuarioDetails = usuario.toUsuarioDetails(), isEntryValid = true, existe = true
+                )
+
+
+            }
+        }
+    }
+
+    private fun validateLoginInput(uiState: UsuarioDetails = usuarioUiState.usuarioDetails): Boolean {
+        return with(uiState) {
+            id.isNotBlank() && password.isNotBlank()
         }
     }
 
@@ -50,7 +86,8 @@ class UsuarioEntryViewModel(private val usuarioRepository: UsuarioRepository) : 
  */
 data class UsuarioUiState(
     val usuarioDetails: UsuarioDetails = UsuarioDetails(),
-    val isEntryValid: Boolean = false
+    val isEntryValid: Boolean = false,
+    val existe:Boolean = false
 )
 
 data class UsuarioDetails(

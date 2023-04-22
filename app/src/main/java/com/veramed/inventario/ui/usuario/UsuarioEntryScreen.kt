@@ -1,9 +1,6 @@
 package com.veramed.inventario.ui.usuario
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
@@ -29,9 +26,8 @@ import java.util.Locale
 
 object UsuarioEntryDestination : NavigationDestination {
     override val route = "usuario_entry"
-    override val titleRes = R.string.usuario_entry
-    const val usuarioIdArg = "usuarioId"
-    val routeWithArgs = "${UsuarioEntryDestination.route}/{$usuarioIdArg}"
+    override val titleRes = R.string.usuario_login
+
 }
 
 @Composable
@@ -52,21 +48,89 @@ fun UsuarioEntryScreen(
             )
         }
     ) { innerPadding ->
-        UsuarioEntryBody(
-            usuarioUiState = viewModel.usuarioUiState,
-            onUsuarioValueChange = viewModel::updateUiState,
-            onSaveClick = {
-                // Note: If the user rotates the screen very fast, the operation may get cancelled
-                // and the item may not be saved in the Database. This is because when config
-                // change occurs, the Activity will be recreated and the rememberCoroutineScope will
-                // be cancelled - since the scope is bound to composition.
-                coroutineScope.launch {
-                    viewModel.saveItem()
-                    navigateBack()
-                }
-            },
-            modifier = modifier.padding(innerPadding)
+
+        if (!viewModel.usuarioUiState.existe) {
+            UsuarioLoginBody(
+                usuarioUiState = viewModel.usuarioUiState,
+                onUsuarioValueChange = viewModel::updateUiState,
+                onSaveClick = {
+                    // Note: If the user rotates the screen very fast, the operation may get cancelled
+                    // and the item may not be saved in the Database. This is because when config
+                    // change occurs, the Activity will be recreated and the rememberCoroutineScope will
+                    // be cancelled - since the scope is bound to composition.
+                    coroutineScope.launch {
+                        viewModel.buscarUsuario()
+                        navigateBack()
+                    }
+                },
+                onRegisterClick = {
+                    // Note: If the user rotates the screen very fast, the operation may get cancelled
+                    // and the item may not be saved in the Database. This is because when config
+                    // change occurs, the Activity will be recreated and the rememberCoroutineScope will
+                    // be cancelled - since the scope is bound to composition.
+                    coroutineScope.launch {
+                        viewModel.registarUsuario()
+                        navigateBack()
+                    }
+                },
+                modifier = modifier.padding(innerPadding)
+            )
+        } else {
+
+            UsuarioEntryBody(
+                usuarioUiState = viewModel.usuarioUiState,
+                onUsuarioValueChange = viewModel::updateUiState,
+                onSaveClick = {
+                    // Note: If the user rotates the screen very fast, the operation may get cancelled
+                    // and the item may not be saved in the Database. This is because when config
+                    // change occurs, the Activity will be recreated and the rememberCoroutineScope will
+                    // be cancelled - since the scope is bound to composition.
+                    coroutineScope.launch {
+                        viewModel.saveItem()
+                        navigateBack()
+                    }
+                },
+                modifier = modifier.padding(innerPadding)
+            )
+
+        }
+    }
+}
+
+@Composable
+fun UsuarioLoginBody(
+    usuarioUiState: UsuarioUiState,
+    onUsuarioValueChange: (UsuarioDetails) -> Unit,
+    onSaveClick: () -> Unit,
+    onRegisterClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(32.dp)
+    ) {
+        UsuarioLoginForm(
+            usuarioDetails = usuarioUiState.usuarioDetails,
+            onValueChange = onUsuarioValueChange
         )
+
+        Button(
+            onClick = onSaveClick,
+            enabled = usuarioUiState.isEntryValid,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(stringResource(R.string.usuario_login))
+        }
+
+            Button(
+                onClick = onRegisterClick,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(stringResource(R.string.usuario_entry))
+            }
+
     }
 }
 
@@ -83,19 +147,52 @@ fun UsuarioEntryBody(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(32.dp)
     ) {
-        UsuarioInputForm(usuarioDetails = usuarioUiState.usuarioDetails, onValueChange = onUsuarioValueChange)
+        UsuarioLoginForm(usuarioDetails = usuarioUiState.usuarioDetails, onValueChange = onUsuarioValueChange)
         Button(
             onClick = onSaveClick,
-            enabled = usuarioUiState.isEntryValid,
+            enabled = usuarioUiState.existe,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(stringResource(R.string.save_action))
+            Text(stringResource(R.string.usuario_login))
         }
     }
 }
 
 @Composable
-fun UsuarioInputForm(
+fun UsuarioLoginForm(
+    usuarioDetails: UsuarioDetails,
+    modifier: Modifier = Modifier,
+    onValueChange: (UsuarioDetails) -> Unit = {},
+    enabled: Boolean = true
+) {
+    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        OutlinedTextField(
+            value = usuarioDetails.id,
+            onValueChange = { onValueChange(usuarioDetails.copy(id = it)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            label = { Text(stringResource(R.string.usuario_cedula_req)) },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled,
+            singleLine = true
+        )
+
+        OutlinedTextField(
+            value = usuarioDetails.password,
+            onValueChange = { onValueChange(usuarioDetails.copy(password = it)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            label = { Text(stringResource(R.string.usuario_password_req)) },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled,
+            singleLine = true
+        )
+
+
+
+    }
+}
+
+@Composable
+fun UsuarioRegisterForm(
     usuarioDetails: UsuarioDetails,
     modifier: Modifier = Modifier,
     onValueChange: (UsuarioDetails) -> Unit = {},
@@ -118,7 +215,9 @@ fun UsuarioInputForm(
             label = { Text(stringResource(R.string.usuario_nombre_req)) },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
-            singleLine = true
+            singleLine = true,
+
+
         )
         OutlinedTextField(
             value = usuarioDetails.password,

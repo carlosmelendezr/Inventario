@@ -109,7 +109,6 @@ fun ItemInputForm(
         "5-TRASLADO ENTRE TIENDAS")
 
     var expanded by remember { mutableStateOf(false) }
-    val currentValue = remember { mutableStateOf(list[0]) }
 
     Column(modifier = modifier.fillMaxWidth().padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(32.dp)) {

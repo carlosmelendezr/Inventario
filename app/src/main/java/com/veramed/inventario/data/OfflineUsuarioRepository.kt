@@ -7,6 +7,8 @@ class OfflineUsuarioRepository(private val usuarioDao: UsuarioDao) : UsuarioRepo
 
     override fun getUsuarioStream(id: Int): Flow<Usuario?> = usuarioDao.getItem(id)
 
+    override fun getUsuario(id: Int): Usuario = usuarioDao.getUsuario(id)
+
     override suspend fun insertUsuario(usuario: Usuario) = usuarioDao.insert(usuario)
 
     override suspend fun deleteUsuario(usuario: Usuario) = usuarioDao.delete(usuario)

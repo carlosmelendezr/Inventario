@@ -9,7 +9,7 @@ import androidx.room.TypeConverters
 /**
  * Database class with a singleton INSTANCE object.
  */
-@Database(entities = [Item::class,Lista::class,Tipo::class, Usuario::class], version = 1, exportSchema = false)
+@Database(entities = [Item::class,Lista::class,Tipo::class, Usuario::class], version = 2, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class InventoryDatabase : RoomDatabase() {
 

@@ -34,7 +34,7 @@ fun InventoryNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = HomeListaDestino.route,
+        startDestination = UsuarioEntryDestination.route,
         modifier = modifier
     ) {
 
@@ -90,12 +90,7 @@ fun InventoryNavHost(
             )
         }
 
-        composable(
-            route = UsuarioEntryDestination.routeWithArgs,
-            arguments = listOf(navArgument(UsuarioEntryDestination.usuarioIdArg) {
-                type = NavType.IntType
-            })
-        ) {
+        composable(route = UsuarioEntryDestination.route) {
             UsuarioEntryScreen(
                 navigateBack = { navController.popBackStack() },
                 onNavigateUp = { navController.navigateUp() }
