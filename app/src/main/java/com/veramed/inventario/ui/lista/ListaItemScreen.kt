@@ -1,48 +1,54 @@
 package com.veramed.inventario.ui.lista
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Button
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.unit.dp
 import com.veramed.inventario.InventoryTopAppBar
 import com.veramed.inventario.R
-import com.veramed.inventario.ui.AppViewModelProvider
-import com.veramed.inventario.ui.item.ItemEditDestination
-import com.veramed.inventario.ui.item.ItemEditViewModel
 import com.veramed.inventario.ui.navigation.NavigationDestination
 import com.veramed.inventario.ui.theme.InventoryTheme
 import kotlinx.coroutines.launch
 
-object ListaItemDestination : NavigationDestination {
-    override val route = "lista_item_edit"
-    override val titleRes = R.string.edit_item_title
+object ListaAgregarItemDestination : NavigationDestination {
+    override val route = "lista_agregar_items"
+    override val titleRes = R.string.lista_agregar_item
     const val itemIdArg = "itemId"
     val routeWithArgs = "$route/{$itemIdArg}"
 }
 
 
 @Composable
-fun ItemEditScreen(
+fun ListaAgregarItemScreen(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ItemEditViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    //viewModel: ListaAgregarItemViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: ListaAgregarItemViewModel
 ) {
     val coroutineScope = rememberCoroutineScope()
     Scaffold(
         topBar = {
             InventoryTopAppBar(
-                title = stringResource(ItemEditDestination.titleRes),
+                title = stringResource(ListaAgregarItemDestination.titleRes)+"",
                 canNavigateBack = true,
                 navigateUp = onNavigateUp
             )
         }
     ) { innerPadding ->
-        com.veramed.inventario.ui.item.ItemEntryBody(
+        AgregarItemEntryBody(
             itemUiState = viewModel.itemUiState,
             onItemValueChange = viewModel::updateUiState,
             onSaveClick = {
@@ -51,7 +57,7 @@ fun ItemEditScreen(
                 // change occurs, the Activity will be recreated and the rememberCoroutineScope will
                 // be cancelled - since the scope is bound to composition.
                 coroutineScope.launch {
-                    viewModel.updateItem()
+                    viewModel.saveItem()
                     navigateBack()
                 }
             },
@@ -60,10 +66,66 @@ fun ItemEditScreen(
     }
 }
 
+@Composable
+fun AgregarItemEntryBody(
+    itemUiState: AgregarItemUiState,
+    onItemValueChange: (ItemDetails) -> Unit,
+    onSaveClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(32.dp)
+    ) {
+        AgregarItemInputForm(itemDetails = itemUiState.itemDetails, onValueChange = onItemValueChange)
+        Button(
+            onClick = onSaveClick,
+            enabled = itemUiState.isEntryValid,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(stringResource(R.string.save_action))
+        }
+    }
+}
+
+@Composable
+fun AgregarItemInputForm(
+    itemDetails: ItemDetails,
+    modifier: Modifier = Modifier,
+    onValueChange: (ItemDetails) -> Unit = {},
+    enabled: Boolean = true
+) {
+    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        OutlinedTextField(
+            value = itemDetails.barra,
+            onValueChange = { onValueChange(itemDetails.copy(name = it)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            label = { Text(stringResource(R.string.item_barra_req)) },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled,
+            singleLine = true
+        )
+        OutlinedTextField(
+            value = itemDetails.quantity,
+            onValueChange = { onValueChange(itemDetails.copy(quantity = it)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            label = { Text(stringResource(R.string.quantity_req)) },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled,
+            singleLine = true
+        )
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
-fun ItemEditRoutePreview() {
+fun ListaAgregarItemScreenPreview() {
     InventoryTheme {
-        ItemEditScreen(navigateBack = { /*Do nothing*/ }, onNavigateUp = { /*Do nothing*/ })
+        ListaAgregarItemScreen(navigateBack = { /*Do nothing*/ },
+            onNavigateUp = { /*Do nothing*/ },
+            viewModel = ListaAgregarItemViewModel()
+        )
     }
 }

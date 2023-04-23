@@ -18,9 +18,9 @@ import com.veramed.inventario.ui.item.ItemEntryDestination
 import com.veramed.inventario.ui.item.ItemEntryScreen
 import com.veramed.inventario.ui.item.ItemEditDestination
 import com.veramed.inventario.ui.item.ItemEditScreen
+import com.veramed.inventario.ui.lista.ListaAgregarItemDestination
 import com.veramed.inventario.ui.lista.ListaEntryDestination
 import com.veramed.inventario.ui.lista.ListaEntryScreen
-import com.veramed.inventario.ui.lista.ListaItemDestination
 import com.veramed.inventario.ui.usuario.UsuarioEntryDestination
 import com.veramed.inventario.ui.usuario.UsuarioEntryScreen
 import com.veramed.inventario.ui.usuario.UsuarioLoginDestination
@@ -44,8 +44,8 @@ fun InventoryNavHost(
         composable(route = HomeListaDestino.route) {
             HomeLista(
                 navigateToListaEntry = { navController.navigate(ListaEntryDestination.route) },
-                navigateToItemUpdate = {
-                    navController.navigate("${ItemDetailsDestination.route}/${it}")
+                navigateToListaItem = {
+                    navController.navigate("${ListaAgregarItemDestination.route}/${it}")
                 }
             )
         }
@@ -87,8 +87,8 @@ fun InventoryNavHost(
         }
 
         composable(
-            route = ListaItemDestination.routeWithArgs,
-            arguments = listOf(navArgument(ListaItemDestination.itemIdArg) {
+            route = ListaAgregarItemDestination.routeWithArgs,
+            arguments = listOf(navArgument(ListaAgregarItemDestination.itemIdArg) {
                 type = NavType.IntType
             })
         ) {

@@ -48,7 +48,7 @@ object HomeListaDestino : NavigationDestination {
 @Composable
 fun HomeLista(
     navigateToListaEntry: () -> Unit,
-    navigateToItemUpdate: (Int) -> Unit,
+    navigateToListaItem: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeListaViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
@@ -75,7 +75,8 @@ fun HomeLista(
     ) { innerPadding ->
         HomeListaBody(
             itemList = listaUiState.listas,
-            onItemClick = navigateToItemUpdate,
+            //onItemClick = navigateToItemUpdate,
+            onItemClick = navigateToListaItem,
             modifier = modifier.padding(innerPadding)
         )
     }

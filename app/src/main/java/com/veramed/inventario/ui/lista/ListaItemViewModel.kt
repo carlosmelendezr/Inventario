@@ -9,8 +9,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.veramed.inventario.data.Item
 import com.veramed.inventario.data.ItemsRepository
-import com.veramed.inventario.ui.item.ItemEditDestination
-import com.veramed.inventario.ui.item.toItemUiState
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -19,26 +17,26 @@ import kotlinx.coroutines.launch
 /**
  * View Model to validate and insert items in the Room database.
  */
-class ListaItemViewModel(
+class ListaAgregarItemViewModel(
     savedStateHandle: SavedStateHandle,
     private val itemsRepository: ItemsRepository) : ViewModel() {
 
     /**
      * Holds current item ui state
      */
-    var itemUiState by mutableStateOf(ItemUiState())
+    var itemUiState by mutableStateOf(AgregarItemUiState())
         private set
 
-    private val itemId: Int = checkNotNull(savedStateHandle[ListaItemDestination.itemIdArg])
+    private val itemId: Int = checkNotNull(savedStateHandle[ListaAgregarItemDestination.itemIdArg])
 
-    /*init {
+    init {
         viewModelScope.launch {
             itemUiState = itemsRepository.getItemStream(itemId)
                 .filterNotNull()
                 .first()
                 .toItemUiState(true)
         }
-    }*/
+    }
 
 
         /**
@@ -47,7 +45,7 @@ class ListaItemViewModel(
          */
         fun updateUiState(itemDetails: ItemDetails) {
             itemUiState =
-                ItemUiState(itemDetails = itemDetails, isEntryValid = validateInput(itemDetails))
+                AgregarItemUiState(itemDetails = itemDetails, isEntryValid = validateInput(itemDetails))
         }
 
         /**
@@ -70,7 +68,7 @@ class ListaItemViewModel(
 /**
  * Represents Ui State for an Item.
  */
-data class ItemUiState(
+data class AgregarItemUiState(
     val itemDetails: ItemDetails = ItemDetails(),
     val isEntryValid: Boolean = false
 )
@@ -101,7 +99,7 @@ fun ItemDetails.toItem(): Item = Item(
 /**
  * Extension function to convert [Item] to [ItemUiState]
  */
-fun Item.toItemUiState(isEntryValid: Boolean = false): ItemUiState = ItemUiState(
+fun Item.toItemUiState(isEntryValid: Boolean = false): AgregarItemUiState = AgregarItemUiState(
     itemDetails = this.toItemDetails(),
     isEntryValid = isEntryValid
 )
