@@ -11,12 +11,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
@@ -94,7 +89,7 @@ private fun HomeListaBody(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        InventoryListHeader()
+        //InventoryListHeader()
         Divider()
         if (itemList.isEmpty()) {
             Text(
@@ -145,16 +140,23 @@ private fun InventoryListRow(
         .clickable { onItemClick(lista) }
         .padding(vertical = 16.dp)
     ) {
-        Text(
-            text = lista.descrip,
-            modifier = Modifier.weight(1.5f),
-            fontWeight = FontWeight.Bold
-        )
-        Text(
-            text = lista.idusuario.toString(),
-            modifier = Modifier.weight(1.0f)
-        )
-        Text(text = lista.centro.toString(), modifier = Modifier.weight(1.0f))
+        val paddingModifier  = Modifier
+            .padding(10.dp)
+            .fillMaxWidth()
+        Card(elevation = 10.dp, modifier = paddingModifier) {
+            Row() {
+                Text(
+                    text = lista.descrip,
+                    modifier = Modifier.weight(1.5f),
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = lista.idusuario.toString(),
+                    modifier = Modifier.weight(1.0f)
+                )
+                Text(text = lista.centro.toString(), modifier = Modifier.weight(1.0f))
+            }
+        }
     }
 }
 

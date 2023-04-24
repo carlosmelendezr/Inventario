@@ -44,7 +44,7 @@ fun ListaAgregarItemScreen(
     Scaffold(
         topBar = {
             InventoryTopAppBar(
-                title = stringResource(ListaAgregarItemDestination.titleRes)+"99",
+                title = stringResource(ListaAgregarItemDestination.titleRes) ,
                 canNavigateBack = true,
                 navigateUp = onNavigateUp
             )
