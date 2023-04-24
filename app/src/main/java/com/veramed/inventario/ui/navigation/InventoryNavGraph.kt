@@ -12,13 +12,9 @@ import com.veramed.inventario.ui.home.HomeDestination
 import com.veramed.inventario.ui.home.HomeLista
 import com.veramed.inventario.ui.home.HomeListaDestino
 import com.veramed.inventario.ui.home.HomeScreen
-import com.veramed.inventario.ui.item.ItemDetailsDestination
-import com.veramed.inventario.ui.item.ItemDetailsScreen
-import com.veramed.inventario.ui.item.ItemEntryDestination
-import com.veramed.inventario.ui.item.ItemEntryScreen
-import com.veramed.inventario.ui.item.ItemEditDestination
-import com.veramed.inventario.ui.item.ItemEditScreen
+import com.veramed.inventario.ui.item.*
 import com.veramed.inventario.ui.lista.ListaAgregarItemDestination
+import com.veramed.inventario.ui.lista.ListaAgregarItemScreen
 import com.veramed.inventario.ui.lista.ListaEntryDestination
 import com.veramed.inventario.ui.lista.ListaEntryScreen
 import com.veramed.inventario.ui.usuario.UsuarioEntryDestination
@@ -57,8 +53,8 @@ fun InventoryNavHost(
                 }
             )
         }
-        composable(route = ItemEntryDestination.route) {
-            ItemEntryScreen(
+        composable(route = ListaAgregarItemDestination.route) {
+            ItemEntryScreenOLD(
                 navigateBack = { navController.popBackStack() },
                 onNavigateUp = { navController.navigateUp() }
             )
@@ -92,7 +88,7 @@ fun InventoryNavHost(
                 type = NavType.IntType
             })
         ) {
-            ItemEditScreen(
+            ListaAgregarItemScreen(
                 navigateBack = { navController.popBackStack() },
                 onNavigateUp = { navController.navigateUp() }
             )

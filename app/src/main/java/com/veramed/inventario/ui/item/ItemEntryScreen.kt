@@ -32,11 +32,11 @@ import java.util.Locale
 
 object ItemEntryDestination : NavigationDestination {
     override val route = "item_entry"
-    override val titleRes = R.string.item_entry_title
+    override val titleRes = R.string.lista_agregar_item
 }
 
 @Composable
-fun ItemEntryScreen(
+fun ItemEntryScreenOLD(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
@@ -53,7 +53,7 @@ fun ItemEntryScreen(
             )
         }
     ) { innerPadding ->
-        ItemEntryBody(
+        ItemEntryBodyOLD(
             itemUiState = viewModel.itemUiState,
             onItemValueChange = viewModel::updateUiState,
             onSaveClick = {
@@ -72,7 +72,7 @@ fun ItemEntryScreen(
 }
 
 @Composable
-fun ItemEntryBody(
+fun ItemEntryBodyOLD(
     itemUiState: ItemUiState,
     onItemValueChange: (ItemDetails) -> Unit,
     onSaveClick: () -> Unit,
@@ -84,7 +84,7 @@ fun ItemEntryBody(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(32.dp)
     ) {
-        ItemInputForm(itemDetails = itemUiState.itemDetails, onValueChange = onItemValueChange)
+        ItemInputFormOLD(itemDetails = itemUiState.itemDetails, onValueChange = onItemValueChange)
         Button(
             onClick = onSaveClick,
             enabled = itemUiState.isEntryValid,
@@ -96,14 +96,14 @@ fun ItemEntryBody(
 }
 
 @Composable
-fun ItemInputForm(
+fun ItemInputFormOLD(
     itemDetails: ItemDetails,
     modifier: Modifier = Modifier,
     onValueChange: (ItemDetails) -> Unit = {},
     enabled: Boolean = true
 ) {
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        OutlinedTextField(
+       /* OutlinedTextField(
             value = itemDetails.name,
             onValueChange = { onValueChange(itemDetails.copy(name = it)) },
             label = { Text(stringResource(R.string.item_name_req)) },
@@ -129,6 +129,25 @@ fun ItemInputForm(
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true
+        )*/
+
+        OutlinedTextField(
+            value = itemDetails.barra,
+            onValueChange = { onValueChange(itemDetails.copy(name = it)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            label = { Text(stringResource(R.string.item_barra_req)) },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled,
+            singleLine = true
+        )
+        OutlinedTextField(
+            value = itemDetails.quantity,
+            onValueChange = { onValueChange(itemDetails.copy(quantity = it)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            label = { Text(stringResource(R.string.quantity_req)) },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled,
+            singleLine = true
         )
     }
 }
@@ -137,7 +156,7 @@ fun ItemInputForm(
 @Composable
 private fun ItemEntryScreenPreview() {
     InventoryTheme {
-        ItemEntryBody(
+        ItemEntryBodyOLD(
             itemUiState = ItemUiState(
                 ItemDetails(
                     name = "Item name",

@@ -109,7 +109,7 @@ private fun ItemDetailsBody(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
-        ItemInputForm(itemDetails = itemDetailsUiState.itemDetails, enabled = false)
+        ItemInputFormOLD(itemDetails = itemDetailsUiState.itemDetails, enabled = false)
         Button(
             onClick = onSellItem,
             modifier = Modifier.fillMaxWidth(),
