@@ -44,7 +44,7 @@ fun InventoryNavHost(
         composable(route = HomeListaDestino.route) {
             HomeLista(
                 navigateToListaEntry = { navController.navigate(ListaEntryDestination.route) },
-                navigateToListaItem = {
+                navigateToListaAgregarItem = {
                     navController.navigate("${ListaAgregarItemDestination.route}/${it}")
                 }
             )

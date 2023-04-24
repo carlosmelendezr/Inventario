@@ -16,8 +16,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.veramed.inventario.InventoryTopAppBar
 import com.veramed.inventario.R
+import com.veramed.inventario.ui.AppViewModelProvider
 import com.veramed.inventario.ui.navigation.NavigationDestination
 import com.veramed.inventario.ui.theme.InventoryTheme
 import kotlinx.coroutines.launch
@@ -35,8 +37,8 @@ fun ListaAgregarItemScreen(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
-    //viewModel: ListaAgregarItemViewModel = viewModel(factory = AppViewModelProvider.Factory)
-    viewModel: ListaAgregarItemViewModel
+    viewModel: ListaAgregarItemViewModel = viewModel(factory = AppViewModelProvider.Factory)
+
 ) {
     val coroutineScope = rememberCoroutineScope()
     Scaffold(
@@ -124,8 +126,7 @@ fun AgregarItemInputForm(
 fun ListaAgregarItemScreenPreview() {
     InventoryTheme {
         ListaAgregarItemScreen(navigateBack = { /*Do nothing*/ },
-            onNavigateUp = { /*Do nothing*/ },
-            viewModel = ListaAgregarItemViewModel()
+            onNavigateUp = { /*Do nothing*/ }
         )
     }
 }

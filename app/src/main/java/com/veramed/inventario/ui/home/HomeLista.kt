@@ -48,7 +48,7 @@ object HomeListaDestino : NavigationDestination {
 @Composable
 fun HomeLista(
     navigateToListaEntry: () -> Unit,
-    navigateToListaItem: (Int) -> Unit,
+    navigateToListaAgregarItem: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeListaViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
@@ -76,7 +76,7 @@ fun HomeLista(
         HomeListaBody(
             itemList = listaUiState.listas,
             //onItemClick = navigateToItemUpdate,
-            onItemClick = navigateToListaItem,
+            onItemClick = navigateToListaAgregarItem,
             modifier = modifier.padding(innerPadding)
         )
     }
@@ -151,7 +151,7 @@ private fun InventoryListRow(
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = lista.feccrea,
+            text = lista.idusuario.toString(),
             modifier = Modifier.weight(1.0f)
         )
         Text(text = lista.centro.toString(), modifier = Modifier.weight(1.0f))
