@@ -49,9 +49,7 @@ class UsuarioEntryViewModel(private val usuarioRepository: UsuarioRepository) : 
         return with(uiState) {
             name.isNotBlank() &&
                     id.isNotBlank() &&
-                    password.isNotBlank() &&
-                    passwordConfirm.isNotBlank() &&
-                    password == passwordConfirm
+                    password.isNotBlank()
         }
     }
 }
