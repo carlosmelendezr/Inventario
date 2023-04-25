@@ -47,7 +47,11 @@ class UsuarioEntryViewModel(private val usuarioRepository: UsuarioRepository) : 
 
     private fun validateInput(uiState: UsuarioDetails = usuarioUiState.usuarioDetails): Boolean {
         return with(uiState) {
-            name.isNotBlank() && id.isNotBlank() && password.isNotBlank()
+            name.isNotBlank() &&
+                    id.isNotBlank() &&
+                    password.isNotBlank() &&
+                    passwordConfirm.isNotBlank() &&
+                    password == passwordConfirm
         }
     }
 }
@@ -65,8 +69,8 @@ data class UsuarioDetails(
     val id: String = "",
     val name: String = "",
     val nivel:Int=0,
-    val password:String=""
-
+    val password:String="",
+    val passwordConfirm:String=""
 
 )
 

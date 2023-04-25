@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.datastore.dataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.veramed.inventario.data.UsuarioRepository
@@ -39,16 +38,19 @@ class UsuarioLoginViewModel(private val usuarioRepository: UsuarioRepository) : 
 
        if (validateInput()) {
             val idusr = usuarioUiState.usuarioDetails.toItem().id
+            val pass = usuarioUiState.usuarioDetails.toItem().password
             viewModelScope.launch {
-                usuarioUiState = usuarioRepository.getUsuario(idusr)
+                usuarioUiState = usuarioRepository.getUsuario(idusr,pass)
                     .filterNotNull()
                     .first()
                     .toUsuarioUiState(true,existe=true)
 
             }
 
+
             }
         }
+
 
     private fun validateInput(uiState: UsuarioDetails = usuarioUiState.usuarioDetails): Boolean {
         return with(uiState) {
@@ -56,6 +58,8 @@ class UsuarioLoginViewModel(private val usuarioRepository: UsuarioRepository) : 
         }
 
     }
+
+
 }
 
 

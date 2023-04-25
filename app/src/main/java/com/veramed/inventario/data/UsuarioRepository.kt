@@ -14,7 +14,7 @@ interface UsuarioRepository {
      */
     fun getUsuarioStream(id: Int): Flow<Usuario?>
 
-    fun getUsuario(id: Int): Flow<Usuario?>
+    fun getUsuario(id: Int, pass:String): Flow<Usuario?>
 
     /**
      * Insert item in the data source

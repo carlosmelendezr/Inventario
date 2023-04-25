@@ -49,6 +49,7 @@
     <string name="usuario_nombre_req">Nombre *</string>
     <string name="usuario_cedula_req">Cédula *</string>
     <string name="usuario_password_req">Contraseña *</string>
+    <string name="usuario_password_conf">Confirmación *</string>
     <string name="register_action">Registrarse</string>
 
 

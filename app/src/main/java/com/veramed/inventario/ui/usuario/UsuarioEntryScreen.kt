@@ -11,6 +11,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -129,7 +130,19 @@ fun UsuarioRegisterForm(
             value = usuarioDetails.password,
             onValueChange = { onValueChange(usuarioDetails.copy(password = it)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+            visualTransformation = PasswordVisualTransformation(),
             label = { Text(stringResource(R.string.usuario_password_req)) },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled,
+            singleLine = true
+        )
+
+        OutlinedTextField(
+            value = usuarioDetails.passwordConfirm,
+            onValueChange = { onValueChange(usuarioDetails.copy(password = it)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+            visualTransformation = PasswordVisualTransformation(),
+            label = { Text(stringResource(R.string.usuario_password_conf)) },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true
