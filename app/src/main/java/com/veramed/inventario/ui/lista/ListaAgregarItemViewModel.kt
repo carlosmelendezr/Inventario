@@ -9,8 +9,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.veramed.inventario.data.Item
 import com.veramed.inventario.data.ItemsRepository
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
+import com.veramed.inventario.data.ListaItemRepository
+import com.veramed.inventario.data.ListaItems
+import com.veramed.inventario.ui.home.HomeUiState
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 
@@ -19,33 +21,43 @@ import kotlinx.coroutines.launch
  */
 class ListaAgregarItemViewModel(
     savedStateHandle: SavedStateHandle,
-    private val itemsRepository: ItemsRepository) : ViewModel() {
+    private val itemsRepository: ItemsRepository,private val listaitemsRepository: ListaItemRepository
+) : ViewModel() {
 
     /**
      * Holds current item ui state
      */
-    var itemUiState by mutableStateOf(AgregarItemUiState())
+    var listaItemUiState by mutableStateOf(AgregarItemUiState())
+        private set
+
+    var listaArticulosUiState by mutableStateOf(AgregarItemUiState())
         private set
 
     private val itemId: Int = checkNotNull(savedStateHandle[ListaAgregarItemDestination.itemIdArg])
 
     init {
-        viewModelScope.launch {
-            itemUiState = itemsRepository.getItemStream(itemId)
-                .filterNotNull()
-                .first()
-                .toItemUiState(true)
+
+         var listaArticulosUiState: StateFlow<listaArticulosUiState> =
+            listaitemsRepository.getItemLista(1).map { listaArticulosUiState(it) }
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+                    initialValue = listaArticulosUiState()
+                )
+      }
+        companion object {
+            private const val TIMEOUT_MILLIS = 5_000L
         }
-    }
+
 
 
         /**
          * Updates the [itemUiState] with the value provided in the argument. This method also triggers
          * a validation for input values.
          */
-        fun updateUiState(itemDetails: ItemDetails) {
-            itemUiState =
-                AgregarItemUiState(itemDetails = itemDetails, isEntryValid = validateInput(itemDetails))
+        fun updateUiState(itemDetails: ListaItemDetails) {
+            listaItemUiState =
+                AgregarItemUiState(listaitemDetails = itemDetails, isEntryValid = validateInput(itemDetails))
         }
 
         /**
@@ -53,11 +65,11 @@ class ListaAgregarItemViewModel(
          */
         suspend fun saveItem() {
             if (validateInput()) {
-                itemsRepository.insertItem(itemUiState.itemDetails.toItem())
+                listaitemsRepository.insertItem(listaItemUiState.listaitemDetails.toItem())
             }
         }
 
-        private fun validateInput(uiState: ItemDetails = itemUiState.itemDetails): Boolean {
+        private fun validateInput(uiState: ListaItemDetails = listaItemUiState.listaitemDetails): Boolean {
             return with(uiState) {
                 name.isNotBlank() && price.isNotBlank() && quantity.isNotBlank()
             }
@@ -65,52 +77,57 @@ class ListaAgregarItemViewModel(
 
 }
 
+data class listaArticulosUiState(val itemList: List<ListaItems> = listOf())
+
 /**
  * Represents Ui State for an Item.
  */
 data class AgregarItemUiState(
-    val itemDetails: ItemDetails = ItemDetails(),
+    val listaitemDetails: ListaItemDetails = ListaItemDetails(),
     val isEntryValid: Boolean = false
 )
 
-data class ItemDetails(
+data class ListaItemDetails(
     val id: Int = 0,
     val name: String = "",
     val price: String = "",
     val quantity: String = "",
     val sap: String = "",
-    val barra:String = ""
+    val barra:String = "",
+    val descrip:String = ""
 )
+
+
 
 /**
  * Extension function to convert [ItemUiState] to [Item]. If the value of [ItemUiState.price] is
  * not a valid [Double], then the price will be set to 0.0. Similarly if the value of
  * [ItemUiState] is not a valid [Int], then the quantity will be set to 0
  */
-fun ItemDetails.toItem(): Item = Item(
+fun ListaItemDetails.toItem(): ListaItems = ListaItems(
     id = id,
-    name = name,
-    price = price.toDoubleOrNull() ?: 0.0,
-    quantity = quantity.toIntOrNull() ?: 0,
+    iditem = 1,
+    idlista = 1,
+    cant = quantity.toIntOrNull() ?: 0,
     barra = barra,
-    sap = sap
+    sap = sap,
+    descrip = descrip
 )
 
 /**
  * Extension function to convert [Item] to [ItemUiState]
  */
-fun Item.toItemUiState(isEntryValid: Boolean = false): AgregarItemUiState = AgregarItemUiState(
-    itemDetails = this.toItemDetails(),
+fun ListaItemDetails.toListaItemUiState(isEntryValid: Boolean = false): AgregarItemUiState = AgregarItemUiState(
+    listaitemDetails = this.toListaItemDetails(),
     isEntryValid = isEntryValid
 )
 
 /**
  * Extension function to convert [Item] to [ItemDetails]
  */
-fun Item.toItemDetails(): ItemDetails = ItemDetails(
+fun ListaItemDetails.toListaItemDetails(): ListaItemDetails = ListaItemDetails(
     id = id,
     name = name,
-    price = price.toString(),
     quantity = quantity.toString(),
     barra = barra,
     sap = sap

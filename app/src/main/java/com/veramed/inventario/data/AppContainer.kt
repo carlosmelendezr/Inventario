@@ -11,6 +11,7 @@ interface AppContainer {
     val tipoRepository: TipoRepository
     val usuarioRepository:UsuarioRepository
     val sesionRepository:SesionRepository
+    val listaItemRepository:ListaItemRepository
 }
 
 /**
@@ -35,8 +36,12 @@ class AppDataContainer(private val context: Context) : AppContainer {
     override val usuarioRepository: UsuarioRepository by lazy {
         OfflineUsuarioRepository(InventoryDatabase.getDatabase(context).usuarioDao())
     }
-
     override val sesionRepository: SesionRepository by lazy {
         OfflineSesionRepository(InventoryDatabase.getDatabase(context).sesionDao())
+    }
+
+
+    override val listaItemRepository: ListaItemRepository by lazy {
+        OfflineListaItemRepository(InventoryDatabase.getDatabase(context).ListaItemDao())
     }
 }
