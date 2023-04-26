@@ -1,17 +1,12 @@
 package com.veramed.inventario.ui.lista
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode.Companion.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -82,7 +77,7 @@ fun AgregarItemEntryBody(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(32.dp)
     ) {
-        CameraPreview()
+        //CameraPreview()
         AgregarItemInputForm(itemDetails = itemUiState.itemDetails, onValueChange = onItemValueChange)
         Button(
             onClick = onSaveClick,
@@ -101,25 +96,35 @@ fun AgregarItemInputForm(
     onValueChange: (ItemDetails) -> Unit = {},
     enabled: Boolean = true
 ) {
+
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        OutlinedTextField(
-            value = itemDetails.barra,
-            onValueChange = { onValueChange(itemDetails.copy(name = it)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            label = { Text(stringResource(R.string.item_barra_req)) },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
-        OutlinedTextField(
-            value = itemDetails.quantity,
-            onValueChange = { onValueChange(itemDetails.copy(quantity = it)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            label = { Text(stringResource(R.string.quantity_req)) },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
+        Row() {
+            Card(modifier = modifier.width(300.dp).height(150.dp)) {
+                CameraPreview()
+                Text(text = "Escanee el codigo de barra",color = androidx.compose.ui.graphics.Color.Red)
+            }
+            Column() {
+                Text(text = "Descripcion")
+                OutlinedTextField(
+                    value = itemDetails.barra,
+                    onValueChange = { onValueChange(itemDetails.copy(name = it)) },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    label = { Text(stringResource(R.string.item_barra_req)) },
+                    //modifier = Modifier.fillMaxWidth(),
+                    enabled = enabled,
+                    singleLine = true
+                )
+                OutlinedTextField(
+                    value = itemDetails.quantity,
+                    onValueChange = { onValueChange(itemDetails.copy(quantity = it)) },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    label = { Text(stringResource(R.string.quantity_req)) },
+                    //modifier = Modifier.fillMaxWidth(),
+                    enabled = enabled,
+                    singleLine = true
+                )
+            }
+       }
     }
 }
 

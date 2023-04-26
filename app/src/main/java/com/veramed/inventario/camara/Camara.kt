@@ -50,7 +50,7 @@ fun CameraPreview() {
             }
         },
         modifier = Modifier
-            .width(400.dp).height(100.dp),
+            .width(400.dp).height(50.dp),
 
         update = { previewView ->
             val cameraSelector: CameraSelector = CameraSelector.Builder()
