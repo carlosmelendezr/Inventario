@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.veramed.inventario.InventoryTopAppBar
 import com.veramed.inventario.R
+import com.veramed.inventario.camara.CameraPreview
 import com.veramed.inventario.ui.AppViewModelProvider
 import com.veramed.inventario.ui.navigation.NavigationDestination
 import com.veramed.inventario.ui.theme.InventoryTheme
@@ -81,6 +82,7 @@ fun AgregarItemEntryBody(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(32.dp)
     ) {
+        CameraPreview()
         AgregarItemInputForm(itemDetails = itemUiState.itemDetails, onValueChange = onItemValueChange)
         Button(
             onClick = onSaveClick,
