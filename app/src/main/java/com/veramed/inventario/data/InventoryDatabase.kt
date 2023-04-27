@@ -5,11 +5,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import java.io.File
 
 /**
  * Database class with a singleton INSTANCE object.
  */
-@Database(entities = [Item::class,Lista::class,Tipo::class, Usuario::class, Sesion::class, ListaItems::class], version = 4, exportSchema = false)
+@Database(entities = [Item::class,
+    Lista::class,Tipo::class, Usuario::class,
+    Sesion::class, ListaItems::class],
+    version = 5, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class InventoryDatabase : RoomDatabase() {
 
@@ -34,6 +38,8 @@ abstract class InventoryDatabase : RoomDatabase() {
                      * attempts to perform a migration with no defined migration path.
                      */
                     .fallbackToDestructiveMigration()
+                    .createFromAsset("database/inven_maestro.db")
+                    //.addCallback(InicializaItems(context))
                     .build()
                     .also { Instance = it }
             }

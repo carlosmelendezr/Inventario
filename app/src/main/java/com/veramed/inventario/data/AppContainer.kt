@@ -44,4 +44,6 @@ class AppDataContainer(private val context: Context) : AppContainer {
     override val listaItemRepository: ListaItemRepository by lazy {
         OfflineListaItemRepository(InventoryDatabase.getDatabase(context).ListaItemDao())
     }
+
+
 }
