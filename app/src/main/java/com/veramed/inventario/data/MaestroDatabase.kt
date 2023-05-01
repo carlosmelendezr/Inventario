@@ -1,5 +1,6 @@
 package com.veramed.inventario.data
 
+
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
@@ -10,33 +11,28 @@ import java.io.File
 /**
  * Database class with a singleton INSTANCE object.
  */
-@Database(entities = [
-    Lista::class,Tipo::class, Usuario::class,
-    Sesion::class, ListaItems::class],
-    version = 6, exportSchema = false)
+@Database(entities = [Item::class],
+    version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
-abstract class InventoryDatabase : RoomDatabase() {
+abstract class MaestroDatabase : RoomDatabase() {
 
-    abstract fun listaDao(): ListaDao
-    abstract fun tipoDao(): TipoDao
-    abstract fun usuarioDao(): UsuarioDao
-    abstract fun sesionDao(): SesionDao
-    abstract fun ListaItemDao(): ListaItemDao
+    abstract fun itemDao(): ItemDao
+
 
     companion object {
         @Volatile
-        private var Instance: InventoryDatabase? = null
+        private var Instance: MaestroDatabase? = null
 
-        fun getDatabase(context: Context): InventoryDatabase {
+        fun getDatabase(context: Context): MaestroDatabase {
             // if the Instance is not null, return it, otherwise create a new database instance.
             return Instance ?: synchronized(this) {
-                Room.databaseBuilder(context, InventoryDatabase::class.java, "inven_database")
+                Room.databaseBuilder(context, MaestroDatabase::class.java, "maestro_database")
                     /**
                      * Setting this option in your app's database builder means that Room
                      * permanently deletes all data from the tables in your database when it
                      * attempts to perform a migration with no defined migration path.
                      */
-                    .fallbackToDestructiveMigration()
+                    .createFromAsset("database/inven_maestro.db")
                     .build()
                     .also { Instance = it }
             }

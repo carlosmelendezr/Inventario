@@ -22,7 +22,7 @@ class AppDataContainer(private val context: Context) : AppContainer {
      * Implementation for [ItemsRepository]
      */
     override val itemsRepository: ItemsRepository by lazy {
-        OfflineItemsRepository(InventoryDatabase.getDatabase(context).itemDao())
+        OfflineItemsRepository(MaestroDatabase.getDatabase(context).itemDao())
     }
 
     override val listaRepository: ListaRepository by lazy {
