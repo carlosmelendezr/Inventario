@@ -1,6 +1,7 @@
 package com.veramed.inventario.ui.lista
 
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,6 +13,7 @@ import com.veramed.inventario.data.ItemsRepository
 import com.veramed.inventario.data.ListaItemRepository
 import com.veramed.inventario.data.ListaItems
 import com.veramed.inventario.ui.home.HomeUiState
+import com.veramed.inventario.ui.item.toItemUiState
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -30,12 +32,18 @@ class ListaAgregarItemViewModel(
     var listaItemUiState by mutableStateOf(AgregarItemUiState())
         private set
 
-    var listaArticulosUiState by mutableStateOf(AgregarItemUiState())
-        private set
+
+    var articulo by mutableStateOf(Item(id=0,name="",0.0,0,"",""))
 
     private val itemId: Int = checkNotNull(savedStateHandle[ListaAgregarItemDestination.itemIdArg])
 
     init {
+
+        viewModelScope.launch {
+            articulo = itemsRepository.getItemStream(itemId)
+                .filterNotNull()
+                .first()
+        }
 
          var listaArticulosUiState: StateFlow<listaArticulosUiState> =
             listaitemsRepository.getItemLista(1).map { listaArticulosUiState(it) }
@@ -58,6 +66,7 @@ class ListaAgregarItemViewModel(
         fun updateUiState(itemDetails: ListaItemDetails) {
             listaItemUiState =
                 AgregarItemUiState(listaitemDetails = itemDetails, isEntryValid = validateInput(itemDetails))
+            buscarItem()
         }
 
         /**
@@ -68,6 +77,21 @@ class ListaAgregarItemViewModel(
                 listaitemsRepository.insertItem(listaItemUiState.listaitemDetails.toItem())
             }
         }
+
+    fun buscarItem() {
+        Log.d("INV","Buscando barra "+listaItemUiState.listaitemDetails.barra)
+        viewModelScope.launch {
+           articulo = itemsRepository.getItembyBarra(listaItemUiState.listaitemDetails.barra)
+                .filterNotNull()
+                .first()
+            listaItemUiState = ListaItemDetails.articuloToUIState(articulo)
+
+
+        }
+
+
+
+    }
 
         private fun validateInput(uiState: ListaItemDetails = listaItemUiState.listaitemDetails): Boolean {
             return with(uiState) {
@@ -96,6 +120,7 @@ data class ListaItemDetails(
     val barra:String = "",
     val descrip:String = ""
 )
+
 
 
 
@@ -132,4 +157,6 @@ fun ListaItemDetails.toListaItemDetails(): ListaItemDetails = ListaItemDetails(
     barra = barra,
     sap = sap
 )
+
+
 

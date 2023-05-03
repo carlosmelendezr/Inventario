@@ -33,6 +33,7 @@ abstract class MaestroDatabase : RoomDatabase() {
                      * attempts to perform a migration with no defined migration path.
                      */
                     .createFromAsset("database/inven_maestro.db")
+                    .fallbackToDestructiveMigration()
                     .build()
                     .also { Instance = it }
             }

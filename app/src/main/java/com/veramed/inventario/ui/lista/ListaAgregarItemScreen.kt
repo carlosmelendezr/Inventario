@@ -112,10 +112,10 @@ fun AgregarItemInputForm(
                 Text(text = "Escanee el codigo de barra",color = androidx.compose.ui.graphics.Color.Red)
             }
             Column() {
-                Text(text = "Descripcion")
+                Text(text = itemDetails.barra)
                 OutlinedTextField(
                     value = itemDetails.barra,
-                    onValueChange = { onValueChange(itemDetails.copy(name = it)) },
+                    onValueChange = { onValueChange(itemDetails.copy(barra = it)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     label = { Text(stringResource(R.string.item_barra_req)) },
                     //modifier = Modifier.fillMaxWidth(),
@@ -149,18 +149,7 @@ private fun ListaArticulos(
     }
 }
 
-@Composable
-private fun InventoryListHeader(modifier: Modifier = Modifier) {
-    Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-        headerList.forEach {
-            Text(
-                text = stringResource(it.headerStringId),
-                modifier = Modifier.weight(it.weight),
-                style = MaterialTheme.typography.h6
-            )
-        }
-    }
-}
+
 
 @Composable
 private fun ListItemRow(

@@ -32,7 +32,7 @@ import java.util.concurrent.Executors
 
 
 @Composable
-fun CameraPreview() {
+fun CameraPreview( ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     var preview by remember { mutableStateOf<Preview?>(null) }

@@ -16,6 +16,8 @@ interface ItemsRepository {
      */
     fun getItemStream(id: Int): Flow<Item?>
 
+    fun getItembyBarra(barra:String): Flow<Item?>
+
     /**
      * Insert item in the data source
      */
