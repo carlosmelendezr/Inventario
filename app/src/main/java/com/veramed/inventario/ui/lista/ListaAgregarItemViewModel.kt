@@ -84,7 +84,7 @@ class ListaAgregarItemViewModel(
            articulo = itemsRepository.getItembyBarra(listaItemUiState.listaitemDetails.barra)
                 .filterNotNull()
                 .first()
-            listaItemUiState = ListaItemDetails.articuloToUIState(articulo)
+            listaItemUiState.copy(articuloToListaItemDetails(articulo),false)
 
 
         }
@@ -158,5 +158,12 @@ fun ListaItemDetails.toListaItemDetails(): ListaItemDetails = ListaItemDetails(
     sap = sap
 )
 
+fun articuloToListaItemDetails(art:Item): ListaItemDetails = ListaItemDetails(
+    id = art.id,
+    name = art.name,
+    quantity = art.quantity.toString(),
+    barra = art.barra,
+    sap = art.sap
+)
 
 

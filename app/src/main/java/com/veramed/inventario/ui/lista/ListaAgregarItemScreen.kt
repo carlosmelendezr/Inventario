@@ -112,7 +112,7 @@ fun AgregarItemInputForm(
                 Text(text = "Escanee el codigo de barra",color = androidx.compose.ui.graphics.Color.Red)
             }
             Column() {
-                Text(text = itemDetails.barra)
+                Text(text = itemDetails.descrip)
                 OutlinedTextField(
                     value = itemDetails.barra,
                     onValueChange = { onValueChange(itemDetails.copy(barra = it)) },
