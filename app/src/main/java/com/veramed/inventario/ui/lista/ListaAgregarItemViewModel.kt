@@ -43,6 +43,7 @@ class ListaAgregarItemViewModel(
             articulo = itemsRepository.getItemStream(itemId)
                 .filterNotNull()
                 .first()
+            Log.d("INVBAR","Primer Articculo "+articulo.name)
         }
 
          var listaArticulosUiState: StateFlow<listaArticulosUiState> =
@@ -79,13 +80,20 @@ class ListaAgregarItemViewModel(
         }
 
     fun buscarItem() {
-        Log.d("INV","Buscando barra "+listaItemUiState.listaitemDetails.barra)
+        Log.d("INVBAR","Buscando barra "+listaItemUiState.listaitemDetails.barra)
         viewModelScope.launch {
            articulo = itemsRepository.getItembyBarra(listaItemUiState.listaitemDetails.barra)
                 .filterNotNull()
                 .first()
-            listaItemUiState = ListaItemDetails.articuloToUIState(articulo)
 
+            listaItemUiState =
+                AgregarItemUiState(listaitemDetails = ListaItemDetails(name=articulo.name,
+                    barra=articulo.barra,
+                    sap=articulo.sap,
+                    quantity = listaItemUiState.listaitemDetails.quantity), isEntryValid =true)
+
+            Log.d("INVBAR","Articulo BD ="+articulo.name+" sap ="+articulo.sap)
+            Log.d("INVBAR","Articulo UI ="+listaItemUiState.listaitemDetails.name+" sap ="+listaItemUiState.listaitemDetails.sap)
 
         }
 

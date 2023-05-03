@@ -8,7 +8,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode.Companion.Color
@@ -27,6 +29,8 @@ import com.veramed.inventario.ui.AppViewModelProvider
 import com.veramed.inventario.ui.navigation.NavigationDestination
 import com.veramed.inventario.ui.theme.InventoryTheme
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 
 object ListaAgregarItemDestination : NavigationDestination {
     override val route = "lista_agregar_items"
@@ -104,15 +108,23 @@ fun AgregarItemInputForm(
     onValueChange: (ListaItemDetails) -> Unit = {},
     enabled: Boolean = true
 ) {
+    var textbarra by rememberSaveable { mutableStateOf("") }
 
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Row() {
             Card(modifier = modifier.width(300.dp).height(150.dp)) {
-                CameraPreview()
+                CameraPreview(itemDetails,onValueChange )
                 Text(text = "Escanee el codigo de barra",color = androidx.compose.ui.graphics.Color.Red)
             }
             Column() {
-                Text(text = itemDetails.barra)
+                //Text(text = "Desc:"+itemDetails.descrip)
+                OutlinedTextField(
+                    value = itemDetails.name,
+                    onValueChange = {},
+                    label = { Text(stringResource(R.string.lista_descrip)) },
+                    enabled = false,
+                    singleLine = true
+                )
                 OutlinedTextField(
                     value = itemDetails.barra,
                     onValueChange = { onValueChange(itemDetails.copy(barra = it)) },
