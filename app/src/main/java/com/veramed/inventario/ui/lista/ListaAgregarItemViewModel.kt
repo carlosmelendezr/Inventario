@@ -32,6 +32,13 @@ class ListaAgregarItemViewModel(
     var listaItemUiState by mutableStateOf(AgregarItemUiState())
         private set
 
+    var listaArticulosUIState: StateFlow<ListaArticulosUiState> =
+        listaitemsRepository.getItemLista(1).map { ListaArticulosUiState(it) }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+                initialValue = ListaArticulosUiState()
+            )
 
     var articulo by mutableStateOf(Item(id=0,name="",0.0,0,"",""))
 
@@ -46,13 +53,7 @@ class ListaAgregarItemViewModel(
             Log.d("INVBAR","Primer Articculo "+articulo.name)
         }
 
-         var listaArticulosUiState: StateFlow<listaArticulosUiState> =
-            listaitemsRepository.getItemLista(1).map { listaArticulosUiState(it) }
-                .stateIn(
-                    scope = viewModelScope,
-                    started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                    initialValue = listaArticulosUiState()
-                )
+
       }
         companion object {
             private const val TIMEOUT_MILLIS = 5_000L
@@ -74,13 +75,16 @@ class ListaAgregarItemViewModel(
          * Inserts an [Item] in the Room database
          */
         suspend fun saveItem() {
+            Log.d("INVBAR","Intentando guardar")
             if (validateInput()) {
                 listaitemsRepository.insertItem(listaItemUiState.listaitemDetails.toItem())
+                listaItemUiState =
+                    AgregarItemUiState(listaitemDetails = ListaItemDetails(), isEntryValid =false)
             }
         }
 
     fun buscarItem() {
-        Log.d("INVBAR","Buscando barra "+listaItemUiState.listaitemDetails.barra)
+        //Log.d("INVBAR","Buscando barra "+listaItemUiState.listaitemDetails.barra)
         viewModelScope.launch {
            articulo = itemsRepository.getItembyBarra(listaItemUiState.listaitemDetails.barra)
                 .filterNotNull()
@@ -89,11 +93,11 @@ class ListaAgregarItemViewModel(
             listaItemUiState =
                 AgregarItemUiState(listaitemDetails = ListaItemDetails(name=articulo.name,
                     barra=articulo.barra,
-                    sap=articulo.sap,
+                    sap=articulo.sap,descrip=articulo.name,
                     quantity = listaItemUiState.listaitemDetails.quantity), isEntryValid =true)
 
-            Log.d("INVBAR","Articulo BD ="+articulo.name+" sap ="+articulo.sap)
-            Log.d("INVBAR","Articulo UI ="+listaItemUiState.listaitemDetails.name+" sap ="+listaItemUiState.listaitemDetails.sap)
+            //Log.d("INVBAR","Articulo BD ="+articulo.name+" sap ="+articulo.sap)
+            //Log.d("INVBAR","Articulo UI ="+listaItemUiState.listaitemDetails.name+" sap ="+listaItemUiState.listaitemDetails.sap)
 
         }
 
@@ -103,13 +107,13 @@ class ListaAgregarItemViewModel(
 
         private fun validateInput(uiState: ListaItemDetails = listaItemUiState.listaitemDetails): Boolean {
             return with(uiState) {
-                name.isNotBlank() && price.isNotBlank() && quantity.isNotBlank()
+                name.isNotBlank() && quantity.isNotBlank()
             }
         }
 
 }
 
-data class listaArticulosUiState(val itemList: List<ListaItems> = listOf())
+data class ListaArticulosUiState(val itemList: List<ListaItems> = listOf())
 
 /**
  * Represents Ui State for an Item.
@@ -117,6 +121,7 @@ data class listaArticulosUiState(val itemList: List<ListaItems> = listOf())
 data class AgregarItemUiState(
     val listaitemDetails: ListaItemDetails = ListaItemDetails(),
     val isEntryValid: Boolean = false
+
 )
 
 data class ListaItemDetails(

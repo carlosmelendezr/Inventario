@@ -68,11 +68,13 @@ fun ListaAgregarItemScreen(
                 // be cancelled - since the scope is bound to composition.
                 coroutineScope.launch {
                     viewModel.saveItem()
-                    navigateBack()
+                    //navigateBack()
                 }
             },
             modifier = modifier.padding(innerPadding)
         )
+        //ListaArticulos(itemList = viewModel.listaArticulosUIState )
+
     }
 }
 
@@ -98,6 +100,7 @@ fun AgregarItemEntryBody(
         ) {
             Text(stringResource(R.string.save_action))
         }
+
     }
 }
 
