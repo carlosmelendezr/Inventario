@@ -1,15 +1,15 @@
 package com.veramed.inventario.ui.lista
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,8 +29,6 @@ import com.veramed.inventario.ui.AppViewModelProvider
 import com.veramed.inventario.ui.navigation.NavigationDestination
 import com.veramed.inventario.ui.theme.InventoryTheme
 import kotlinx.coroutines.launch
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
 
 object ListaAgregarItemDestination : NavigationDestination {
     override val route = "lista_agregar_items"
@@ -49,6 +47,7 @@ fun ListaAgregarItemScreen(
 
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val listaUiState by viewModel.listaArticulosUIState.collectAsState()
     Scaffold(
         topBar = {
             InventoryTopAppBar(
@@ -60,6 +59,7 @@ fun ListaAgregarItemScreen(
     ) { innerPadding ->
         AgregarItemEntryBody(
             itemUiState = viewModel.listaItemUiState,
+            listaUiState = listaUiState,
             onItemValueChange = viewModel::updateUiState,
             onSaveClick = {
                 // Note: If the user rotates the screen very fast, the operation may get cancelled
@@ -73,7 +73,7 @@ fun ListaAgregarItemScreen(
             },
             modifier = modifier.padding(innerPadding)
         )
-        //ListaArticulos(itemList = viewModel.listaArticulosUIState )
+
 
     }
 }
@@ -81,6 +81,7 @@ fun ListaAgregarItemScreen(
 @Composable
 fun AgregarItemEntryBody(
     itemUiState: AgregarItemUiState,
+    listaUiState: ListaArticulosUiState,
     onItemValueChange: (ListaItemDetails) -> Unit,
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -100,6 +101,7 @@ fun AgregarItemEntryBody(
         ) {
             Text(stringResource(R.string.save_action))
         }
+        ListaArticulos(itemList = listaUiState.itemList,{} )
 
     }
 }
@@ -115,7 +117,9 @@ fun AgregarItemInputForm(
 
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Row() {
-            Card(modifier = modifier.width(300.dp).height(150.dp)) {
+            Card(modifier = modifier
+                .width(300.dp)
+                .height(150.dp)) {
                 CameraPreview(itemDetails,onValueChange )
                 Text(text = "Escanee el codigo de barra",color = androidx.compose.ui.graphics.Color.Red)
             }
@@ -175,29 +179,33 @@ private fun ListItemRow(
     Row(modifier = modifier
         .fillMaxWidth()
         .clickable { onItemClick(lista) }
-        .padding(vertical = 16.dp)
+        .padding(vertical = 10.dp, horizontal = 5.dp)
     ) {
-       /* val paddingModifier  = Modifier
-            .padding(10.dp)
-            .fillMaxWidth()*/
+               Text(
+                   text = lista.sap,
+                   fontWeight = FontWeight.Bold,
+                   style = MaterialTheme.typography.h6
+               )
 
-            Row() {
+               Text(
+                   text = lista.descrip,
+                   fontWeight = FontWeight.Normal,
+                   style = MaterialTheme.typography.h6
+               )
 
-                Column(Modifier.fillMaxWidth()) {
-                    // Encabezado
+               Text(
+                   text = lista.cant.toString(),
+                   fontWeight = FontWeight.Bold,
+                   style = MaterialTheme.typography.h6
+               )
 
-                    Text(
-                        text = lista.descrip,
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.h6
-                    )
-
-                    // Subtítulo
+               Text(
+                   text = lista.barra,
+                   fontWeight = FontWeight.Light,
+                   style = MaterialTheme.typography.h6
+               )
 
 
-                }
-
-            }
 
     }
 }
