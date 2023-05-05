@@ -1,11 +1,12 @@
 package com.veramed.inventario.ui.lista
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.BorderStroke
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
+
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -179,32 +180,39 @@ private fun ListItemRow(
     Row(modifier = modifier
         .fillMaxWidth()
         .clickable { onItemClick(lista) }
-        .padding(vertical = 10.dp, horizontal = 5.dp)
+        .padding(vertical = 5.dp, horizontal = 5.dp)
     ) {
-               Text(
-                   text = lista.sap,
-                   fontWeight = FontWeight.Bold,
-                   style = MaterialTheme.typography.h6
-               )
-
-               Text(
-                   text = lista.descrip,
-                   fontWeight = FontWeight.Normal,
-                   style = MaterialTheme.typography.h6
-               )
-
-               Text(
-                   text = lista.cant.toString(),
-                   fontWeight = FontWeight.Bold,
-                   style = MaterialTheme.typography.h6
-               )
-
-               Text(
-                   text = lista.barra,
-                   fontWeight = FontWeight.Light,
-                   style = MaterialTheme.typography.h6
-               )
-
+        Box(modifier=Modifier.weight(2f,fill=true)) {
+            Text(
+                text = lista.sap,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.h6
+            )
+        }
+        Spacer(modifier = Modifier.weight(1f,fill = true))
+        Box(modifier=Modifier.weight(5f,fill=true)) {
+            Text(
+                text = lista.descrip,
+                fontWeight = FontWeight.Normal,
+                style = MaterialTheme.typography.h6
+            )
+        }
+        Spacer(modifier = Modifier.weight(1f,fill = true))
+        Box(modifier=Modifier.weight(1f,fill=true)) {
+            Text(
+                text = lista.cant.toString(),
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.h6
+            )
+        }
+        Spacer(modifier = Modifier.weight(1f,fill = true))
+        Box(modifier=Modifier.weight(2f,fill=true)) {
+            Text(
+                text = lista.barra,
+                fontWeight = FontWeight.Light,
+                style = MaterialTheme.typography.h6
+            )
+        }
 
 
     }
