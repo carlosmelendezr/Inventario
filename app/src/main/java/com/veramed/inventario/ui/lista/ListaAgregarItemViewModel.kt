@@ -46,12 +46,12 @@ class ListaAgregarItemViewModel(
 
     init {
 
-        viewModelScope.launch {
+        /*viewModelScope.launch {
             articulo = itemsRepository.getItemStream(itemId)
                 .filterNotNull()
                 .first()
             Log.d("INVBAR","Primer Articculo "+articulo.name)
-        }
+        }*/
 
 
       }
@@ -68,7 +68,9 @@ class ListaAgregarItemViewModel(
         fun updateUiState(itemDetails: ListaItemDetails) {
             listaItemUiState =
                 AgregarItemUiState(listaitemDetails = itemDetails, isEntryValid = validateInput(itemDetails))
-            buscarItem()
+            if (itemDetails.barra.length>7) {
+                buscarItem()
+            }
         }
 
         /**
@@ -84,20 +86,36 @@ class ListaAgregarItemViewModel(
         }
 
     fun buscarItem() {
-        //Log.d("INVBAR","Buscando barra "+listaItemUiState.listaitemDetails.barra)
+        Log.d("INVBAR","Buscando barra "+listaItemUiState.listaitemDetails.barra)
+
         viewModelScope.launch {
            articulo = itemsRepository.getItembyBarra(listaItemUiState.listaitemDetails.barra)
                 .filterNotNull()
                 .first()
 
-            listaItemUiState =
-                AgregarItemUiState(listaitemDetails = ListaItemDetails(name=articulo.name,
-                    barra=articulo.barra,
-                    sap=articulo.sap,descrip=articulo.name,
-                    quantity = listaItemUiState.listaitemDetails.quantity), isEntryValid =true)
+        }
 
-            //Log.d("INVBAR","Articulo BD ="+articulo.name+" sap ="+articulo.sap)
-            //Log.d("INVBAR","Articulo UI ="+listaItemUiState.listaitemDetails.name+" sap ="+listaItemUiState.listaitemDetails.sap)
+        if (articulo.name.isNotBlank()) {
+            Log.d("INVBAR","BARRA EXISTE "+articulo.name)
+            listaItemUiState =
+                AgregarItemUiState(
+                    listaitemDetails = ListaItemDetails(
+                        name = articulo.name,
+                        barra = articulo.barra,
+                        sap = articulo.sap, descrip = articulo.name,
+                        quantity = listaItemUiState.listaitemDetails.quantity
+                    ), isEntryValid = true
+                )
+        } else {
+            Log.d("INVBAR","BARRA NO EXISTE "+listaItemUiState.listaitemDetails.barra)
+            listaItemUiState =
+                AgregarItemUiState(
+                    listaitemDetails = ListaItemDetails(
+                        barra = listaItemUiState.listaitemDetails.barra,
+                        descrip = "ARTICULO NO EXISTE"
+                    ), isEntryValid = false
+                )
+
 
         }
 

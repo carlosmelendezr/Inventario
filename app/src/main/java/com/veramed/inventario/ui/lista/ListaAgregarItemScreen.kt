@@ -1,13 +1,13 @@
 package com.veramed.inventario.ui.lista
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.background
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-
 import androidx.compose.foundation.lazy.LazyColumn
-
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode.Companion.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -94,14 +95,16 @@ fun AgregarItemEntryBody(
         verticalArrangement = Arrangement.spacedBy(32.dp)
     ) {
         //CameraPreview()
-        AgregarItemInputForm(itemDetails = itemUiState.listaitemDetails, onValueChange = onItemValueChange)
-        Button(
+        AgregarItemInputForm(itemDetails = itemUiState.listaitemDetails,
+            onValueChange = onItemValueChange,
+            onSaveClick = onSaveClick)
+        /*Button(
             onClick = onSaveClick,
             enabled = itemUiState.isEntryValid,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(stringResource(R.string.save_action))
-        }
+        }*/
         ListaArticulos(itemList = listaUiState.itemList,{} )
 
     }
@@ -112,27 +115,31 @@ fun AgregarItemInputForm(
     itemDetails: ListaItemDetails,
     modifier: Modifier = Modifier,
     onValueChange: (ListaItemDetails) -> Unit = {},
+    onSaveClick: () -> Unit,
     enabled: Boolean = true
 ) {
     var textbarra by rememberSaveable { mutableStateOf("") }
 
-    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        TextField(
+            value = itemDetails.descrip,
+            modifier = Modifier.fillMaxWidth().background(androidx.compose.ui.graphics.Color.Green),
+            onValueChange = {},
+            label = { Text(stringResource(R.string.lista_descrip)) },
+            enabled = false,
+            singleLine = true
+        )
         Row() {
             Card(modifier = modifier
                 .width(300.dp)
                 .height(150.dp)) {
+
                 CameraPreview(itemDetails,onValueChange )
-                Text(text = "Escanee el codigo de barra",color = androidx.compose.ui.graphics.Color.Red)
+
             }
+
             Column() {
-                //Text(text = "Desc:"+itemDetails.descrip)
-                OutlinedTextField(
-                    value = itemDetails.name,
-                    onValueChange = {},
-                    label = { Text(stringResource(R.string.lista_descrip)) },
-                    enabled = false,
-                    singleLine = true
-                )
+
                 OutlinedTextField(
                     value = itemDetails.barra,
                     onValueChange = { onValueChange(itemDetails.copy(barra = it)) },
@@ -145,12 +152,18 @@ fun AgregarItemInputForm(
                 OutlinedTextField(
                     value = itemDetails.quantity,
                     onValueChange = { onValueChange(itemDetails.copy(quantity = it)) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number,imeAction = ImeAction.Send),
+                    keyboardActions = KeyboardActions(
+                        onSend = {
+                            onSaveClick()
+                        }
+                    ),
                     label = { Text(stringResource(R.string.quantity_req)) },
                     //modifier = Modifier.fillMaxWidth(),
                     enabled = enabled,
                     singleLine = true
                 )
+
             }
        }
     }
