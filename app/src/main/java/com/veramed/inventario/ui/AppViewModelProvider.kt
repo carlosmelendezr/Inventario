@@ -71,7 +71,8 @@ object AppViewModelProvider {
             ListaAgregarItemViewModel(
                 this.createSavedStateHandle(),
                 inventoryApplication().container.itemsRepository,
-                inventoryApplication().container.listaItemRepository
+                inventoryApplication().container.listaItemRepository,
+                inventoryApplication()
             )
         }
     }

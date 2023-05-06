@@ -1,18 +1,24 @@
 package com.veramed.inventario.ui.lista
 
 
+import android.content.Context
+import android.media.MediaPlayer
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.veramed.inventario.InventoryApp
+import com.veramed.inventario.R
 import com.veramed.inventario.data.Item
 import com.veramed.inventario.data.ItemsRepository
 import com.veramed.inventario.data.ListaItemRepository
 import com.veramed.inventario.data.ListaItems
 import com.veramed.inventario.ui.home.HomeUiState
+import com.veramed.inventario.ui.inventoryApplication
 import com.veramed.inventario.ui.item.toItemUiState
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -23,8 +29,12 @@ import kotlinx.coroutines.launch
  */
 class ListaAgregarItemViewModel(
     savedStateHandle: SavedStateHandle,
-    private val itemsRepository: ItemsRepository,private val listaitemsRepository: ListaItemRepository
+    private val itemsRepository: ItemsRepository,
+    private val listaitemsRepository: ListaItemRepository,
+    context: Context
 ) : ViewModel() {
+
+     val mp: MediaPlayer = MediaPlayer.create( context, R.raw.error)
 
     /**
      * Holds current item ui state
@@ -44,18 +54,7 @@ class ListaAgregarItemViewModel(
 
     private val itemId: Int = checkNotNull(savedStateHandle[ListaAgregarItemDestination.itemIdArg])
 
-    init {
-
-        /*viewModelScope.launch {
-            articulo = itemsRepository.getItemStream(itemId)
-                .filterNotNull()
-                .first()
-            Log.d("INVBAR","Primer Articculo "+articulo.name)
-        }*/
-
-
-      }
-        companion object {
+           companion object {
             private const val TIMEOUT_MILLIS = 5_000L
         }
 
@@ -93,20 +92,22 @@ class ListaAgregarItemViewModel(
                 .filterNotNull()
                 .first()
 
+            if (articulo.name.isNotBlank()) {
+                Log.d("INVBAR","BARRA EXISTE "+articulo.name)
+                listaItemUiState =
+                    AgregarItemUiState(
+                        listaitemDetails = ListaItemDetails(
+                            name = articulo.name,
+                            barra = articulo.barra,
+                            sap = articulo.sap, descrip = articulo.name,
+                            quantity = listaItemUiState.listaitemDetails.quantity
+                        ), isEntryValid = true
+                    )
+            }
+
         }
 
-        if (articulo.name.isNotBlank()) {
-            Log.d("INVBAR","BARRA EXISTE "+articulo.name)
-            listaItemUiState =
-                AgregarItemUiState(
-                    listaitemDetails = ListaItemDetails(
-                        name = articulo.name,
-                        barra = articulo.barra,
-                        sap = articulo.sap, descrip = articulo.name,
-                        quantity = listaItemUiState.listaitemDetails.quantity
-                    ), isEntryValid = true
-                )
-        } else {
+        if (!listaItemUiState.isEntryValid ){
             Log.d("INVBAR","BARRA NO EXISTE "+listaItemUiState.listaitemDetails.barra)
             listaItemUiState =
                 AgregarItemUiState(
@@ -115,7 +116,7 @@ class ListaAgregarItemViewModel(
                         descrip = "ARTICULO NO EXISTE"
                     ), isEntryValid = false
                 )
-
+             mp.start()
 
         }
 

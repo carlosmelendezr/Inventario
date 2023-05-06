@@ -3,6 +3,7 @@ package com.veramed.inventario.camara
 
 
 import android.Manifest
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup
@@ -27,6 +28,7 @@ import androidx.core.content.ContextCompat
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.common.util.concurrent.ListenableFuture
+import com.veramed.inventario.R
 import com.veramed.inventario.ui.item.ItemDetails
 import com.veramed.inventario.ui.lista.ListaItemDetails
 import java.util.concurrent.ExecutorService
@@ -40,6 +42,7 @@ fun CameraPreview(   itemDetails: ListaItemDetails,
     val lifecycleOwner = LocalLifecycleOwner.current
     var preview by remember { mutableStateOf<Preview?>(null) }
     val barCodeVal = remember { mutableStateOf("") }
+    val mp: MediaPlayer = MediaPlayer.create(context, R.raw.scannerbeep)
 
     AndroidView(
         factory = { AndroidViewContext ->
@@ -74,6 +77,7 @@ fun CameraPreview(   itemDetails: ListaItemDetails,
                             barCodeVal.value = barcodeValue
                                 .also {
                                     onValueChange(itemDetails.copy(barra = barcodeValue))
+                                    mp.start()
                                 }
                             Toast.makeText(context, barcodeValue, Toast.LENGTH_SHORT).show()
                         }
