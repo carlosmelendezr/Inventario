@@ -14,7 +14,12 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.BlendMode.Companion.Color
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -97,7 +102,7 @@ fun AgregarItemEntryBody(
         //CameraPreview()
         AgregarItemInputForm(itemDetails = itemUiState.listaitemDetails,
             onValueChange = onItemValueChange,
-            onSaveClick = onSaveClick)
+            onSaveClick = onSaveClick,enabled=itemUiState.isEntryValid)
         /*Button(
             onClick = onSaveClick,
             enabled = itemUiState.isEntryValid,
@@ -118,12 +123,22 @@ fun AgregarItemInputForm(
     onSaveClick: () -> Unit,
     enabled: Boolean = true
 ) {
-    var textbarra by rememberSaveable { mutableStateOf("") }
+    var enableBarra = !enabled;
+    val cantFocusRequester = remember { FocusRequester() }
+
+
+
+    val colorEstado: Color
+    if (itemDetails.descrip.contains("ERROR"))
+        {colorEstado=androidx.compose.ui.graphics.Color.Red} else {colorEstado=androidx.compose.ui.graphics.Color.Green}
+
 
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         TextField(
             value = itemDetails.descrip,
-            modifier = Modifier.fillMaxWidth().background(androidx.compose.ui.graphics.Color.Green),
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(colorEstado),
             onValueChange = {},
             label = { Text(stringResource(R.string.lista_descrip)) },
             enabled = false,
@@ -145,8 +160,8 @@ fun AgregarItemInputForm(
                     onValueChange = { onValueChange(itemDetails.copy(barra = it)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     label = { Text(stringResource(R.string.item_barra_req)) },
-                    //modifier = Modifier.fillMaxWidth(),
-                    enabled = enabled,
+                    //modifier = Modifier.onFocusEvent { it. },
+                    enabled = enableBarra,
                     singleLine = true
                 )
                 OutlinedTextField(
@@ -156,13 +171,21 @@ fun AgregarItemInputForm(
                     keyboardActions = KeyboardActions(
                         onSend = {
                             onSaveClick()
+                            cantFocusRequester.freeFocus()
                         }
                     ),
                     label = { Text(stringResource(R.string.quantity_req)) },
-                    //modifier = Modifier.fillMaxWidth(),
-                    enabled = enabled,
-                    singleLine = true
+                    modifier = Modifier.focusRequester(cantFocusRequester),
+                    enabled = enabled ,
+                    singleLine = true ,
+
                 )
+
+                SideEffect {
+                    if (enabled) {
+                        cantFocusRequester.requestFocus()
+                    }
+                }
 
             }
        }

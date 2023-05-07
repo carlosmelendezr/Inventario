@@ -103,17 +103,22 @@ class ListaAgregarItemViewModel(
                             quantity = listaItemUiState.listaitemDetails.quantity
                         ), isEntryValid = true
                     )
+
             }
 
         }
 
-        if (!listaItemUiState.isEntryValid ){
+        /*
+        * Estado de error cuando no existe la barra.
+        * */
+
+        if (!listaItemUiState.isEntryValid && listaItemUiState.listaitemDetails.barra.isNotBlank()  ){
             Log.d("INVBAR","BARRA NO EXISTE "+listaItemUiState.listaitemDetails.barra)
             listaItemUiState =
                 AgregarItemUiState(
                     listaitemDetails = ListaItemDetails(
                         barra = listaItemUiState.listaitemDetails.barra,
-                        descrip = "ARTICULO NO EXISTE"
+                        descrip = "ERROR: ARTICULO "+listaItemUiState.listaitemDetails.barra+" NO EXISTE"
                     ), isEntryValid = false
                 )
              mp.start()
