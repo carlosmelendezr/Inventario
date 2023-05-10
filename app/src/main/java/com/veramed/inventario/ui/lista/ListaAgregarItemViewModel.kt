@@ -51,6 +51,7 @@ class ListaAgregarItemViewModel(
             )
 
     var articulo by mutableStateOf(Item(id=0,name="",0.0,0,"",""))
+    var estadoError by mutableStateOf(false)
 
     private val itemId: Int = checkNotNull(savedStateHandle[ListaAgregarItemDestination.itemIdArg])
 
@@ -88,11 +89,20 @@ class ListaAgregarItemViewModel(
         Log.d("INVBAR","Buscando barra "+listaItemUiState.listaitemDetails.barra)
 
         viewModelScope.launch {
-           articulo = itemsRepository.getItembyBarra(listaItemUiState.listaitemDetails.barra)
-                .filterNotNull()
-                .first()
+            Log.d("INVBAR","Buscando 2 barra "+listaItemUiState.listaitemDetails.barra)
 
-            if (articulo.name.isNotBlank()) {
+            try {
+                var result = itemsRepository.getItembyBarra(listaItemUiState.listaitemDetails.barra)
+                //articulo = result.filterNotNull().first()
+                /*articulo = itemsRepository.getItembyBarra(listaItemUiState.listaitemDetails.barra)
+               .filterNotNull()
+               .first()*/
+            } catch(e:Exception) {
+                Log.d("INVBAR","Exception  "+e.message)
+                estadoError=true
+            }
+
+            if (!estadoError && articulo.barra.length>7) {
                 Log.d("INVBAR","BARRA EXISTE "+articulo.name)
                 listaItemUiState =
                     AgregarItemUiState(
@@ -103,7 +113,7 @@ class ListaAgregarItemViewModel(
                             quantity = listaItemUiState.listaitemDetails.quantity
                         ), isEntryValid = true
                     )
-
+                estadoError=false
             }
 
         }
@@ -112,7 +122,9 @@ class ListaAgregarItemViewModel(
         * Estado de error cuando no existe la barra.
         * */
 
-        if (!listaItemUiState.isEntryValid && listaItemUiState.listaitemDetails.barra.isNotBlank()  ){
+        Log.d("INVBAR","Estado Error "+estadoError)
+       // if (!listaItemUiState.isEntryValid && listaItemUiState.listaitemDetails.barra.isNotBlank()  ){
+        if (estadoError ){
             Log.d("INVBAR","BARRA NO EXISTE "+listaItemUiState.listaitemDetails.barra)
             listaItemUiState =
                 AgregarItemUiState(
