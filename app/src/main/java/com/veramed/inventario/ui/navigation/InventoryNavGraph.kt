@@ -13,10 +13,7 @@ import com.veramed.inventario.ui.home.HomeLista
 import com.veramed.inventario.ui.home.HomeListaDestino
 import com.veramed.inventario.ui.home.HomeScreen
 import com.veramed.inventario.ui.item.*
-import com.veramed.inventario.ui.lista.ListaAgregarItemDestination
-import com.veramed.inventario.ui.lista.ListaAgregarItemScreen
-import com.veramed.inventario.ui.lista.ListaEntryDestination
-import com.veramed.inventario.ui.lista.ListaEntryScreen
+import com.veramed.inventario.ui.lista.*
 import com.veramed.inventario.ui.usuario.UsuarioEntryDestination
 import com.veramed.inventario.ui.usuario.UsuarioEntryScreen
 import com.veramed.inventario.ui.usuario.UsuarioLoginDestination
@@ -90,7 +87,19 @@ fun InventoryNavHost(
         ) {
             ListaAgregarItemScreen(
                 navigateBack = { navController.popBackStack() },
-                onNavigateUp = { navController.navigateUp() }
+                onNavigateUp = { navController.navigateUp() },
+                navigateToDetalles = {navController.navigate(ListaDetalleDestination.route)}
+            )
+        }
+
+        composable(
+            route = ListaDetalleDestination.routeWithArgs,
+            arguments = listOf(navArgument(ListaDetalleDestination.itemIdArg) {
+                type = NavType.IntType
+            })
+        ) {
+            ListaDetalleScreen(
+                navigateBack = { navController.popBackStack() }
             )
         }
 
