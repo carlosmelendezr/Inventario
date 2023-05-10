@@ -49,6 +49,7 @@ object ListaAgregarItemDestination : NavigationDestination {
 fun ListaAgregarItemScreen(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
+    navigateToDetalles:(Int) ->Unit,
     modifier: Modifier = Modifier,
     viewModel: ListaAgregarItemViewModel = viewModel(factory = AppViewModelProvider.Factory)
 
@@ -78,7 +79,8 @@ fun ListaAgregarItemScreen(
                     //navigateBack()
                 }
             },
-            modifier = modifier.padding(innerPadding)
+            modifier = modifier.padding(innerPadding),
+            navigateToDetalles=navigateToDetalles
         )
 
 
@@ -91,7 +93,8 @@ fun AgregarItemEntryBody(
     listaUiState: ListaArticulosUiState,
     onItemValueChange: (ListaItemDetails) -> Unit,
     onSaveClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToDetalles: (Int) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -110,7 +113,7 @@ fun AgregarItemEntryBody(
         ) {
             Text(stringResource(R.string.save_action))
         }*/
-        ListaArticulos(itemList = listaUiState.itemList,{} )
+        ListaArticulos(itemList = listaUiState.itemList,{}, navigateToDetalles=navigateToDetalles)
 
     }
 }
@@ -195,11 +198,12 @@ fun AgregarItemInputForm(
 private fun ListaArticulos(
     itemList: List<ListaItems>,
     onItemClick: (ListaItems) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToDetalles: (Int) -> Unit
 ) {
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         items(items = itemList, key = { it.id }) { listaitem ->
-            ListItemRow(lista = listaitem, onItemClick = onItemClick)
+            ListItemRow(lista = listaitem, onItemClick = onItemClick, navigateToDetalles=navigateToDetalles)
             Divider()
         }
     }
@@ -211,12 +215,14 @@ private fun ListaArticulos(
 private fun ListItemRow(
     lista: ListaItems,
     onItemClick: (ListaItems) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToDetalles: (Int) -> Unit
 ) {
     Row(modifier = modifier
         .fillMaxWidth()
         .clickable { onItemClick(lista) }
-        .padding(vertical = 5.dp, horizontal = 5.dp)
+        .padding(vertical = 5.dp, horizontal = 5.dp).clickable {  navigateToDetalles(lista.id) }
+
     ) {
         Box(modifier=Modifier.weight(2f,fill=true)) {
             Text(
@@ -268,7 +274,7 @@ private val headerList = listOf(
 fun ListaAgregarItemScreenPreview() {
     InventoryTheme {
         ListaAgregarItemScreen(navigateBack = { /*Do nothing*/ },
-            onNavigateUp = { /*Do nothing*/ }
+            onNavigateUp = { /*Do nothing*/ }, navigateToDetalles = {}
         )
     }
 }

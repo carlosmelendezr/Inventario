@@ -7,16 +7,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
@@ -28,6 +21,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -51,8 +45,7 @@ object ListaDetalleDestination : NavigationDestination {
 }
 
 @Composable
-fun ItemDetailsScreen(
-    navigateToEditItem: (Int) -> Unit,
+fun ListaDetalleScreen(
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ItemDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory)
@@ -68,20 +61,9 @@ fun ItemDetailsScreen(
                 navigateUp = navigateBack
             )
         },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { navigateToEditItem(uiState.value.itemDetails.id) },
-                modifier = Modifier.navigationBarsPadding()
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = stringResource(R.string.edit_item_title),
-                    tint = MaterialTheme.colors.onPrimary
-                )
-            }
-        },
+
     ) { innerPadding ->
-        ItemDetailsBody(
+        ItemDetallesBody(
             itemDetailsUiState = uiState.value,
             onSellItem = { viewModel.reduceQuantityByOne() },
             onDelete = {
@@ -100,7 +82,7 @@ fun ItemDetailsScreen(
 }
 
 @Composable
-private fun ItemDetailsBody(
+private fun ItemDetallesBody(
     itemDetailsUiState: ItemDetailsUiState,
     onSellItem: () -> Unit,
     onDelete: () -> Unit,
@@ -113,14 +95,8 @@ private fun ItemDetailsBody(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
-        ItemInputFormOLD(itemDetails = itemDetailsUiState.itemDetails, enabled = false)
-        Button(
-            onClick = onSellItem,
-            modifier = Modifier.fillMaxWidth(),
-            enabled = !itemDetailsUiState.outOfStock
-        ) {
-            Text(stringResource(R.string.sell))
-        }
+        EditItemInputForm(itemDetails = itemDetailsUiState.itemDetails, enabled = false)
+
         OutlinedButton(
             onClick = { deleteConfirmationRequired = true },
             modifier = Modifier.fillMaxWidth()
@@ -138,6 +114,51 @@ private fun ItemDetailsBody(
         }
     }
 }
+@Composable
+fun EditItemInputForm(
+    itemDetails: ItemDetails,
+    modifier: Modifier = Modifier,
+    onValueChange: (ItemDetails) -> Unit = {},
+    enabled: Boolean = true
+) {
+    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        OutlinedTextField(
+             value = itemDetails.name,
+             onValueChange = { onValueChange(itemDetails.copy(name = it)) },
+             label = { Text(stringResource(R.string.item_name_req)) },
+             modifier = Modifier.fillMaxWidth(),
+             enabled = false,
+             singleLine = true
+         )
+        OutlinedTextField(
+            value = itemDetails.sap,
+            onValueChange = { onValueChange(itemDetails.copy(name = it)) },
+            label = { Text(stringResource(R.string.item_name_req)) },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = false,
+            singleLine = true
+        )
+        OutlinedTextField(
+            value = itemDetails.barra,
+            onValueChange = { onValueChange(itemDetails.copy(name = it)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            label = { Text(stringResource(R.string.item_barra_req)) },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = false,
+            singleLine = true
+        )
+        OutlinedTextField(
+            value = itemDetails.quantity,
+            onValueChange = { onValueChange(itemDetails.copy(quantity = it)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            label = { Text(stringResource(R.string.quantity_req)) },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled,
+            singleLine = true
+        )
+    }
+}
+
 
 @Composable
 private fun DeleteConfirmationDialog(
@@ -167,7 +188,7 @@ private fun DeleteConfirmationDialog(
 @Composable
 fun ItemDetailsScreenPreview() {
     InventoryTheme {
-        ItemDetailsBody(
+        ItemDetallesBody(
             ItemDetailsUiState(
                 outOfStock = true,
                 itemDetails = ItemDetails(1, "Pen", "$100", "10")
