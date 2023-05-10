@@ -42,6 +42,7 @@ fun CameraPreview(   itemDetails: ListaItemDetails,
     val lifecycleOwner = LocalLifecycleOwner.current
     var preview by remember { mutableStateOf<Preview?>(null) }
     val barCodeVal = remember { mutableStateOf("") }
+
     val mp: MediaPlayer = MediaPlayer.create(context, R.raw.scannerbeep)
 
     AndroidView(
@@ -76,8 +77,11 @@ fun CameraPreview(   itemDetails: ListaItemDetails,
                         barcode.rawValue?.let { barcodeValue ->
                             barCodeVal.value = barcodeValue
                                 .also {
-                                    onValueChange(itemDetails.copy(barra = barcodeValue))
-                                    mp.start()
+                                    if (barcodeValue.isNotBlank()) {
+                                        onValueChange(itemDetails.copy(barra = barcodeValue))
+                                        Log.d("INVBAR","Barra escaneada = "+barcodeValue)
+                                        mp.start()
+                                    }
                                 }
                             Toast.makeText(context, barcodeValue, Toast.LENGTH_SHORT).show()
                         }
