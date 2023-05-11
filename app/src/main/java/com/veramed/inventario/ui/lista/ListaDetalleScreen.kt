@@ -48,9 +48,9 @@ object ListaDetalleDestination : NavigationDestination {
 fun ListaDetalleScreen(
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ItemDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: ListaDetalleViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val uiState = viewModel.uiState.collectAsState()
+    val uiState = viewModel.detalleUiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
@@ -65,7 +65,7 @@ fun ListaDetalleScreen(
     ) { innerPadding ->
         ItemDetallesBody(
             itemDetailsUiState = uiState.value,
-            onSellItem = { viewModel.reduceQuantityByOne() },
+            onSellItem = { /*viewModel.reduceQuantityByOne()*/ },
             onDelete = {
                 // Note: If the user rotates the screen very fast, the operation may get cancelled
                 // and the item may not be deleted from the Database. This is because when config
@@ -83,7 +83,7 @@ fun ListaDetalleScreen(
 
 @Composable
 private fun ItemDetallesBody(
-    itemDetailsUiState: ItemDetailsUiState,
+    itemDetailsUiState: ListaItemDetalleUiState,
     onSellItem: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier
@@ -95,7 +95,7 @@ private fun ItemDetallesBody(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
-        EditItemInputForm(itemDetails = itemDetailsUiState.itemDetails, enabled = false)
+        EditItemInputForm(itemDetails = itemDetailsUiState.itemDetalle, enabled = false)
 
         OutlinedButton(
             onClick = { deleteConfirmationRequired = true },
@@ -116,7 +116,7 @@ private fun ItemDetallesBody(
 }
 @Composable
 fun EditItemInputForm(
-    itemDetails: ItemDetails,
+    itemDetails: ListaItemDetails,
     modifier: Modifier = Modifier,
     onValueChange: (ItemDetails) -> Unit = {},
     enabled: Boolean = true
@@ -124,7 +124,7 @@ fun EditItemInputForm(
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         OutlinedTextField(
              value = itemDetails.name,
-             onValueChange = { onValueChange(itemDetails.copy(name = it)) },
+             onValueChange = { },
              label = { Text(stringResource(R.string.item_name_req)) },
              modifier = Modifier.fillMaxWidth(),
              enabled = false,
@@ -132,24 +132,24 @@ fun EditItemInputForm(
          )
         OutlinedTextField(
             value = itemDetails.sap,
-            onValueChange = { onValueChange(itemDetails.copy(name = it)) },
-            label = { Text(stringResource(R.string.item_name_req)) },
+            onValueChange = { },
+            label = { Text(stringResource(R.string.sap)) },
             modifier = Modifier.fillMaxWidth(),
             enabled = false,
             singleLine = true
         )
         OutlinedTextField(
             value = itemDetails.barra,
-            onValueChange = { onValueChange(itemDetails.copy(name = it)) },
+            onValueChange = {  },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            label = { Text(stringResource(R.string.item_barra_req)) },
+            label = { Text(stringResource(R.string.barra)) },
             modifier = Modifier.fillMaxWidth(),
             enabled = false,
             singleLine = true
         )
         OutlinedTextField(
             value = itemDetails.quantity,
-            onValueChange = { onValueChange(itemDetails.copy(quantity = it)) },
+            onValueChange = {  },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             label = { Text(stringResource(R.string.quantity_req)) },
             modifier = Modifier.fillMaxWidth(),
@@ -189,10 +189,7 @@ private fun DeleteConfirmationDialog(
 fun ItemDetailsScreenPreview() {
     InventoryTheme {
         ItemDetallesBody(
-            ItemDetailsUiState(
-                outOfStock = true,
-                itemDetails = ItemDetails(1, "Pen", "$100", "10")
-            ),
+            itemDetailsUiState =ListaItemDetalleUiState(),
             onSellItem = {},
             onDelete = {}
         )

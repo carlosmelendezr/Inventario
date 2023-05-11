@@ -221,7 +221,7 @@ private fun ListItemRow(
     Row(modifier = modifier
         .fillMaxWidth()
         .clickable { onItemClick(lista) }
-        .padding(vertical = 5.dp, horizontal = 5.dp).clickable {  navigateToDetalles(lista.id) }
+        .padding(vertical = 5.dp, horizontal = 5.dp).clickable {  navigateToDetalles(lista.iditem) }
 
     ) {
         Box(modifier=Modifier.weight(2f,fill=true)) {

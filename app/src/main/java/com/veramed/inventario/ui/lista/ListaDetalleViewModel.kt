@@ -1,5 +1,8 @@
 package com.veramed.inventario.ui.lista
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -30,16 +33,23 @@ class ListaDetalleViewModel(
      * Holds the item details ui state. The data is retrieved from [ItemsRepository] and mapped to
      * the UI state.
      */
-    val detalleUiState: StateFlow<ListaItemDetalleUiState> =
-        listaItemRepository.getItemLista(itemId)
-            .filterNotNull()
-            .map {
-                ListaItemDetalleUiState(outOfStock =false, itemDetalle = it.first().toItemDetails())
-            }.stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                initialValue = ListaItemDetalleUiState()
-            )
+
+
+
+        var detalleUiState: StateFlow<ListaItemDetalleUiState> =
+            listaItemRepository.getItemLista(itemId)
+                .filterNotNull()
+                .map {
+                    ListaItemDetalleUiState(
+                        outOfStock = false,
+                        itemDetalle = it.first().toItemDetails()
+                    )
+                }.stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+                    initialValue = ListaItemDetalleUiState()
+                )
+
 
     /**
      * Reduces the item quantity by one and update the [ItemsRepository]'s data source.
@@ -87,6 +97,9 @@ fun Item.toItemUiState(isEntryValid: Boolean = false): ItemUiState = ItemUiState
 fun ListaItems.toItemDetails(): ListaItemDetails = ListaItemDetails(
     id = id,
     name = descrip,
+    sap=sap,
+    barra=barra,
+    quantity = cant.toString()
 
 )
 
