@@ -23,6 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.veramed.inventario.InventoryTopAppBar
 import com.veramed.inventario.R
 import com.veramed.inventario.data.Lista
+import com.veramed.inventario.data.PostListaHomeServer
 import com.veramed.inventario.ui.AppViewModelProvider
 import com.veramed.inventario.ui.navigation.NavigationDestination
 import com.veramed.inventario.ui.theme.InventoryTheme
@@ -161,14 +162,15 @@ private fun InventoryListRow(
 
                     )
                 }
-                /*Spacer(modifier = Modifier.height(1.dp))
+                Spacer(modifier = Modifier.height(1.dp))
                 Column(Modifier.fillMaxWidth()) {
                 Text(
                     text = lista.idusuario.toString(),
                     modifier = Modifier.weight(1.0f)
                 )
                 Text(text = lista.centro.toString(), modifier = Modifier.weight(1.0f))
-                }*/
+                }
+
             }
         }
     }

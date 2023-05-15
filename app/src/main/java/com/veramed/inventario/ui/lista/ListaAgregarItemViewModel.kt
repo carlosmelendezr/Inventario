@@ -54,7 +54,7 @@ class ListaAgregarItemViewModel(
 
     var articulo by mutableStateOf(Item(id=0,name="",0.0,0,"",""))
 
-    private val itemId: Int = checkNotNull(savedStateHandle[ListaAgregarItemDestination.itemIdArg])
+    private val listaId: Int = checkNotNull(savedStateHandle[ListaAgregarItemDestination.itemIdArg])
 
            companion object {
             private const val TIMEOUT_MILLIS = 5_000L
@@ -214,7 +214,7 @@ data class ListaItemDetails(
  */
 fun ListaItemDetails.toItem(): ListaItems = ListaItems(
     id = id,
-    iditem = 1,
+    iditem = id,
     idlista = 1,
     cant = quantity.toIntOrNull() ?: 0,
     barra = barra,
