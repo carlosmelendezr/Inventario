@@ -1,5 +1,6 @@
 package com.veramed.inventario.ui.lista
 
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 
@@ -217,7 +218,8 @@ private fun ListItemRow(
     Row(modifier = modifier
         .fillMaxWidth()
         .clickable { onItemClick(lista) }
-        .padding(vertical = 5.dp, horizontal = 5.dp).clickable {  navigateToDetalles(lista.iditem) }
+        .padding(vertical = 5.dp, horizontal = 5.dp).clickable {  navigateToDetalles(lista.id) }
+
 
     ) {
         Box(modifier=Modifier.weight(2f,fill=true)) {
