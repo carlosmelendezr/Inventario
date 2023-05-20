@@ -41,9 +41,6 @@ class ListaDetalleViewModel(
 
         var detalleUiState: StateFlow<ListaItemDetalleUiState> =
             listaItemRepository.getItemStream(id=itemId)
-                .also {
-                    Log.d("IDL","ID ITEM ="+itemId)
-                }
                 .filterNotNull()
                 .map {
                     ListaItemDetalleUiState(
