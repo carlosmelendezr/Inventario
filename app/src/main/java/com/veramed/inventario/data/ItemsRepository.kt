@@ -1,5 +1,6 @@
 package com.veramed.inventario.data
 
+import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -16,7 +17,7 @@ interface ItemsRepository {
      */
     fun getItemStream(id: Int): Flow<Item?>
 
-    fun getItembyBarra(barra:String): Flow<Item?>
+    fun getItembyBarra(barra:String): Flow<Item>
 
     /**
      * Insert item in the data source

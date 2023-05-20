@@ -88,7 +88,7 @@ fun InventoryNavHost(
             ListaAgregarItemScreen(
                 navigateBack = { navController.popBackStack() },
                 onNavigateUp = { navController.navigateUp() },
-                navigateToDetalles = {navController.navigate(ListaDetalleDestination.route)}
+                navigateToDetalles = {navController.navigate("${ListaDetalleDestination.route}/${it}")}
             )
         }
 

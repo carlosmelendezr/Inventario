@@ -35,6 +35,8 @@
     <string name="save_action">Guardar</string>
     <string name="sell">Vender</string>
     <string name="yes">Si</string>
+    <string name="sap">SAP</string>
+    <string name="barra">Barra</string>
 
     <string name="lista_id">No.</string>
     <string name="lista_nombre">Nombre</string>

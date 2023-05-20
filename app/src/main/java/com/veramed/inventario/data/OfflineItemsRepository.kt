@@ -1,5 +1,6 @@
 package com.veramed.inventario.data
 
+import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
 
 class OfflineItemsRepository(private val itemDao: ItemDao) : ItemsRepository {
@@ -7,7 +8,7 @@ class OfflineItemsRepository(private val itemDao: ItemDao) : ItemsRepository {
 
     override fun getItemStream(id: Int): Flow<Item?> = itemDao.getItem(id)
 
-    override fun getItembyBarra(barra:String): Flow<Item?> = itemDao.getItembyBarra(barra)
+    override fun getItembyBarra(barra:String): Flow<Item> = itemDao.getItembyBarra(barra)
 
     override suspend fun insertItem(item: Item) = itemDao.insert(item)
 

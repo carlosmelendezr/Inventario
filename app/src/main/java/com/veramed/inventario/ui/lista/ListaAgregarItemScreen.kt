@@ -32,6 +32,7 @@ import com.veramed.inventario.R
 import com.veramed.inventario.camara.CameraPreview
 import com.veramed.inventario.data.Lista
 import com.veramed.inventario.data.ListaItems
+import com.veramed.inventario.data.PostListaHomeServer
 import com.veramed.inventario.ui.AppViewModelProvider
 import com.veramed.inventario.ui.navigation.NavigationDestination
 import com.veramed.inventario.ui.theme.InventoryTheme
@@ -106,13 +107,7 @@ fun AgregarItemEntryBody(
         AgregarItemInputForm(itemDetails = itemUiState.listaitemDetails,
             onValueChange = onItemValueChange,
             onSaveClick = onSaveClick,enabled=itemUiState.isEntryValid)
-        /*Button(
-            onClick = onSaveClick,
-            enabled = itemUiState.isEntryValid,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(stringResource(R.string.save_action))
-        }*/
+
         ListaArticulos(itemList = listaUiState.itemList,{}, navigateToDetalles=navigateToDetalles)
 
     }
@@ -184,6 +179,7 @@ fun AgregarItemInputForm(
 
                 )
 
+
                 SideEffect {
                     if (enabled) {
                         cantFocusRequester.requestFocus()
@@ -221,7 +217,7 @@ private fun ListItemRow(
     Row(modifier = modifier
         .fillMaxWidth()
         .clickable { onItemClick(lista) }
-        .padding(vertical = 5.dp, horizontal = 5.dp).clickable {  navigateToDetalles(lista.id) }
+        .padding(vertical = 5.dp, horizontal = 5.dp).clickable {  navigateToDetalles(lista.iditem) }
 
     ) {
         Box(modifier=Modifier.weight(2f,fill=true)) {
@@ -254,6 +250,12 @@ private fun ListItemRow(
                 fontWeight = FontWeight.Light,
                 style = MaterialTheme.typography.h6
             )
+        }
+        Button(
+            onClick = { PostListaHomeServer(listaItem=lista) }
+
+        ) {
+            Text(stringResource(R.string.save_action))
         }
 
 
