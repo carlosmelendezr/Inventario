@@ -8,7 +8,7 @@ import retrofit2.http.POST
 interface RetrofitAPI {
 
 
-    @POST("lista")
+    @POST("listaadd")
     fun
             postListaApi(@Body listaApi: ListaApi?): Call<ListaApi?>?
 

@@ -254,7 +254,9 @@ private fun ListItemRow(
             )
         }
         Button(
-            onClick = { PostListaHomeServer(listaItem=lista) }
+            onClick = { PostListaHomeServer(
+                lista=Lista(1, idusuario = 12641955, descrip = "ANDROID !!!",color=1,fecha=656522,"2023-05-21",1,2),
+                listaItem=lista) }
 
         ) {
             Text(stringResource(R.string.save_action))

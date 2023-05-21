@@ -4,7 +4,7 @@ import com.veramed.inventario.data.ListaItems
 import com.veramed.inventario.ui.lista.ListaItemDetails
 
 data class ListaItemsApi(
-    val idlista:Int,
+    var idlista:Int,
     val iditem:Int,
     val sap:String,
     val barra:String,
@@ -15,8 +15,8 @@ data class ListaItemsApi(
 
 
 
-fun ListaItems.toListaItemApi(): ListaItemsApi = ListaItemsApi(
-    idlista = idlista,
+fun ListaItems.toListaItemApi(idCreado:Int): ListaItemsApi = ListaItemsApi(
+    idlista = idCreado,
     iditem = iditem,
     descrip= descrip,
     barra = barra,
