@@ -39,13 +39,16 @@ class ListaAgregarItemViewModel(
     /**
      * Holds current item ui state
      */
+
+    var listaId: Int = checkNotNull(savedStateHandle[ListaAgregarItemDestination.itemIdArg])
+
     var listaItemUiState by mutableStateOf(AgregarItemUiState())
         private set
     var existe by mutableStateOf(false)
     var error by mutableStateOf(false)
 
     var listaArticulosUIState: StateFlow<ListaArticulosUiState> =
-        listaitemsRepository.getItemLista(1).map { ListaArticulosUiState(it) }
+        listaitemsRepository.getItemLista(listaId).map { ListaArticulosUiState(it) }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -54,7 +57,7 @@ class ListaAgregarItemViewModel(
 
     var articulo by mutableStateOf(Item(id=0,name="",0.0,0,"",""))
 
-    private val listaId: Int = checkNotNull(savedStateHandle[ListaAgregarItemDestination.itemIdArg])
+
 
            companion object {
             private const val TIMEOUT_MILLIS = 5_000L
@@ -82,7 +85,7 @@ class ListaAgregarItemViewModel(
 
             if (validateInput()) {
                 existe = false
-                listaitemsRepository.insertItem(listaItemUiState.listaitemDetails.toItem())
+                listaitemsRepository.insertItem(listaItemUiState.listaitemDetails.toItem(listaId))
                 listaItemUiState =
                     AgregarItemUiState(listaitemDetails = ListaItemDetails(), isEntryValid =false)
             }
@@ -212,10 +215,10 @@ data class ListaItemDetails(
  * not a valid [Double], then the price will be set to 0.0. Similarly if the value of
  * [ItemUiState] is not a valid [Int], then the quantity will be set to 0
  */
-fun ListaItemDetails.toItem(): ListaItems = ListaItems(
+fun ListaItemDetails.toItem(listaId:Int): ListaItems = ListaItems(
     id = id,
     iditem = id,
-    idlista = 1,
+    idlista = listaId,
     cant = quantity.toIntOrNull() ?: 0,
     barra = barra,
     sap = sap,

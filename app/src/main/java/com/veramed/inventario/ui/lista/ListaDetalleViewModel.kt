@@ -1,5 +1,6 @@
 package com.veramed.inventario.ui.lista
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -36,13 +37,15 @@ class ListaDetalleViewModel(
 
 
 
+
+
         var detalleUiState: StateFlow<ListaItemDetalleUiState> =
-            listaItemRepository.getItemLista(itemId)
+            listaItemRepository.getItemStream(id=itemId)
                 .filterNotNull()
                 .map {
                     ListaItemDetalleUiState(
                         outOfStock = false,
-                        itemDetalle = it.first().toItemDetails()
+                        itemDetalle = it.toItemDetails()
                     )
                 }.stateIn(
                     scope = viewModelScope,
@@ -67,7 +70,7 @@ class ListaDetalleViewModel(
      * Deletes the item from the [ItemsRepository]'s data source.
      */
     suspend fun deleteItem() {
-        listaItemRepository.deleteItem(detalleUiState.value.itemDetalle.toItem())
+        listaItemRepository.deleteItem(detalleUiState.value.itemDetalle.toItem(listaId =itemId ))
     }
 
     companion object {
