@@ -35,7 +35,7 @@ fun PostListaHomeServer(lista: Lista,listaItem: List<ListaItems>) {
 
         override fun onResponse(llamarLista: Call<ListaApi?>?, response: Response<ListaApi?>) {
 
-            idCreado = response.body()?.idusuario ?: 0
+            idCreado = response.body()?.id ?: 0
 
             val resp = "ID = " + idCreado +
                     "Response Code : " + response.message()
