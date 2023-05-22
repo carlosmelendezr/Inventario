@@ -11,6 +11,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -65,7 +68,20 @@ fun ListaAgregarItemScreen(
                 canNavigateBack = true,
                 navigateUp = onNavigateUp
             )
-        }
+        }, floatingActionButton = {
+            FloatingActionButton(
+                onClick = {PostListaHomeServer(
+                    lista=Lista(1, idusuario = 12641955, descrip = "ANDROID !!!  222",color=1,fecha=656522,"2023-05-21",1,2),
+                    listaItem=listaUiState.itemList)},
+                modifier = Modifier.navigationBarsPadding()
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Send,
+                    contentDescription = stringResource(R.string.item_entry_title),
+                    tint = MaterialTheme.colors.onPrimary
+                )
+            }
+        },
     ) { innerPadding ->
         AgregarItemEntryBody(
             itemUiState = viewModel.listaItemUiState,
@@ -253,14 +269,12 @@ private fun ListItemRow(
                 style = MaterialTheme.typography.h6
             )
         }
-        Button(
-            onClick = { PostListaHomeServer(
-                lista=Lista(1, idusuario = 12641955, descrip = "ANDROID !!!",color=1,fecha=656522,"2023-05-21",1,2),
-                listaItem=lista) }
+       /* Button(
+            onClick = {  }
 
         ) {
             Text(stringResource(R.string.save_action))
-        }
+        }*/
 
 
     }
