@@ -45,6 +45,7 @@
     <string name="lista_entry">Crear Lista</string>
     <string name="lista_tipo">Tipo de Movimiento</string>
     <string name="lista_agregar_item">Agregar Item</string>
+    <string name="lista_transmitir">Transmitir Lista</string>
 
     <string name="usuario_login">Iniciar Sesion</string>
     <string name="usuario_entry">Registrar Usuario</string>

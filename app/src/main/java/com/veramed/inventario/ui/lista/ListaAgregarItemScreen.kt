@@ -269,14 +269,6 @@ private fun ListItemRow(
                 style = MaterialTheme.typography.h6
             )
         }
-       /* Button(
-            onClick = {  }
-
-        ) {
-            Text(stringResource(R.string.save_action))
-        }*/
-
-
     }
 }
 
