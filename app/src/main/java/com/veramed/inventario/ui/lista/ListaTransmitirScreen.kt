@@ -53,26 +53,25 @@ object ListaTransmitirDestination : NavigationDestination {
 @Composable
 fun ListaTransmitirScreen(
     navigateBack: () -> Unit,
-    onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ListaTransmitirViewModel = viewModel(factory = AppViewModelProvider.Factory)
 
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val listaUiState by viewModel.listaTUiState.collectAsState( )
+
     val listaArticulosUiState by viewModel.listaArticulosUIState.collectAsState()
 
     Scaffold(
         topBar = {
             InventoryTopAppBar(
                 title = stringResource(ListaAgregarItemDestination.titleRes) ,
-                canNavigateBack = true,
-                navigateUp = onNavigateUp
+                canNavigateBack = true
+
             )
         }, floatingActionButton = {
             FloatingActionButton(
                 onClick = {PostListaHomeServer(
-                    lista=Lista(1, idusuario = 12641955, descrip = "ANDROID !!!  222",color=1,fecha=656522,"2023-05-21",1,2),
+                    lista=viewModel.listaTUiState.toLista(),
                     listaItem=listaArticulosUiState.itemList)},
                 modifier = Modifier.navigationBarsPadding()
             ) {
@@ -85,8 +84,8 @@ fun ListaTransmitirScreen(
         },
     ) { innerPadding ->
         TransmitirBody(
-            lista = listaUiState.lista,
-            listaTUiState = listaUiState,
+
+            listaTUiState = viewModel.listaTUiState,
 
             modifier = modifier.padding(innerPadding),
 
@@ -98,7 +97,6 @@ fun ListaTransmitirScreen(
 
 @Composable
 fun TransmitirBody(
-    lista: Lista,
     listaTUiState: ListaTUiState,
     modifier: Modifier = Modifier
 ) {
@@ -109,7 +107,27 @@ fun TransmitirBody(
         verticalArrangement = Arrangement.spacedBy(32.dp)
     ) {
 
+        Card(elevation = 10.dp,
+            backgroundColor= androidx.compose.ui.graphics.Color.DarkGray
 
+        ) {
+            Row() {
+
+                Column(Modifier.fillMaxWidth()) {
+                    // Encabezado
+
+                    Text(
+                        text = listaTUiState.descrip,
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.h6
+                    )
+                    // Subtítulo
+
+                }
+
+
+            }
+        }
 
 
     }
@@ -124,8 +142,8 @@ fun TransmitirBody(
 @Composable
 fun ListaTransmitorScreenPreview() {
     InventoryTheme {
-        ListaTransmitirScreen(navigateBack = { /*Do nothing*/ },
-            onNavigateUp = { /*Do nothing*/ }
+        ListaTransmitirScreen(navigateBack = { /*Do nothing*/ }
+
         )
     }
 }

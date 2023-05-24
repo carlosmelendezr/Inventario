@@ -55,6 +55,7 @@ fun ListaAgregarItemScreen(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
     navigateToDetalles:(Int) ->Unit,
+    navigateToTransmitir:(Int) ->Unit,
     modifier: Modifier = Modifier,
     viewModel: ListaAgregarItemViewModel = viewModel(factory = AppViewModelProvider.Factory)
 
@@ -70,9 +71,7 @@ fun ListaAgregarItemScreen(
             )
         }, floatingActionButton = {
             FloatingActionButton(
-                onClick = {PostListaHomeServer(
-                    lista=Lista(1, idusuario = 12641955, descrip = "ANDROID !!!  222",color=1,fecha=656522,"2023-05-21",1,2),
-                    listaItem=listaUiState.itemList)},
+                onClick = {navigateToTransmitir(viewModel.listaId)},
                 modifier = Modifier.navigationBarsPadding()
             ) {
                 Icon(
@@ -286,7 +285,7 @@ private val headerList = listOf(
 fun ListaAgregarItemScreenPreview() {
     InventoryTheme {
         ListaAgregarItemScreen(navigateBack = { /*Do nothing*/ },
-            onNavigateUp = { /*Do nothing*/ }, navigateToDetalles = {}
+            onNavigateUp = { /*Do nothing*/ }, navigateToDetalles = {}, navigateToTransmitir = {}
         )
     }
 }

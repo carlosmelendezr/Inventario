@@ -17,6 +17,7 @@ import com.veramed.inventario.ui.item.ItemEntryViewModel
 import com.veramed.inventario.ui.lista.ListaAgregarItemViewModel
 import com.veramed.inventario.ui.lista.ListaDetalleViewModel
 import com.veramed.inventario.ui.lista.ListaEntryViewModel
+import com.veramed.inventario.ui.lista.ListaTransmitirViewModel
 import com.veramed.inventario.ui.usuario.UsuarioEntryViewModel
 import com.veramed.inventario.ui.usuario.UsuarioLoginViewModel
 
@@ -74,6 +75,15 @@ object AppViewModelProvider {
                 inventoryApplication().container.itemsRepository,
                 inventoryApplication().container.listaItemRepository,
                 inventoryApplication()
+            )
+        }
+
+        initializer {
+            ListaTransmitirViewModel(
+                this.createSavedStateHandle(),
+                inventoryApplication().container.listaRepository,
+                inventoryApplication().container.listaItemRepository
+
             )
         }
 
