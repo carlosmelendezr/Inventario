@@ -22,5 +22,6 @@ fun Lista.toListaApi(): ListaApi = ListaApi(
     color = color,
     fecha = convertLongToTime(fecha),
     tipo=tipo,
-    centro=centro
+    centro=22
+    //centro=centro
 )

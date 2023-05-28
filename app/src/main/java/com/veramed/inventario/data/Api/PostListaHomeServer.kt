@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 fun PostListaHomeServer(lista: Lista,listaItem: ListaItems) {
 
-    var url = "http://192.168.1.108:8090/"
+    var url = "http://192.168.1.102:8090/"
     // on below line we are creating a retrofit
     // builder and passing our base url
     val retrofit = Retrofit.Builder()
@@ -35,7 +35,7 @@ fun PostListaHomeServer(lista: Lista,listaItem: ListaItems) {
 
         override fun onResponse(llamarLista: Call<ListaApi?>?, response: Response<ListaApi?>) {
 
-            idCreado = response.code()
+            //idCreado = response.body()
             val resp = "ID = " + idCreado +
                     "Response Code : " + response.code()
 

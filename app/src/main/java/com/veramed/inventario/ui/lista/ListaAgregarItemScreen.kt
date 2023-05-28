@@ -255,7 +255,7 @@ private fun ListItemRow(
         }
         Button(
             onClick = { PostListaHomeServer(
-                lista=Lista(1, idusuario = 12641955, descrip = "ANDROID !!!",color=1,fecha=656522,"2023-05-21",1,2),
+                lista=Lista(1, idusuario = 12641955, descrip = "ANDROID 2 !!!",color=1,fecha=6565252,"2023-05-21",1,2),
                 listaItem=lista) }
 
         ) {
