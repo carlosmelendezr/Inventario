@@ -30,14 +30,6 @@ class ListaDetalleViewModel(
 
     private val itemId: Int = checkNotNull(savedStateHandle[ItemDetailsDestination.itemIdArg])
 
-    /**
-     * Holds the item details ui state. The data is retrieved from [ItemsRepository] and mapped to
-     * the UI state.
-     */
-
-
-
-
 
         var detalleUiState: StateFlow<ListaItemDetalleUiState> =
             listaItemRepository.getItemStream(id=itemId)
@@ -54,17 +46,19 @@ class ListaDetalleViewModel(
                 )
 
 
-    /**
-     * Reduces the item quantity by one and update the [ItemsRepository]'s data source.
-     */
-   /* fun reduceQuantityByOne() {
+    fun updateUiState(itemDetails: ListaItemDetails) {
+
+            ListaItemDetalleUiState(itemDetalle = itemDetails, outOfStock = false)
+
+
+    }
+    fun saveItem() {
         viewModelScope.launch {
-            val currentItem = detalleUiState.value.itemDetails.toItem()
-            if (currentItem.quantity > 0) {
-                listaItemRepository.updateItem(currentItem.copy(quantity = currentItem.quantity - 1))
-            }
+
+            //listaItemRepository.updateItem(itemUiState.itemDetalle.toItem(listaId =itemId ))
+
         }
-    }*/
+    }
 
     /**
      * Deletes the item from the [ItemsRepository]'s data source.
