@@ -46,7 +46,7 @@ fun ListaDetalleScreen(
     modifier: Modifier = Modifier,
     viewModel: ListaDetalleViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-
+    var datosVence = viewModel.venceUiState
     val uiState = viewModel.detalleUiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -62,6 +62,7 @@ fun ListaDetalleScreen(
     ) { innerPadding ->
         ItemDetallesBody(
             itemDetailsUiState = uiState.value,
+            datosVence = datosVence ,
             onSaveItem = { viewModel::saveItem },
             onValueChange = {viewModel::updateUiState},
             onDelete = {
@@ -84,7 +85,8 @@ private fun ItemDetallesBody(
     itemDetailsUiState: ListaItemDetalleUiState,
     onSaveItem: () -> Unit,
     onDelete: () -> Unit,
-    onValueChange: (ListaItemDetails) -> Unit = {},
+    datosVence: DatosVence,
+    onValueChange: (DatosVence) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -96,7 +98,8 @@ private fun ItemDetallesBody(
         var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
         EditItemInputForm(itemDetails = itemDetailsUiState.itemDetalle,
             enabled = false,
-            onValueChange = onValueChange)
+            onValueChange = onValueChange,
+            datosVence = datosVence)
         Button(
             onClick = onSaveItem,
             enabled = true,
@@ -125,8 +128,9 @@ private fun ItemDetallesBody(
 @Composable
 fun EditItemInputForm(
     itemDetails: ListaItemDetails,
+    datosVence: DatosVence,
     modifier: Modifier = Modifier,
-    onValueChange: (ListaItemDetails) -> Unit = {},
+    onValueChange: (DatosVence) -> Unit = {},
     enabled: Boolean = true
 ) {
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -156,19 +160,19 @@ fun EditItemInputForm(
             )
         }
 
-        OutlinedTextField(
-            value = itemDetails.quantity,
-            onValueChange = {onValueChange(itemDetails.copy(barra = it))   },
+       /* OutlinedTextField(
+            value = datosVence.quantity,
+            onValueChange = { onValueChange(datosVence.copy(quantity = it))},
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             label = { Text(stringResource(R.string.quantity_req)) },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true
-        )
+        )*/
         Row() {
             OutlinedTextField(
-                value = itemDetails.lote,
-                onValueChange = { onValueChange(itemDetails.copy(lote = it)) },
+                value = datosVence.lote,
+                onValueChange = { onValueChange(datosVence.copy(lote = it)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 label = { Text(stringResource(R.string.item_lote)) },
                 enabled = true,
@@ -176,8 +180,8 @@ fun EditItemInputForm(
             )
 
             OutlinedTextField(
-                value = itemDetails.fecvenc,
-                onValueChange = { onValueChange(itemDetails.copy(fecvenc = it)) },
+                value = datosVence.fecvenc,
+                onValueChange = { onValueChange(datosVence.copy(fecvenc = it)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 label = { Text(stringResource(R.string.item_vencimiento)) },
                 enabled = true,
@@ -219,7 +223,8 @@ fun ItemDetailsScreenPreview() {
         ItemDetallesBody(
             itemDetailsUiState =ListaItemDetalleUiState(),
             onSaveItem = {},
-            onDelete = {}
+            onDelete = {},
+            datosVence = DatosVence()
         )
     }
 }
