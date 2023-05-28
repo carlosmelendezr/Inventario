@@ -156,6 +156,26 @@ fun EditItemInputForm(
             enabled = enabled,
             singleLine = true
         )
+
+        OutlinedTextField(
+            value = itemDetails.lote,
+            onValueChange = {  },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            label = { Text(stringResource(R.string.item_lote)) },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled,
+            singleLine = true
+        )
+
+        OutlinedTextField(
+            value = itemDetails.fecvenc,
+            onValueChange = {  },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            label = { Text(stringResource(R.string.item_vencimiento)) },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled,
+            singleLine = true
+        )
     }
 }
 

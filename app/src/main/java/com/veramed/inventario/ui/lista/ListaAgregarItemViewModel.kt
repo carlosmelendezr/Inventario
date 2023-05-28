@@ -7,20 +7,14 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.veramed.inventario.InventoryApp
 import com.veramed.inventario.R
 import com.veramed.inventario.data.Item
 import com.veramed.inventario.data.ItemsRepository
-import com.veramed.inventario.data.Lista
 import com.veramed.inventario.data.ListaItemRepository
 import com.veramed.inventario.data.ListaItems
-import com.veramed.inventario.ui.home.HomeUiState
-import com.veramed.inventario.ui.inventoryApplication
-import com.veramed.inventario.ui.item.toItemUiState
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -35,7 +29,7 @@ class ListaAgregarItemViewModel(
     context: Context
 ) : ViewModel() {
 
-     val mp: MediaPlayer = MediaPlayer.create( context, R.raw.error)
+     private val mp: MediaPlayer = MediaPlayer.create( context, R.raw.error)
 
     /**
      * Holds current item ui state
@@ -43,16 +37,11 @@ class ListaAgregarItemViewModel(
 
     var listaId: Int = checkNotNull(savedStateHandle[ListaAgregarItemDestination.itemIdArg])
 
-
-
-
     var listaItemUiState by mutableStateOf(AgregarItemUiState())
         private set
 
-
-    var existe by mutableStateOf(false)
-    var error by mutableStateOf(false)
-
+    private var existe by mutableStateOf(false)
+    private var error by mutableStateOf(false)
 
 
     var listaArticulosUIState: StateFlow<ListaArticulosUiState> =
@@ -63,7 +52,7 @@ class ListaAgregarItemViewModel(
                 initialValue = ListaArticulosUiState()
             )
 
-    var articulo by mutableStateOf(Item(id=0,name="",0.0,0,"",""))
+    private var articulo by mutableStateOf(Item(id=0,name="",0.0,0,"","","",""))
 
 
 
@@ -72,18 +61,19 @@ class ListaAgregarItemViewModel(
         }
 
 
-
-        /**
-         * Updates the [itemUiState] with the value provided in the argument. This method also triggers
-         * a validation for input values.
-         */
         fun updateUiState(itemDetails: ListaItemDetails) {
             listaItemUiState =
                 AgregarItemUiState(listaitemDetails = itemDetails, isEntryValid = validateInput(itemDetails))
-            if (itemDetails.barra.length>7) {
+           /* if (itemDetails.barra.length>7) {
                 buscarItem()
-            }
+            }*/
         }
+
+    fun buscarBarra() {
+
+            buscarItem()
+
+    }
 
         /**
          * Inserts an [Item] in the Room database
@@ -99,7 +89,7 @@ class ListaAgregarItemViewModel(
             }
         }
 
-    fun buscarItem() {
+    private fun buscarItem() {
 
         error = false
         Log.d("INVBAR","Buscando barra "+listaItemUiState.listaitemDetails.barra)
@@ -108,7 +98,7 @@ class ListaAgregarItemViewModel(
              try {
 
                  articulo = itemsRepository.getItembyBarra(listaItemUiState.listaitemDetails.barra)
-                     .catch { exception -> emit(Item(id = 0, name = "", 0.0, 0, "", "")) }
+                     .catch { emit(Item(id = 0, name = "", 0.0, 0, "", "","","")) }
                      .onEmpty { Log.d("INVBAR", "La lista esta vacia") }
                      .filterNotNull()
                      .first()
@@ -212,17 +202,11 @@ data class ListaItemDetails(
     val quantity: String = "",
     val sap: String = "",
     val barra:String = "",
-    val descrip:String = ""
+    val descrip:String = "",
+    val lote:String = "",
+    val fecvenc:String = ""
 )
 
-
-
-
-/**
- * Extension function to convert [ItemUiState] to [Item]. If the value of [ItemUiState.price] is
- * not a valid [Double], then the price will be set to 0.0. Similarly if the value of
- * [ItemUiState] is not a valid [Int], then the quantity will be set to 0
- */
 fun ListaItemDetails.toItem(listaId:Int): ListaItems = ListaItems(
     id = id,
     iditem = id,
@@ -230,27 +214,25 @@ fun ListaItemDetails.toItem(listaId:Int): ListaItems = ListaItems(
     cant = quantity.toIntOrNull() ?: 0,
     barra = barra,
     sap = sap,
-    descrip = descrip
+    descrip = descrip,
+    lote = lote,
+    fecvenc = fecvenc
 )
 
-/**
- * Extension function to convert [Item] to [ItemUiState]
- */
-fun ListaItemDetails.toListaItemUiState(isEntryValid: Boolean = false): AgregarItemUiState = AgregarItemUiState(
+/*fun ListaItemDetails.toListaItemUiState(isEntryValid: Boolean = false): AgregarItemUiState = AgregarItemUiState(
     listaitemDetails = this.toListaItemDetails(),
     isEntryValid = isEntryValid
-)
+)*/
 
-/**
- * Extension function to convert [Item] to [ItemDetails]
- */
-fun ListaItemDetails.toListaItemDetails(): ListaItemDetails = ListaItemDetails(
+/*fun ListaItemDetails.toListaItemDetails(): ListaItemDetails = ListaItemDetails(
     id = id,
     name = name,
     quantity = quantity.toString(),
     barra = barra,
-    sap = sap
-)
+    sap = sap,
+    lote = lote,
+    fecvenc = fecvenc
+)*/
 
 
 

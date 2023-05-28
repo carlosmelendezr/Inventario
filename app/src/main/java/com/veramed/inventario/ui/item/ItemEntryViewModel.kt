@@ -60,7 +60,9 @@ data class ItemDetails(
     val price: String = "",
     val quantity: String = "",
     val sap: String = "",
-    val barra:String = ""
+    val barra:String = "",
+    val lote:String = "",
+    val fecvence:String = ""
 )
 
 /**
@@ -74,7 +76,10 @@ fun ItemDetails.toItem(): Item = Item(
     price = price.toDoubleOrNull() ?: 0.0,
     quantity = quantity.toIntOrNull() ?: 0,
     barra = barra,
-    sap = sap
+    sap = sap,
+    lote = lote,
+    fecvence = fecvence
+
 )
 
 /**
@@ -92,6 +97,8 @@ fun Item.toItemDetails(): ItemDetails = ItemDetails(
     id = id,
     name = name,
     price = price.toString(),
-    quantity = quantity.toString()
+    quantity = quantity.toString(),
+    lote = lote,
+    fecvence = fecvence
 )
 
