@@ -11,6 +11,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -52,6 +55,7 @@ fun ListaAgregarItemScreen(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
     navigateToDetalles:(Int) ->Unit,
+    navigateToTransmitir:(Int) ->Unit,
     modifier: Modifier = Modifier,
     viewModel: ListaAgregarItemViewModel = viewModel(factory = AppViewModelProvider.Factory)
 
@@ -65,7 +69,18 @@ fun ListaAgregarItemScreen(
                 canNavigateBack = true,
                 navigateUp = onNavigateUp
             )
-        }
+        }, floatingActionButton = {
+            FloatingActionButton(
+                onClick = {navigateToTransmitir(viewModel.listaId)},
+                modifier = Modifier.navigationBarsPadding()
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Send,
+                    contentDescription = stringResource(R.string.item_entry_title),
+                    tint = MaterialTheme.colors.onPrimary
+                )
+            }
+        },
     ) { innerPadding ->
         AgregarItemEntryBody(
             itemUiState = viewModel.listaItemUiState,
@@ -253,16 +268,6 @@ private fun ListItemRow(
                 style = MaterialTheme.typography.h6
             )
         }
-        Button(
-            onClick = { PostListaHomeServer(
-                lista=Lista(1, idusuario = 12641955, descrip = "ANDROID 2 !!!",color=1,fecha=6565252,"2023-05-21",1,2),
-                listaItem=lista) }
-
-        ) {
-            Text(stringResource(R.string.save_action))
-        }
-
-
     }
 }
 
@@ -280,7 +285,7 @@ private val headerList = listOf(
 fun ListaAgregarItemScreenPreview() {
     InventoryTheme {
         ListaAgregarItemScreen(navigateBack = { /*Do nothing*/ },
-            onNavigateUp = { /*Do nothing*/ }, navigateToDetalles = {}
+            onNavigateUp = { /*Do nothing*/ }, navigateToDetalles = {}, navigateToTransmitir = {}
         )
     }
 }

@@ -68,6 +68,18 @@ fun InventoryNavHost(
             )
         }
         composable(
+            route = ListaTransmitirDestination.routeWithArgs,
+            arguments = listOf(navArgument(ListaTransmitirDestination.itemIdArg) {
+                type = NavType.IntType
+            })
+        ) {
+            ListaTransmitirScreen(
+
+                navigateBack = { navController.navigateUp() }
+            )
+        }
+
+        composable(
             route = ItemEditDestination.routeWithArgs,
             arguments = listOf(navArgument(ItemEditDestination.itemIdArg) {
                 type = NavType.IntType

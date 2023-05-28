@@ -15,6 +15,7 @@ import com.veramed.inventario.InventoryApp
 import com.veramed.inventario.R
 import com.veramed.inventario.data.Item
 import com.veramed.inventario.data.ItemsRepository
+import com.veramed.inventario.data.Lista
 import com.veramed.inventario.data.ListaItemRepository
 import com.veramed.inventario.data.ListaItems
 import com.veramed.inventario.ui.home.HomeUiState
@@ -42,10 +43,17 @@ class ListaAgregarItemViewModel(
 
     var listaId: Int = checkNotNull(savedStateHandle[ListaAgregarItemDestination.itemIdArg])
 
+
+
+
     var listaItemUiState by mutableStateOf(AgregarItemUiState())
         private set
+
+
     var existe by mutableStateOf(false)
     var error by mutableStateOf(false)
+
+
 
     var listaArticulosUIState: StateFlow<ListaArticulosUiState> =
         listaitemsRepository.getItemLista(listaId).map { ListaArticulosUiState(it) }
