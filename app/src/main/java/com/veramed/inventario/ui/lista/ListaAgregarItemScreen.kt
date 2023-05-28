@@ -174,13 +174,13 @@ fun AgregarItemInputForm(
                 OutlinedTextField(
                     value = itemDetails.barra,
                     onValueChange = { onValueChange(itemDetails.copy(barra = it)) },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number,imeAction = ImeAction.Send),
                     keyboardActions = KeyboardActions(
                         onSend = {
                             onItemBuscar
-                            cantFocusRequester.freeFocus()
                         }
                     ),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+
                     label = { Text(stringResource(R.string.item_barra_req)) },
                     enabled = enableBarra,
                     singleLine = true

@@ -54,23 +54,21 @@ class ListaAgregarItemViewModel(
 
     private var articulo by mutableStateOf(Item(id=0,name="",0.0,0,"","","",""))
 
+    companion object {
+        private const val TIMEOUT_MILLIS = 5_000L
+    }
 
 
-           companion object {
-            private const val TIMEOUT_MILLIS = 5_000L
-        }
-
-
-        fun updateUiState(itemDetails: ListaItemDetails) {
+    fun updateUiState(itemDetails: ListaItemDetails) {
             listaItemUiState =
                 AgregarItemUiState(listaitemDetails = itemDetails, isEntryValid = validateInput(itemDetails))
-           /* if (itemDetails.barra.length>7) {
+            if (itemDetails.barra.length>7) {
                 buscarItem()
-            }*/
+            }
         }
 
     fun buscarBarra() {
-
+            Log.d("INVBAR","Buscando barra")
             buscarItem()
 
     }
@@ -98,7 +96,7 @@ class ListaAgregarItemViewModel(
              try {
 
                  articulo = itemsRepository.getItembyBarra(listaItemUiState.listaitemDetails.barra)
-                     .catch { emit(Item(id = 0, name = "", 0.0, 0, "", "","","")) }
+                     .catch { emit(Item(id = -1, name = "ERROR", 0.0, 0, "-1", "","",""))}
                      .onEmpty { Log.d("INVBAR", "La lista esta vacia") }
                      .filterNotNull()
                      .first()
@@ -127,7 +125,7 @@ class ListaAgregarItemViewModel(
              }
          }
 
-             Log.d("INVBAR","BARRA EXISTE 1 "+articulo.sap)
+
             /*if (articulo.name.isNotBlank()) {
                 Log.d("INVBAR","BARRA EXISTE "+articulo.name)
                 listaItemUiState =
