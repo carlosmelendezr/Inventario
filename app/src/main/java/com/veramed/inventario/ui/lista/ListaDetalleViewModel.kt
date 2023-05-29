@@ -20,9 +20,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-/**
- * ViewModel to retrieve, update and delete an item from the [ItemsRepository]'s data source.
- */
+
 class ListaDetalleViewModel(
     savedStateHandle: SavedStateHandle,
     private val listaItemRepository: ListaItemRepository,
@@ -48,7 +46,7 @@ class ListaDetalleViewModel(
                 )
 
 
-    fun updateUiState(datosVence: DatosVence) {
+    fun actualizaUiState(datosVence: DatosVence) {
 
         venceUiState = DatosVence(lote = datosVence.lote,
             fecvenc = datosVence.fecvenc,
@@ -65,9 +63,7 @@ class ListaDetalleViewModel(
         }
     }
 
-    /**
-     * Deletes the item from the [ItemsRepository]'s data source.
-     */
+
     suspend fun deleteItem() {
         listaItemRepository.deleteItem(detalleUiState.value.itemDetalle.toItem(listaId =itemId ))
     }
@@ -87,8 +83,8 @@ data class ListaItemDetalleUiState(
 )
 
 data class DatosVence(
-    val lote:String="",
-    val fecvenc:String="",
+    val lote:String="LOTEUNICO",
+    val fecvenc:String="03-2023",
     val quantity:Int=0
     )
 
