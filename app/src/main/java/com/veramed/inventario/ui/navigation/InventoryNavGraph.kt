@@ -98,6 +98,7 @@ fun InventoryNavHost(
             })
         ) {
             ListaAgregarItemScreen(
+                navigateToTransmitir = {navController.navigate("${ListaTransmitirDestination.route}/${it}")},
                 navigateBack = { navController.popBackStack() },
                 onNavigateUp = { navController.navigateUp() },
                 navigateToDetalles = {navController.navigate("${ListaDetalleDestination.route}/${it}")}
