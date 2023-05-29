@@ -6,15 +6,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -46,7 +39,7 @@ fun ListaDetalleScreen(
     modifier: Modifier = Modifier,
     viewModel: ListaDetalleViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    var datosVence = viewModel.venceUiState
+    val datosVence = viewModel.venceUiState
     val uiState = viewModel.detalleUiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -64,7 +57,7 @@ fun ListaDetalleScreen(
             itemDetailsUiState = uiState.value,
             datosVence = datosVence ,
             onSaveItem = { viewModel::saveItem },
-            onValueChange = {viewModel::updateUiState},
+            onValueChange = {viewModel::actualizaUiState},
             onDelete = {
                 // Note: If the user rotates the screen very fast, the operation may get cancelled
                 // and the item may not be deleted from the Database. This is because when config
@@ -133,6 +126,7 @@ fun EditItemInputForm(
     onValueChange: (DatosVence) -> Unit = {},
     enabled: Boolean = true
 ) {
+
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         OutlinedTextField(
              value = itemDetails.name,
