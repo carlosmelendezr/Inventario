@@ -1,11 +1,7 @@
 package com.veramed.inventario.ui.lista
 
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -50,6 +46,7 @@ fun ListaDetalleScreen(
     modifier: Modifier = Modifier,
     viewModel: ListaDetalleViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    var datosVence = viewModel.venceUiState
     val uiState = viewModel.detalleUiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -65,7 +62,9 @@ fun ListaDetalleScreen(
     ) { innerPadding ->
         ItemDetallesBody(
             itemDetailsUiState = uiState.value,
-            onSellItem = { /*viewModel.reduceQuantityByOne()*/ },
+            datosVence = datosVence ,
+            onSaveItem = { viewModel::saveItem },
+            onValueChange = {viewModel::updateUiState},
             onDelete = {
                 // Note: If the user rotates the screen very fast, the operation may get cancelled
                 // and the item may not be deleted from the Database. This is because when config
@@ -84,8 +83,10 @@ fun ListaDetalleScreen(
 @Composable
 private fun ItemDetallesBody(
     itemDetailsUiState: ListaItemDetalleUiState,
-    onSellItem: () -> Unit,
+    onSaveItem: () -> Unit,
     onDelete: () -> Unit,
+    datosVence: DatosVence,
+    onValueChange: (DatosVence) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -95,7 +96,17 @@ private fun ItemDetallesBody(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
-        EditItemInputForm(itemDetails = itemDetailsUiState.itemDetalle, enabled = false)
+        EditItemInputForm(itemDetails = itemDetailsUiState.itemDetalle,
+            enabled = false,
+            onValueChange = onValueChange,
+            datosVence = datosVence)
+        Button(
+            onClick = onSaveItem,
+            enabled = true,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(stringResource(R.string.save_action))
+        }
 
         OutlinedButton(
             onClick = { deleteConfirmationRequired = true },
@@ -117,8 +128,9 @@ private fun ItemDetallesBody(
 @Composable
 fun EditItemInputForm(
     itemDetails: ListaItemDetails,
+    datosVence: DatosVence,
     modifier: Modifier = Modifier,
-    onValueChange: (ItemDetails) -> Unit = {},
+    onValueChange: (DatosVence) -> Unit = {},
     enabled: Boolean = true
 ) {
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -130,52 +142,52 @@ fun EditItemInputForm(
              enabled = false,
              singleLine = true
          )
-        OutlinedTextField(
-            value = itemDetails.sap,
-            onValueChange = { },
-            label = { Text(stringResource(R.string.sap)) },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = false,
-            singleLine = true
-        )
-        OutlinedTextField(
-            value = itemDetails.barra,
-            onValueChange = {  },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            label = { Text(stringResource(R.string.barra)) },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = false,
-            singleLine = true
-        )
-        OutlinedTextField(
-            value = itemDetails.quantity,
-            onValueChange = {  },
+        Row() {
+            OutlinedTextField(
+                value = itemDetails.sap,
+                onValueChange = {},
+                label = { Text(stringResource(R.string.sap)) },
+                enabled = false,
+                singleLine = true
+            )
+            OutlinedTextField(
+                value = itemDetails.barra,
+                onValueChange = { },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                label = { Text(stringResource(R.string.barra)) },
+                enabled = false,
+                singleLine = true
+            )
+        }
+
+       /* OutlinedTextField(
+            value = datosVence.quantity,
+            onValueChange = { onValueChange(datosVence.copy(quantity = it))},
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             label = { Text(stringResource(R.string.quantity_req)) },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true
-        )
+        )*/
+        Row() {
+            OutlinedTextField(
+                value = datosVence.lote,
+                onValueChange = { onValueChange(datosVence.copy(lote = it)) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                label = { Text(stringResource(R.string.item_lote)) },
+                enabled = true,
+                singleLine = true
+            )
 
-        OutlinedTextField(
-            value = itemDetails.lote,
-            onValueChange = {  },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            label = { Text(stringResource(R.string.item_lote)) },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
-
-        OutlinedTextField(
-            value = itemDetails.fecvenc,
-            onValueChange = {  },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            label = { Text(stringResource(R.string.item_vencimiento)) },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
+            OutlinedTextField(
+                value = datosVence.fecvenc,
+                onValueChange = { onValueChange(datosVence.copy(fecvenc = it)) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                label = { Text(stringResource(R.string.item_vencimiento)) },
+                enabled = true,
+                singleLine = true
+            )
+        }
     }
 }
 
@@ -210,8 +222,9 @@ fun ItemDetailsScreenPreview() {
     InventoryTheme {
         ItemDetallesBody(
             itemDetailsUiState =ListaItemDetalleUiState(),
-            onSellItem = {},
-            onDelete = {}
+            onSaveItem = {},
+            onDelete = {},
+            datosVence = DatosVence()
         )
     }
 }

@@ -170,38 +170,44 @@ fun AgregarItemInputForm(
 
                     CameraPreview(itemDetails, onValueChange)
                 }
+               Row() {
+                   OutlinedTextField(
+                       value = itemDetails.barra,
+                       onValueChange = { onValueChange(itemDetails.copy(barra = it)) },
+                       keyboardOptions = KeyboardOptions(
+                           keyboardType = KeyboardType.Number,
+                           imeAction = ImeAction.Send
+                       ),
+                       keyboardActions = KeyboardActions(
+                           onSend = {
+                               onItemBuscar
+                           }
+                       ),
 
-                OutlinedTextField(
-                    value = itemDetails.barra,
-                    onValueChange = { onValueChange(itemDetails.copy(barra = it)) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number,imeAction = ImeAction.Send),
-                    keyboardActions = KeyboardActions(
-                        onSend = {
-                            onItemBuscar
-                        }
-                    ),
+                       label = { Text(stringResource(R.string.item_barra_req)) },
+                       enabled = enableBarra,
+                       singleLine = true
+                   )
+                   OutlinedTextField(
+                       value = itemDetails.quantity,
+                       onValueChange = { onValueChange(itemDetails.copy(quantity = it)) },
+                       keyboardOptions = KeyboardOptions(
+                           keyboardType = KeyboardType.Number,
+                           imeAction = ImeAction.Send
+                       ),
+                       keyboardActions = KeyboardActions(
+                           onSend = {
+                               onSaveClick()
+                               cantFocusRequester.freeFocus()
+                           }
+                       ),
+                       label = { Text(stringResource(R.string.quantity_req)) },
+                       modifier = Modifier.focusRequester(cantFocusRequester),
+                       enabled = enabled,
+                       singleLine = true,
 
-                    label = { Text(stringResource(R.string.item_barra_req)) },
-                    enabled = enableBarra,
-                    singleLine = true
-                )
-                OutlinedTextField(
-                    value = itemDetails.quantity,
-                    onValueChange = { onValueChange(itemDetails.copy(quantity = it)) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number,imeAction = ImeAction.Send),
-                    keyboardActions = KeyboardActions(
-                        onSend = {
-                            onSaveClick()
-                            cantFocusRequester.freeFocus()
-                        }
-                    ),
-                    label = { Text(stringResource(R.string.quantity_req)) },
-                    modifier = Modifier.focusRequester(cantFocusRequester),
-                    enabled = enabled ,
-                    singleLine = true ,
-
-                )
-
+                       )
+               }
 
                 SideEffect {
                     if (enabled) {

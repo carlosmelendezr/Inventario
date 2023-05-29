@@ -30,14 +30,8 @@ class ListaDetalleViewModel(
 
     private val itemId: Int = checkNotNull(savedStateHandle[ItemDetailsDestination.itemIdArg])
 
-    /**
-     * Holds the item details ui state. The data is retrieved from [ItemsRepository] and mapped to
-     * the UI state.
-     */
-
-
-
-
+    var venceUiState by mutableStateOf(DatosVence())
+        private set
 
         var detalleUiState: StateFlow<ListaItemDetalleUiState> =
             listaItemRepository.getItemStream(id=itemId)
@@ -54,17 +48,22 @@ class ListaDetalleViewModel(
                 )
 
 
-    /**
-     * Reduces the item quantity by one and update the [ItemsRepository]'s data source.
-     */
-   /* fun reduceQuantityByOne() {
+    fun updateUiState(datosVence: DatosVence) {
+
+        venceUiState = DatosVence(lote = datosVence.lote,
+            fecvenc = datosVence.fecvenc,
+            quantity = datosVence.quantity)
+        Log.d("LDV","Nuevoss Datos "+datosVence.lote)
+
+
+    }
+    fun saveItem() {
         viewModelScope.launch {
-            val currentItem = detalleUiState.value.itemDetails.toItem()
-            if (currentItem.quantity > 0) {
-                listaItemRepository.updateItem(currentItem.copy(quantity = currentItem.quantity - 1))
-            }
+
+            //listaItemRepository.updateItem(itemUiState.itemDetalle.toItem(listaId =itemId ))
+
         }
-    }*/
+    }
 
     /**
      * Deletes the item from the [ItemsRepository]'s data source.
@@ -83,8 +82,15 @@ class ListaDetalleViewModel(
  */
 data class ListaItemDetalleUiState(
     val outOfStock: Boolean = true,
-    val itemDetalle: ListaItemDetails = ListaItemDetails()
+    val itemDetalle: ListaItemDetails = ListaItemDetails(),
+
 )
+
+data class DatosVence(
+    val lote:String="",
+    val fecvenc:String="",
+    val quantity:Int=0
+    )
 
 /**
  * Extension function to convert [Item] to [ItemUiState]
@@ -102,7 +108,9 @@ fun ListaItems.toItemDetails(): ListaItemDetails = ListaItemDetails(
     name = descrip,
     sap=sap,
     barra=barra,
-    quantity = cant.toString()
+    quantity = cant.toString(),
+    lote = lote,
+    fecvenc = fecvenc
 
 )
 
