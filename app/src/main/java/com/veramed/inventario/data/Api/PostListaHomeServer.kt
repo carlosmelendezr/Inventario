@@ -24,16 +24,15 @@ fun PostListaHomeServer(lista: Lista,listaItem: List<ListaItems>) {
         .build()
     // below the line is to create an instance for our retrofit api class.
 
-    var idCreado:Int = 0
+    var idCreado: Int
 
     val retrofitapi = retrofit.create(RetrofitAPI::class.java)
 
-    val listaApi:ListaApi = lista.toListaApi()
-    val llamarLista: Call<ListaApi?>? = retrofitapi.postListaApi(listaApi)
+    val llamarLista: Call<Lista?>? = retrofitapi.postListaApi(lista)
 
-    llamarLista!!.enqueue(object:Callback<ListaApi?> {
+    llamarLista!!.enqueue(object:Callback<Lista?> {
 
-        override fun onResponse(llamarLista: Call<ListaApi?>?, response: Response<ListaApi?>) {
+        override fun onResponse(llamarLista: Call<Lista?>?, response: Response<Lista?>) {
 
             idCreado = response.body()?.id ?: 0
 
@@ -43,12 +42,14 @@ fun PostListaHomeServer(lista: Lista,listaItem: List<ListaItems>) {
             Log.d("APIV", resp)
 
             listaItem.forEach {
-                PostListaItems(idCreado, it)
+                var itm = it
+                itm.idlista = idCreado
+                PostListaItems(itm)
             }
 
         }
 
-        override fun onFailure(call: Call<ListaApi?>?, t: Throwable) {
+        override fun onFailure(call: Call<Lista?>?, t: Throwable) {
             // we get error response from API.
             Log.e("APIV", "Error found is : " + t.message)
         }
@@ -58,7 +59,7 @@ fun PostListaHomeServer(lista: Lista,listaItem: List<ListaItems>) {
 
 }
 
-fun PostListaItems(idLista:Int,listaItem: ListaItems) {
+fun PostListaItems(listaItem: ListaItems) {
 
     var url = "http://192.10.47.88:8090/"
     // on below line we are creating a retrofit
@@ -73,19 +74,14 @@ fun PostListaItems(idLista:Int,listaItem: ListaItems) {
         .build()
     // below the line is to create an instance for our retrofit api class.
 
-
     val retrofitapi = retrofit.create(RetrofitAPI::class.java)
+    val llamar: Call<ListaItems?>? = retrofitapi.postListaItemApi(listaItem)
 
-    Log.d("APIV", "creando los item en la lista "+idLista)
-
-    var listaItemApi: ListaItemsApi = listaItem.toListaItemApi(idCreado = idLista)
-    val llamar: Call<ListaItemsApi?>? = retrofitapi.postListaItemApi(listaItemApi)
-
-    llamar!!.enqueue(object : Callback<ListaItemsApi?> {
+    llamar!!.enqueue(object : Callback<ListaItems?> {
 
             override fun onResponse(
-                llamar: Call<ListaItemsApi?>?,
-                response: Response<ListaItemsApi?>
+                llamar: Call<ListaItems?>?,
+                response: Response<ListaItems?>
             ) {
 
                 val id = response.code()
@@ -93,11 +89,8 @@ fun PostListaItems(idLista:Int,listaItem: ListaItems) {
                         "Response Code : " + response.code()
 
                 Log.d("APIV", resp)
-
-
             }
-
-            override fun onFailure(call: Call<ListaItemsApi?>?, t: Throwable) {
+            override fun onFailure(call: Call<ListaItems?>?, t: Throwable) {
                 // we get error response from API.
                 Log.e("APIV", "Error found is : " + t.message)
             }

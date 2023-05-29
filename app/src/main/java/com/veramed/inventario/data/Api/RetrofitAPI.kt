@@ -1,6 +1,8 @@
 package com.veramed.inventario.data.Api
 
 
+import com.veramed.inventario.data.Lista
+import com.veramed.inventario.data.ListaItems
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -10,11 +12,11 @@ interface RetrofitAPI {
 
     @POST("listaadd")
     fun
-            postListaApi(@Body listaApi: ListaApi?): Call<ListaApi?>?
+            postListaApi(@Body lista: Lista?): Call<Lista?>?
 
     @POST("listaitem")
     fun
-        postListaItemApi(@Body listaItemsApi: ListaItemsApi?): Call<ListaItemsApi?>?
+        postListaItemApi(@Body listaItems: ListaItems?): Call<ListaItems?>?
 
 
 

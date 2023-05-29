@@ -20,9 +20,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-/**
- * ViewModel to retrieve, update and delete an item from the [ItemsRepository]'s data source.
- */
+
 class ListaDetalleViewModel(
     savedStateHandle: SavedStateHandle,
     private val listaItemRepository: ListaItemRepository,
@@ -30,14 +28,8 @@ class ListaDetalleViewModel(
 
     private val itemId: Int = checkNotNull(savedStateHandle[ItemDetailsDestination.itemIdArg])
 
-    /**
-     * Holds the item details ui state. The data is retrieved from [ItemsRepository] and mapped to
-     * the UI state.
-     */
-
-
-
-
+    var venceUiState by mutableStateOf(DatosVence())
+        private set
 
         var detalleUiState: StateFlow<ListaItemDetalleUiState> =
             listaItemRepository.getItemStream(id=itemId)
@@ -54,21 +46,24 @@ class ListaDetalleViewModel(
                 )
 
 
-    /**
-     * Reduces the item quantity by one and update the [ItemsRepository]'s data source.
-     */
-   /* fun reduceQuantityByOne() {
-        viewModelScope.launch {
-            val currentItem = detalleUiState.value.itemDetails.toItem()
-            if (currentItem.quantity > 0) {
-                listaItemRepository.updateItem(currentItem.copy(quantity = currentItem.quantity - 1))
-            }
-        }
-    }*/
+    fun actualizaUiState(datosVence: DatosVence) {
 
-    /**
-     * Deletes the item from the [ItemsRepository]'s data source.
-     */
+        venceUiState = DatosVence(lote = datosVence.lote,
+            fecvenc = datosVence.fecvenc,
+            quantity = datosVence.quantity)
+        Log.d("LDV","Nuevoss Datos "+datosVence.lote)
+
+
+    }
+    fun saveItem() {
+        viewModelScope.launch {
+
+            //listaItemRepository.updateItem(itemUiState.itemDetalle.toItem(listaId =itemId ))
+
+        }
+    }
+
+
     suspend fun deleteItem() {
         listaItemRepository.deleteItem(detalleUiState.value.itemDetalle.toItem(listaId =itemId ))
     }
@@ -83,8 +78,15 @@ class ListaDetalleViewModel(
  */
 data class ListaItemDetalleUiState(
     val outOfStock: Boolean = true,
-    val itemDetalle: ListaItemDetails = ListaItemDetails()
+    val itemDetalle: ListaItemDetails = ListaItemDetails(),
+
 )
+
+data class DatosVence(
+    val lote:String="LOTEUNICO",
+    val fecvenc:String="03-2023",
+    val quantity:Int=0
+    )
 
 /**
  * Extension function to convert [Item] to [ItemUiState]
@@ -102,7 +104,9 @@ fun ListaItems.toItemDetails(): ListaItemDetails = ListaItemDetails(
     name = descrip,
     sap=sap,
     barra=barra,
-    quantity = cant.toString()
+    quantity = cant.toString(),
+    lote = lote,
+    fecvenc = fecvenc
 
 )
 
