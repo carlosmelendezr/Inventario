@@ -52,7 +52,11 @@ fun ListaDetalleScreen(
         ItemDetallesBody(
             itemDetailsUiState = uiState,
             datosVence = viewModel.venceUiState ,
-            onSaveItem =   viewModel::saveItem,
+            //onSaveItem =   viewModel::saveItem,
+            onSaveItem = {
+                viewModel.saveItem()
+                navigateBack()
+            },
             onValueChange = viewModel::actualizaUiState,
             onDelete = {
 

@@ -3,13 +3,11 @@ package com.veramed.inventario.ui.lista
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.veramed.inventario.data.Item
-import com.veramed.inventario.data.ItemsRepository
 import com.veramed.inventario.data.ListaItemRepository
 import com.veramed.inventario.data.ListaItems
 import com.veramed.inventario.ui.item.*
@@ -20,9 +18,8 @@ import kotlinx.coroutines.launch
 
 class ListaDetalleViewModel(
     savedStateHandle: SavedStateHandle,
-    private val listaItemRepository: ListaItemRepository,
+    private val listaItemRepository: ListaItemRepository
 ) : ViewModel() {
-
     private val itemId: Int = checkNotNull(savedStateHandle[ItemDetailsDestination.itemIdArg])
 
     var venceUiState by mutableStateOf(DatosVence())
@@ -37,7 +34,9 @@ class ListaDetalleViewModel(
                         detalleUiState = ListaItemDetalleUiState(
                             outOfStock = false,
                             itemDetalle = it.toItemDetails())
-                        venceUiState = DatosVence(lote=it.lote, fecvenc = it.fecvence)
+                        venceUiState = DatosVence(lote=it.lote,
+                            fecvenc = it.fecvence,
+                            idlista = it.idlista)
                     }
 
         }
@@ -50,7 +49,7 @@ class ListaDetalleViewModel(
 
       venceUiState = DatosVence(lote = datosVence.lote,
             fecvenc = datosVence.fecvenc,
-            quantity = datosVence.quantity)
+            quantity = datosVence.quantity, idlista = datosVence.idlista)
 
 
     }
@@ -61,13 +60,12 @@ class ListaDetalleViewModel(
         itemDetalle.lote = venceUiState.lote
         itemDetalle.fecvenc = venceUiState.fecvenc
 
-        Log.d("APIV","itemDetalle 2 name "+itemDetalle.name)
 
         viewModelScope.launch {
-            /* ID incorrecto*/
-            listaItemRepository.updateItem(itemDetalle.toItem(detalleUiState.itemDetalle.id))
+            listaItemRepository.updateItem(itemDetalle.toItem(venceUiState.idlista))
 
         }
+
     }
     suspend fun deleteItem() {
         listaItemRepository.deleteItem(detalleUiState.itemDetalle.toItem(listaId =itemId ))
@@ -88,7 +86,8 @@ data class ListaItemDetalleUiState(
 data class DatosVence(
     val lote:String="",
     val fecvenc:String="",
-    val quantity:Int=0
+    val quantity:Int=0,
+    val idlista:Int=0
     )
 
 /**
