@@ -3,6 +3,7 @@ package com.veramed.inventario.ui.lista
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -13,11 +14,7 @@ import com.veramed.inventario.data.ListaItemRepository
 import com.veramed.inventario.data.ListaItems
 import com.veramed.inventario.ui.item.*
 import com.veramed.inventario.ui.item.toItemDetails
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 
@@ -29,43 +26,48 @@ class ListaDetalleViewModel(
     private val itemId: Int = checkNotNull(savedStateHandle[ItemDetailsDestination.itemIdArg])
 
     var venceUiState by mutableStateOf(DatosVence())
-        private set
+    var detalleUiState by mutableStateOf(ListaItemDetalleUiState())
 
-        var detalleUiState: StateFlow<ListaItemDetalleUiState> =
-            listaItemRepository.getItemStream(id=itemId)
-                .filterNotNull()
-                .map {
-                    ListaItemDetalleUiState(
-                        outOfStock = false,
-                        itemDetalle = it.toItemDetails()
-                    )
-                }.stateIn(
-                    scope = viewModelScope,
-                    started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                    initialValue = ListaItemDetalleUiState()
-                )
+    init {
+
+        viewModelScope.launch {
+                listaItemRepository.getItemStream(id=itemId)
+                    .filterNotNull()
+                    .collect{
+                        detalleUiState = ListaItemDetalleUiState(
+                            outOfStock = false,
+                            itemDetalle = it.toItemDetails())
+                        venceUiState = DatosVence(lote=it.lote, fecvenc = it.fecvenc)
+                    }
+
+        }
+
+    }
+
 
 
     fun actualizaUiState(datosVence: DatosVence) {
 
-        venceUiState = DatosVence(lote = datosVence.lote,
+      venceUiState = DatosVence(lote = datosVence.lote,
             fecvenc = datosVence.fecvenc,
             quantity = datosVence.quantity)
-        Log.d("LDV","Nuevoss Datos "+datosVence.lote)
 
 
     }
     fun saveItem() {
-        viewModelScope.launch {
+        var itemDetalle: ListaItemDetails = detalleUiState.itemDetalle
+        itemDetalle.lote = venceUiState.lote
+        itemDetalle.fecvenc = venceUiState.fecvenc
 
-            //listaItemRepository.updateItem(itemUiState.itemDetalle.toItem(listaId =itemId ))
+        viewModelScope.launch {
+            listaItemRepository.updateItem(itemDetalle.toItem(listaId =itemId ))
 
         }
     }
 
 
     suspend fun deleteItem() {
-        listaItemRepository.deleteItem(detalleUiState.value.itemDetalle.toItem(listaId =itemId ))
+        listaItemRepository.deleteItem(detalleUiState.itemDetalle.toItem(listaId =itemId ))
     }
 
     companion object {
@@ -73,9 +75,7 @@ class ListaDetalleViewModel(
     }
 }
 
-/**
- * UI state for ItemDetailsScreen
- */
+
 data class ListaItemDetalleUiState(
     val outOfStock: Boolean = true,
     val itemDetalle: ListaItemDetails = ListaItemDetails(),
@@ -83,8 +83,8 @@ data class ListaItemDetalleUiState(
 )
 
 data class DatosVence(
-    val lote:String="LOTEUNICO",
-    val fecvenc:String="03-2023",
+    val lote:String="",
+    val fecvenc:String="",
     val quantity:Int=0
     )
 
