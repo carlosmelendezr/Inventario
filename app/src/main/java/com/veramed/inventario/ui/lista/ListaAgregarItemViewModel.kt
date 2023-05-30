@@ -201,8 +201,8 @@ data class ListaItemDetails(
     val sap: String = "",
     val barra:String = "",
     val descrip:String = "",
-    val lote:String = "",
-    val fecvenc:String = ""
+    var lote:String = "",
+    var fecvenc:String = ""
 )
 
 fun ListaItemDetails.toItem(listaId:Int): ListaItems = ListaItems(

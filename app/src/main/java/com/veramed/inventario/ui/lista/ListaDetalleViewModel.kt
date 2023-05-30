@@ -3,6 +3,7 @@ package com.veramed.inventario.ui.lista
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -29,7 +30,6 @@ class ListaDetalleViewModel(
     private val itemId: Int = checkNotNull(savedStateHandle[ItemDetailsDestination.itemIdArg])
 
     var venceUiState by mutableStateOf(DatosVence())
-        private set
 
         var detalleUiState: StateFlow<ListaItemDetalleUiState> =
             listaItemRepository.getItemStream(id=itemId)
@@ -39,6 +39,7 @@ class ListaDetalleViewModel(
                         outOfStock = false,
                         itemDetalle = it.toItemDetails()
                     )
+
                 }.stateIn(
                     scope = viewModelScope,
                     started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -48,17 +49,20 @@ class ListaDetalleViewModel(
 
     fun actualizaUiState(datosVence: DatosVence) {
 
-        venceUiState = DatosVence(lote = datosVence.lote,
+      venceUiState = DatosVence(lote = datosVence.lote,
             fecvenc = datosVence.fecvenc,
             quantity = datosVence.quantity)
-        Log.d("LDV","Nuevoss Datos "+datosVence.lote)
 
 
     }
     fun saveItem() {
-        viewModelScope.launch {
+        var itemDetalle: ListaItemDetails = detalleUiState.value.itemDetalle
+        itemDetalle.lote = venceUiState.lote
+        itemDetalle.fecvenc = venceUiState.fecvenc
 
-            //listaItemRepository.updateItem(itemUiState.itemDetalle.toItem(listaId =itemId ))
+        viewModelScope.launch {
+             itemDetalle
+            listaItemRepository.updateItem(itemDetalle.toItem(listaId =itemId ))
 
         }
     }
@@ -73,9 +77,7 @@ class ListaDetalleViewModel(
     }
 }
 
-/**
- * UI state for ItemDetailsScreen
- */
+
 data class ListaItemDetalleUiState(
     val outOfStock: Boolean = true,
     val itemDetalle: ListaItemDetails = ListaItemDetails(),
@@ -83,8 +85,8 @@ data class ListaItemDetalleUiState(
 )
 
 data class DatosVence(
-    val lote:String="LOTEUNICO",
-    val fecvenc:String="03-2023",
+    val lote:String="",
+    val fecvenc:String="",
     val quantity:Int=0
     )
 
