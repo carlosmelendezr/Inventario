@@ -18,10 +18,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.veramed.inventario.InventoryTopAppBar
 import com.veramed.inventario.R
 import com.veramed.inventario.ui.AppViewModelProvider
-import com.veramed.inventario.ui.item.ItemDetails
-import com.veramed.inventario.ui.item.ItemDetailsUiState
-import com.veramed.inventario.ui.item.ItemDetailsViewModel
-import com.veramed.inventario.ui.item.ItemInputFormOLD
 import com.veramed.inventario.ui.navigation.NavigationDestination
 import com.veramed.inventario.ui.theme.InventoryTheme
 
@@ -40,7 +36,7 @@ fun ListaDetalleScreen(
     modifier: Modifier = Modifier,
     viewModel: ListaDetalleViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val uiState = viewModel.detalleUiState.collectAsState()
+    val uiState = viewModel.detalleUiState
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
@@ -54,7 +50,7 @@ fun ListaDetalleScreen(
 
     ) { innerPadding ->
         ItemDetallesBody(
-            itemDetailsUiState = uiState.value,
+            itemDetailsUiState = uiState,
             datosVence = viewModel.venceUiState ,
             onSaveItem =  { viewModel::saveItem
                             navigateBack()

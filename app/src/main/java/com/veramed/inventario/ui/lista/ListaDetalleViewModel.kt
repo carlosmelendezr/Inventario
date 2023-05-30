@@ -14,11 +14,7 @@ import com.veramed.inventario.data.ListaItemRepository
 import com.veramed.inventario.data.ListaItems
 import com.veramed.inventario.ui.item.*
 import com.veramed.inventario.ui.item.toItemDetails
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 
@@ -30,21 +26,24 @@ class ListaDetalleViewModel(
     private val itemId: Int = checkNotNull(savedStateHandle[ItemDetailsDestination.itemIdArg])
 
     var venceUiState by mutableStateOf(DatosVence())
+    var detalleUiState by mutableStateOf(ListaItemDetalleUiState())
 
-        var detalleUiState: StateFlow<ListaItemDetalleUiState> =
-            listaItemRepository.getItemStream(id=itemId)
-                .filterNotNull()
-                .map {
-                    ListaItemDetalleUiState(
-                        outOfStock = false,
-                        itemDetalle = it.toItemDetails()
-                    )
+    init {
 
-                }.stateIn(
-                    scope = viewModelScope,
-                    started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                    initialValue = ListaItemDetalleUiState()
-                )
+        viewModelScope.launch {
+                listaItemRepository.getItemStream(id=itemId)
+                    .filterNotNull()
+                    .collect{
+                        detalleUiState = ListaItemDetalleUiState(
+                            outOfStock = false,
+                            itemDetalle = it.toItemDetails())
+                        venceUiState = DatosVence(lote=it.lote, fecvenc = it.fecvenc)
+                    }
+
+        }
+
+    }
+
 
 
     fun actualizaUiState(datosVence: DatosVence) {
@@ -56,12 +55,11 @@ class ListaDetalleViewModel(
 
     }
     fun saveItem() {
-        var itemDetalle: ListaItemDetails = detalleUiState.value.itemDetalle
+        var itemDetalle: ListaItemDetails = detalleUiState.itemDetalle
         itemDetalle.lote = venceUiState.lote
         itemDetalle.fecvenc = venceUiState.fecvenc
 
         viewModelScope.launch {
-             itemDetalle
             listaItemRepository.updateItem(itemDetalle.toItem(listaId =itemId ))
 
         }
@@ -69,7 +67,7 @@ class ListaDetalleViewModel(
 
 
     suspend fun deleteItem() {
-        listaItemRepository.deleteItem(detalleUiState.value.itemDetalle.toItem(listaId =itemId ))
+        listaItemRepository.deleteItem(detalleUiState.itemDetalle.toItem(listaId =itemId ))
     }
 
     companion object {
