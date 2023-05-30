@@ -52,9 +52,7 @@ fun ListaDetalleScreen(
         ItemDetallesBody(
             itemDetailsUiState = uiState,
             datosVence = viewModel.venceUiState ,
-            onSaveItem =  { viewModel::saveItem
-                            navigateBack()
-                          },
+            onSaveItem =   viewModel::saveItem,
             onValueChange = viewModel::actualizaUiState,
             onDelete = {
 
@@ -147,6 +145,10 @@ fun EditItemInputForm(
                 enabled = false,
                 singleLine = true
             )
+
+
+        }
+        Row() {
             OutlinedTextField(
                 value = itemDetails.quantity,
                 onValueChange = { onValueChange(datosVence.copy(quantity =it.toInt())) },
@@ -155,14 +157,8 @@ fun EditItemInputForm(
                 enabled = false,
                 singleLine = true
             )
-
         }
-
-
-
         Row() {
-
-
             OutlinedTextField(
                 value = datosVence.lote,
                 onValueChange = { onValueChange(datosVence.copy(lote=it)) },

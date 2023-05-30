@@ -200,7 +200,7 @@ data class ListaItemDetails(
     val quantity: String = "",
     val sap: String = "",
     val barra:String = "",
-    val descrip:String = "",
+    var descrip:String = "",
     var lote:String = "",
     var fecvenc:String = ""
 )
@@ -214,7 +214,8 @@ fun ListaItemDetails.toItem(listaId:Int): ListaItems = ListaItems(
     sap = sap,
     descrip = descrip,
     lote = lote,
-    fecvenc = fecvenc
+    fecvence = fecvenc,
+
 )
 
 /*fun ListaItemDetails.toListaItemUiState(isEntryValid: Boolean = false): AgregarItemUiState = AgregarItemUiState(

@@ -37,7 +37,7 @@ class ListaDetalleViewModel(
                         detalleUiState = ListaItemDetalleUiState(
                             outOfStock = false,
                             itemDetalle = it.toItemDetails())
-                        venceUiState = DatosVence(lote=it.lote, fecvenc = it.fecvenc)
+                        venceUiState = DatosVence(lote=it.lote, fecvenc = it.fecvence)
                     }
 
         }
@@ -56,8 +56,11 @@ class ListaDetalleViewModel(
     }
     fun saveItem() {
         var itemDetalle: ListaItemDetails = detalleUiState.itemDetalle
+        Log.d("APIV","itemDetalle lote "+itemDetalle.lote)
+        itemDetalle.descrip = itemDetalle.name
         itemDetalle.lote = venceUiState.lote
         itemDetalle.fecvenc = venceUiState.fecvenc
+        Log.d("APIV","itemDetalle 2 name "+itemDetalle.name)
 
         viewModelScope.launch {
             listaItemRepository.updateItem(itemDetalle.toItem(listaId =itemId ))
@@ -96,9 +99,7 @@ fun Item.toItemUiState(isEntryValid: Boolean = false): ItemUiState = ItemUiState
     isEntryValid = isEntryValid
 )
 
-/**
- * Extension function to convert [Item] to [ItemDetails]
- */
+
 fun ListaItems.toItemDetails(): ListaItemDetails = ListaItemDetails(
     id = id,
     name = descrip,
@@ -106,7 +107,7 @@ fun ListaItems.toItemDetails(): ListaItemDetails = ListaItemDetails(
     barra=barra,
     quantity = cant.toString(),
     lote = lote,
-    fecvenc = fecvenc
+    fecvenc = fecvence
 
 )
 

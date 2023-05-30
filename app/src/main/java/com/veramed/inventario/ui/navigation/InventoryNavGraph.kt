@@ -102,7 +102,6 @@ fun InventoryNavHost(
                 navigateBack = { navController.popBackStack() },
                 onNavigateUp = { navController.navigateUp() },
                 navigateToDetalles = {navController.navigate("${ListaDetalleDestination.route}/${it}")},
-                navigateToTransmitir = {navController.navigate("${ListaTransmitirDestination.route}/${it}")}
             )
         }
 

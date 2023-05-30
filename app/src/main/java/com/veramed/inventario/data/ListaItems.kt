@@ -20,6 +20,6 @@ data class ListaItems(
     val descrip:String,
     val cant:Int,
     val lote:String,
-    val fecvenc:String
+    val fecvence:String
 
 )
