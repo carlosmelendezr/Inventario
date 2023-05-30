@@ -60,15 +60,15 @@ class ListaDetalleViewModel(
         itemDetalle.descrip = itemDetalle.name
         itemDetalle.lote = venceUiState.lote
         itemDetalle.fecvenc = venceUiState.fecvenc
+
         Log.d("APIV","itemDetalle 2 name "+itemDetalle.name)
 
         viewModelScope.launch {
-            listaItemRepository.updateItem(itemDetalle.toItem(listaId =itemId ))
+            /* ID incorrecto*/
+            listaItemRepository.updateItem(itemDetalle.toItem(detalleUiState.itemDetalle.id))
 
         }
     }
-
-
     suspend fun deleteItem() {
         listaItemRepository.deleteItem(detalleUiState.itemDetalle.toItem(listaId =itemId ))
     }
