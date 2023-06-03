@@ -24,6 +24,9 @@ interface ListaItemDao {
     @Query("SELECT * from listaitems WHERE idlista = :idlista ORDER BY id DESC")
     fun getItemLista(idlista: Int): Flow<List<ListaItems>>
 
+    @Query("SELECT COUNT(*) FROM listaitems WHERE idlista = :idlista ")
+    fun getItemCount(idlista: Int): Flow<Int>
+
     @Query("SELECT * from listaitems WHERE barra = :barra")
     fun getItembyBarra(barra:String): Flow<ListaItems>
 

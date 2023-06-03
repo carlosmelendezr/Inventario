@@ -8,6 +8,8 @@ class OfflineListaItemRepository(private val listaitemDao: ListaItemDao):ListaIt
 
     override fun getItemStream(id: Int): Flow<ListaItems?> = listaitemDao.getItem(id)
 
+    override fun getItemCount(idlista: Int): Flow<Int> = listaitemDao.getItemCount(idlista)
+
     override fun getItemLista(idlista: Int):Flow<List<ListaItems>> = listaitemDao.getItemLista(idlista)
 
     override suspend fun insertItem(item: ListaItems) = listaitemDao.insert(item)

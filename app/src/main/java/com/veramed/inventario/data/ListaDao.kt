@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ListaDao {
-    @Query("SELECT * from lista ORDER BY fecha ASC")
+    @Query("SELECT *,(SELECT count(*) FROM listaitems  WHERE lista.id = listaitems.idlista ) AS articulos from lista ORDER BY fecha ASC")
     fun getAllItems(): Flow<List<Lista>>
 
     @Query("SELECT * from lista WHERE id = :id")

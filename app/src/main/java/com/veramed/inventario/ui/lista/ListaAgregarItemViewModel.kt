@@ -126,19 +126,6 @@ class ListaAgregarItemViewModel(
          }
 
 
-            /*if (articulo.name.isNotBlank()) {
-                Log.d("INVBAR","BARRA EXISTE "+articulo.name)
-                listaItemUiState =
-                    AgregarItemUiState(
-                        listaitemDetails = ListaItemDetails(
-                            name = articulo.name,
-                            barra = articulo.barra,
-                            sap = articulo.sap, descrip = articulo.name,
-                            quantity = listaItemUiState.listaitemDetails.quantity
-                        ), isEntryValid = true
-                    )
-
-            }*/
 
              if (!existe ) {
 

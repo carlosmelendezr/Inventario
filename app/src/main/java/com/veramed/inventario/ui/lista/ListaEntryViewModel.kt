@@ -81,7 +81,8 @@ fun ListaDetalles.toItem(): Lista = Lista(
     feccrea=DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(Date()),
     tipo=tipo.substring(0,tipo.indexOf("-")).toInt(),
     centro=centro,
-    fecha= Date().time
+    fecha= Date().time,
+    articulos = 0
 )
 
 /**

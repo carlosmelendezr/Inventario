@@ -12,6 +12,8 @@ interface ListaItemRepository {
 
     fun getItemLista(idlista: Int): Flow<List<ListaItems>>
 
+    fun getItemCount(idlista: Int): Flow<Int>
+
     /**
      * Retrieve an item from the given data source that matches with the [id].
      */

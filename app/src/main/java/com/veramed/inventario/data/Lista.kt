@@ -1,6 +1,7 @@
 package com.veramed.inventario.data
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import java.util.*
@@ -17,6 +18,8 @@ data class Lista(
     val fecha:Long,
     val feccrea:String,
     val tipo:Int,
-    val centro:Int
+    val centro:Int,
+    @Expose(serialize = false,deserialize = false)
+    val articulos:Int?
 
 )

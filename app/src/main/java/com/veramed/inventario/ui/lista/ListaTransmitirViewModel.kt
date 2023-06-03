@@ -76,7 +76,8 @@ fun ListaTUiState.toLista(): Lista = Lista(
     fecha = fecha,
     feccrea = feccrea,
     tipo = tipo,
-    centro = centro
+    centro = centro,
+    articulos = 0
 )
 
 fun Lista.toListaTUiState(): ListaTUiState = ListaTUiState(
