@@ -94,8 +94,8 @@ private fun HomeListaBody(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        //InventoryListHeader()
-        Divider()
+
+
         if (itemList.isEmpty()) {
             Text(
                 text = stringResource(R.string.no_item_description),
@@ -117,12 +117,11 @@ private fun ListaInventario(
     modifier: Modifier = Modifier,
     onDelete: (Lista) -> Unit,
 ) {
-    LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(3.dp)) {
         items(items = itemList, key = { it.id }) { listaitem ->
             InventoryListRow(lista = listaitem,
                 onItemClick = onItemClick,onDelete=onDelete
                 )
-            Divider()
         }
     }
 }
@@ -152,10 +151,10 @@ private fun InventoryListRow(
     Row(modifier = modifier
         .fillMaxWidth()
         .clickable {  if (lista.color<3) onItemClick(lista) }
-        .padding(vertical = 16.dp)
+        .padding(vertical = 5.dp)
     ) {
         val paddingModifier  = Modifier
-            .padding(10.dp)
+            .padding(5.dp)
             .fillMaxWidth()
         Card(elevation = 5.dp,
             modifier = paddingModifier,
