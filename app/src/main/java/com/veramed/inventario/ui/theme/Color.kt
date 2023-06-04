@@ -22,3 +22,11 @@ val Purple500 = Color(0xFF6200EE)
 val Purple700 = Color(0xFF3700B3)
 val Teal200 = Color(0xFF03DAC5)
 
+fun colorTarjeta(codcolor:Int):Color {
+    return when(codcolor) {
+        1 -> Color.Yellow
+        2 -> Color.Blue
+        3 -> Color.Green
+        else -> Color.LightGray
+    }
+}

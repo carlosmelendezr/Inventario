@@ -74,7 +74,6 @@ fun InventoryNavHost(
             })
         ) {
             ListaTransmitirScreen(
-
                 navigateBack = { navController.navigateUp() }
             )
         }

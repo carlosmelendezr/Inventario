@@ -48,6 +48,13 @@ class ListaTransmitirViewModel(
                 initialValue = ListaArticulosUiState()
             )
 
+    fun guardarLista() {
+
+        viewModelScope.launch {
+            listaRepository.updateLista( listaTUiState.toLista(color=3))
+        }
+
+    }
 
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
@@ -64,11 +71,12 @@ data class ListaTUiState(
     val fecha:Long=0,
     val feccrea:String="",
     val tipo:Int =0,
-    val centro:Int=0
+    val centro:Int=0,
+    val articulos:Int = 0
 
 )
 
-fun ListaTUiState.toLista(): Lista = Lista(
+fun ListaTUiState.toLista(color:Int): Lista = Lista(
     id = id,
     idusuario = idusuario,
     descrip = descrip,
@@ -77,7 +85,7 @@ fun ListaTUiState.toLista(): Lista = Lista(
     feccrea = feccrea,
     tipo = tipo,
     centro = centro,
-    articulos = 0
+    articulos = articulos
 )
 
 fun Lista.toListaTUiState(): ListaTUiState = ListaTUiState(
@@ -88,7 +96,8 @@ fun Lista.toListaTUiState(): ListaTUiState = ListaTUiState(
     fecha = fecha,
     feccrea = feccrea,
     tipo = tipo,
-    centro = centro
+    centro = centro,
+    articulos= articulos?:0
 
 )
 

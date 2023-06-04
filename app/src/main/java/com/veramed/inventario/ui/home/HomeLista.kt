@@ -27,6 +27,7 @@ import com.veramed.inventario.data.Lista
 import com.veramed.inventario.ui.AppViewModelProvider
 import com.veramed.inventario.ui.navigation.NavigationDestination
 import com.veramed.inventario.ui.theme.InventoryTheme
+import com.veramed.inventario.ui.theme.colorTarjeta
 
 import com.veramed.util.convertLongToTimeScreen
 
@@ -150,7 +151,7 @@ private fun InventoryListRow(
     var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
     Row(modifier = modifier
         .fillMaxWidth()
-        .clickable { onItemClick(lista) }
+        .clickable {  if (lista.color<3) onItemClick(lista) }
         .padding(vertical = 16.dp)
     ) {
         val paddingModifier  = Modifier
@@ -158,7 +159,7 @@ private fun InventoryListRow(
             .fillMaxWidth()
         Card(elevation = 5.dp,
             modifier = paddingModifier,
-            backgroundColor=Color.Yellow
+            backgroundColor=colorTarjeta(lista.color)
 
         ) {
             Row() {
@@ -177,21 +178,24 @@ private fun InventoryListRow(
                             text = "Creado el " + convertLongToTimeScreen(lista.fecha),
                             style = MaterialTheme.typography.body1
                         )
-                        Spacer(modifier = Modifier.height(5.dp))
+                        Spacer(modifier = Modifier.width(5.dp))
                         Text(
-                            text = "Usuario " + lista.idusuario.toString(),
-                            style = MaterialTheme.typography.body1,
-                            textAlign = TextAlign.Right
+                            text ="Articulos "+lista.articulos,
+                            textAlign = TextAlign.Right,
+                            modifier=Modifier.fillMaxWidth()
+
                         )
+
                     }
+
                     Text(
-                        text = "Articulos "+lista.articulos
-
+                        text = "Usuario " + lista.idusuario.toString(),
+                        style = MaterialTheme.typography.body1,
+                        textAlign = TextAlign.Right,
+                        modifier=Modifier.fillMaxWidth()
                     )
-
                     IconButton(
-                        onClick = { deleteConfirmationRequired = true },
-                        modifier = Modifier.fillMaxWidth()
+                        onClick = { deleteConfirmationRequired = true }
                     ) {
                         Icon(Icons.Filled.Delete, contentDescription = "Borrar")
                     }

@@ -1,46 +1,32 @@
 package com.veramed.inventario.ui.lista
 
-import androidx.annotation.StringRes
-import androidx.compose.foundation.background
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
+
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Home
+
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
+
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusEvent
-import androidx.compose.ui.graphics.BlendMode.Companion.Color
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.veramed.inventario.InventoryTopAppBar
 import com.veramed.inventario.R
-import com.veramed.inventario.camara.CameraPreview
-import com.veramed.inventario.data.Lista
-import com.veramed.inventario.data.ListaItems
+
 import com.veramed.inventario.data.PostListaHomeServer
 import com.veramed.inventario.ui.AppViewModelProvider
 import com.veramed.inventario.ui.navigation.NavigationDestination
 import com.veramed.inventario.ui.theme.InventoryTheme
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+
 
 object ListaTransmitirDestination : NavigationDestination {
     override val route = "lista_transmitir"
@@ -57,11 +43,12 @@ fun ListaTransmitirScreen(
     viewModel: ListaTransmitirViewModel = viewModel(factory = AppViewModelProvider.Factory)
 
 ) {
-    val coroutineScope = rememberCoroutineScope()
+    var visible by remember { mutableStateOf(false) }
 
     val listaArticulosUiState by viewModel.listaArticulosUIState.collectAsState()
 
     Scaffold(
+        bottomBar = {BottomBar(navigateBack)},
         topBar = {
             InventoryTopAppBar(
                 title = stringResource(ListaAgregarItemDestination.titleRes) ,
@@ -70,9 +57,16 @@ fun ListaTransmitirScreen(
             )
         }, floatingActionButton = {
             FloatingActionButton(
-                onClick = {PostListaHomeServer(
-                    lista=viewModel.listaTUiState.toLista(),
-                    listaItem=listaArticulosUiState.itemList)},
+                onClick = {
+                    visible=true
+                    if (PostListaHomeServer(
+                        lista=viewModel.listaTUiState.toLista(0),
+                        listaItem=listaArticulosUiState.itemList))
+                    {
+                        viewModel.guardarLista()
+                        navigateBack()
+                    } else {visible=false}
+                          },
                 modifier = Modifier.navigationBarsPadding()
             ) {
                 Icon(
@@ -83,21 +77,36 @@ fun ListaTransmitirScreen(
             }
         },
     ) { innerPadding ->
-        TransmitirBody(
+        Column() {
+            TransmitirBody(
+                listaTUiState = viewModel.listaTUiState,
+                cantArticulos = listaArticulosUiState.itemList.size,
 
-            listaTUiState = viewModel.listaTUiState,
+                modifier = modifier.padding(innerPadding)
+            )
 
-            modifier = modifier.padding(innerPadding),
+                Column(modifier= Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center) {
+                    if (visible) {
+                        LinearProgressIndicator(modifier=Modifier.fillMaxWidth())
+                    }
+                    if (!visible) {
+                        LinearProgressIndicator(
+                            color= androidx.compose.ui.graphics.Color.Red,
+                            modifier=Modifier.fillMaxWidth())
+                    }
 
-        )
+                }
+            }
+        }
 
-
-    }
 }
 
 @Composable
 fun TransmitirBody(
     listaTUiState: ListaTUiState,
+    cantArticulos:Int,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -121,7 +130,11 @@ fun TransmitirBody(
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.h6
                     )
-                    // Subtítulo
+                    Text(
+                        text = "Articulos :$cantArticulos",
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.h6
+                    )
 
                 }
 
@@ -129,12 +142,41 @@ fun TransmitirBody(
             }
         }
 
-
     }
 }
 
+@Composable
+fun BottomBar(navigateBack: () -> Unit) {
+    val selectedIndex = remember { mutableStateOf(0) }
+    BottomNavigation(elevation = 10.dp) {
 
+        BottomNavigationItem(icon = {
+            Icon(imageVector = Icons.Default.ArrowBack,"")
+        },
+            label = { Text(text = "Regresar") },
+            selected = (selectedIndex.value == 0),
+            onClick = navigateBack
+            )
 
+        /*BottomNavigationItem(icon = {
+            Icon(imageVector = Icons.Default.Favorite,"")
+        },
+            label = { Text(text = "Favorite") },
+            selected = (selectedIndex.value == 1),
+            onClick = {
+                selectedIndex.value = 1
+            })
+
+        BottomNavigationItem(icon = {
+            Icon(imageVector = Icons.Default.Person,"")
+        },
+            label = { Text(text = "Profile") },
+            selected = (selectedIndex.value == 2),
+            onClick = {
+                selectedIndex.value = 2
+            })*/
+    }
+}
 
 
 
