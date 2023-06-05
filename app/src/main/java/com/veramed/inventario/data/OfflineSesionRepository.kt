@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 
 class OfflineSesionRepository(private val sesionDao: SesionDao) : SesionRepository  {
 
-    override fun getSesionActual(): Flow<List<Sesion>> = sesionDao.getSesionActual()
+    override fun getSesionActual(): Flow<Sesion> = sesionDao.getSesionActual()
 
     override suspend fun inicarSesion(sesion:Sesion)  = sesionDao.iniciarSesion(sesion)
 

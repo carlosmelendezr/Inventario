@@ -40,7 +40,8 @@ object AppViewModelProvider {
         }
 
         initializer {
-            ListaEntryViewModel(inventoryApplication().container.listaRepository)
+            ListaEntryViewModel(inventoryApplication().container.listaRepository,
+                inventoryApplication().container.sesionRepository)
         }
 
         // Initializer for ItemDetailsViewModel
@@ -57,8 +58,8 @@ object AppViewModelProvider {
         }
         // Initializer for HomeListaViewModel
         initializer {
-            HomeListaViewModel(inventoryApplication().container.listaRepository
-                )
+            HomeListaViewModel(inventoryApplication().container.listaRepository,
+                inventoryApplication().container.sesionRepository)
         }
 
         // Initializer for HomeListaViewModel
@@ -67,7 +68,8 @@ object AppViewModelProvider {
         }
 
         initializer {
-            UsuarioLoginViewModel(inventoryApplication().container.usuarioRepository)
+            UsuarioLoginViewModel(inventoryApplication().container.usuarioRepository,
+                inventoryApplication().container.sesionRepository)
         }
 
         initializer {

@@ -53,7 +53,7 @@ fun HomeLista(
     Scaffold(
         topBar = {
             InventoryTopAppBar(
-                title = stringResource(HomeDestination.titleRes),
+                title = stringResource(HomeDestination.titleRes)+" ("+viewModel.sesion.name+")",
                 canNavigateBack = false
             )
         },
@@ -187,12 +187,7 @@ private fun InventoryListRow(
 
                     }
 
-                    Text(
-                        text = "Usuario " + lista.idusuario.toString(),
-                        style = MaterialTheme.typography.body1,
-                        textAlign = TextAlign.Right,
-                        modifier=Modifier.fillMaxWidth()
-                    )
+
                     IconButton(
                         onClick = { deleteConfirmationRequired = true }
                     ) {
