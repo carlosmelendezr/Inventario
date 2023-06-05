@@ -9,8 +9,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-fun PostListaHomeServer(lista: Lista,listaItem: List<ListaItems>) {
-
+fun PostListaHomeServer(lista: Lista,listaItem: List<ListaItems>):Boolean {
+    var exito = false
     var url = "http://192.10.47.88:8090/"
     // on below line we are creating a retrofit
     // builder and passing our base url
@@ -46,16 +46,19 @@ fun PostListaHomeServer(lista: Lista,listaItem: List<ListaItems>) {
                 itm.idlista = idCreado
                 PostListaItems(itm)
             }
+            exito=true
 
         }
 
         override fun onFailure(call: Call<Lista?>?, t: Throwable) {
             // we get error response from API.
             Log.e("APIV", "Error found is : " + t.message)
+            exito= false
+
         }
 
     })
-
+    return exito
 
 }
 

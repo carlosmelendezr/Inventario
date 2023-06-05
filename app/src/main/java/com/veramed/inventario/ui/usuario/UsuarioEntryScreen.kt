@@ -91,7 +91,7 @@ fun UsuarioEntryBody(
             enabled = usuarioUiState.isEntryValid,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(stringResource(R.string.usuario_login))
+            Text(stringResource(R.string.register_action))
         }
     }
 }
@@ -139,7 +139,7 @@ fun UsuarioRegisterForm(
 
         OutlinedTextField(
             value = usuarioDetails.passwordConfirm,
-            onValueChange = { onValueChange(usuarioDetails.copy(password = it)) },
+            onValueChange = { onValueChange(usuarioDetails.copy(passwordConfirm = it)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
             visualTransformation = PasswordVisualTransformation(),
             label = { Text(stringResource(R.string.usuario_password_conf)) },
