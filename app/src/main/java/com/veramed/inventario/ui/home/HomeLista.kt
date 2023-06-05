@@ -27,6 +27,7 @@ import com.veramed.inventario.data.Lista
 import com.veramed.inventario.ui.AppViewModelProvider
 import com.veramed.inventario.ui.navigation.NavigationDestination
 import com.veramed.inventario.ui.theme.InventoryTheme
+import com.veramed.inventario.ui.theme.ListaColor
 
 import com.veramed.util.convertLongToTimeScreen
 
@@ -158,7 +159,7 @@ private fun InventoryListRow(
             .fillMaxWidth()
         Card(elevation = 5.dp,
             modifier = paddingModifier,
-            backgroundColor=Color.Yellow
+            backgroundColor= ListaColor(lista.color)
 
         ) {
             Row() {
