@@ -108,13 +108,20 @@ fun ItemInputForm(
         "4-TRASLADO ALMACEN TIENDA",
         "5-TRASLADO ENTRE TIENDAS")
 
+    val centros = listOf("1-LAS MERCEDES",
+        "2-VALLE ARRIBA",
+        "3-SANTA MONICA",
+        "4-ALTO PRADO",
+        "5-GUATIRE","6-GUARENAS")
+
     var expanded by remember { mutableStateOf(false) }
+    var expandedCentro by remember { mutableStateOf(false) }
 
     Column(modifier = modifier.fillMaxWidth().padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(32.dp)) {
         OutlinedTextField(
             value = listaDetalles.descrip,
-            onValueChange = { onValueChange(listaDetalles.copy(descrip = it)) },
+            onValueChange = { onValueChange(listaDetalles.copy(descrip = it.uppercase())) },
             label = { Text(stringResource(R.string.lista_descrip)) },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
@@ -161,6 +168,44 @@ Box(modifier = Modifier.fillMaxWidth()) {
 
     }
 
+        Box(modifier = Modifier.fillMaxWidth()) {
+            Row(modifier = Modifier.clickable {
+                expandedCentro = !expandedCentro
+            }.align(Alignment.Center)) {
+
+                OutlinedTextField(
+                    value = listaDetalles.centro,
+                    onValueChange = {onValueChange(listaDetalles.copy(centro = it))},
+                    label={Text("Tienda")},
+                    modifier = Modifier.fillMaxWidth().clickable {
+                        expandedCentro = !expandedCentro
+                    },
+                    enabled = false,
+                    readOnly = true,
+                    singleLine = true)
+
+                Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = null)
+                DropdownMenu(
+                    expanded = expandedCentro,
+                    onDismissRequest = { expandedCentro = false },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+
+                centros.forEach {
+
+                        DropdownMenuItem(onClick = {
+                            onValueChange(listaDetalles.copy(centro=it))
+                            expandedCentro = false
+                        }) {
+                            Text(modifier = Modifier.fillMaxWidth(),text = it)
+                        }
+                    }
+
+                }
+            }
+
+        }
+
 
     }
  }
@@ -174,7 +219,7 @@ private fun ItemEntryScreenPreview() {
     InventoryTheme {
         ItemEntryBody(
             listaUiState = ListaUiState(
-                ListaDetalles(1,1,"Toma de Prueba",0,"","19/04/2023","",1
+                ListaDetalles(1,1,"Toma de Prueba",0,"","19/04/2023","","1"
 
                 )
             ),

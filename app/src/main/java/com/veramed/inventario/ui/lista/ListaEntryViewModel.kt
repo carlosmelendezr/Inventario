@@ -5,8 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.veramed.inventario.data.Lista
 import com.veramed.inventario.data.ListaRepository
+import com.veramed.inventario.data.Sesion
+import com.veramed.inventario.data.SesionRepository
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -16,13 +21,21 @@ import java.util.*
 /**
  * View Model to validate and insert items in the Room database.
  */
-class ListaEntryViewModel(private val listaRepository: ListaRepository) : ViewModel() {
+class ListaEntryViewModel(private val listaRepository: ListaRepository,
+                          private val sesionRepository: SesionRepository) : ViewModel() {
 
     /**
      * Holds current item ui state
      */
     var listaUiState by mutableStateOf(ListaUiState())
         private set
+
+    var sesion = Sesion(0,"",0)
+    init {
+        viewModelScope.launch {
+            sesion = sesionRepository.getSesionActual().first()
+        }
+    }
 
 
 
@@ -40,7 +53,7 @@ class ListaEntryViewModel(private val listaRepository: ListaRepository) : ViewMo
      */
     suspend fun saveItem() {
         if (validateInput()) {
-            listaRepository.insertLista(listaUiState.listaDetails.toItem())
+            listaRepository.insertLista(listaUiState.listaDetails.toItem(sesion.id))
         }
     }
 
@@ -68,19 +81,19 @@ data class ListaDetalles(
     val fecha:String = "",
     val feccrea: String = "",
     val tipo: String = "",
-    val centro: Int = 0
+    val centro: String = ""
 
 )
 
 
-fun ListaDetalles.toItem(): Lista = Lista(
+fun ListaDetalles.toItem(idusr:Int=idusuario): Lista = Lista(
     id = id,
-    idusuario = idusuario,
+    idusuario = idusr,
     descrip=descrip,
     color=color,
     feccrea=DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(Date()),
     tipo=tipo.substring(0,tipo.indexOf("-")).toInt(),
-    centro=centro,
+    centro=centro.substring(0,centro.indexOf("-")).toInt(),
     fecha= Date().time,
     articulos = 0
 )
@@ -103,7 +116,7 @@ fun Lista.toListaDetails(): ListaDetalles = ListaDetalles(
     color=color,
     feccrea=feccrea,
     tipo=tipo.toString(),
-    centro=centro,
+    centro=centro.toString(),
 
 )
 

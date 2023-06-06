@@ -6,7 +6,7 @@ interface SesionRepository {
     /**
      * Retrieve all the items from the the given data source.
      */
-    fun getSesionActual(): Flow<List<Sesion>>
+    fun getSesionActual(): Flow<Sesion>
 
     /**
      * Retrieve an item from the given data source that matches with the [id].

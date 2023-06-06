@@ -118,7 +118,7 @@ fun UsuarioRegisterForm(
 
         OutlinedTextField(
             value = usuarioDetails.name,
-            onValueChange = { onValueChange(usuarioDetails.copy(name = it)) },
+            onValueChange = { onValueChange(usuarioDetails.copy(name = it.uppercase())) },
             label = { Text(stringResource(R.string.usuario_nombre_req)) },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,

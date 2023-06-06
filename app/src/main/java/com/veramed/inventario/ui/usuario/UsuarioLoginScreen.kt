@@ -55,13 +55,11 @@ fun UsuarioLoginScreen(
                 usuarioUiState = viewModel.usuarioUiState,
                 onUsuarioValueChange = viewModel::updateUiState,
                 onSaveClick = {
-                    // Note: If the user rotates the screen very fast, the operation may get cancelled
-                    // and the item may not be saved in the Database. This is because when config
-                    // change occurs, the Activity will be recreated and the rememberCoroutineScope will
-                    // be cancelled - since the scope is bound to composition.
+
                     coroutineScope.launch {
                         viewModel.buscarUsuario()
                         if (viewModel.usuarioUiState.existe) {
+                            viewModel.abrirSesion()
                             navigateToListaEntry()
                         } else {
 

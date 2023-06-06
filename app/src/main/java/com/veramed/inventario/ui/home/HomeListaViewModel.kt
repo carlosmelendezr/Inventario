@@ -15,7 +15,15 @@ import kotlinx.coroutines.launch
  * View Model to retrieve all items in the Room database.
  */
 class HomeListaViewModel(
-    private val  listaRepository: ListaRepository) : ViewModel() {
+    private val  listaRepository: ListaRepository,
+    private val sesionRepository: SesionRepository) : ViewModel() {
+
+    var sesion = Sesion(0,"",0)
+   init {
+       viewModelScope.launch {
+           sesion = sesionRepository.getSesionActual().first()
+       }
+   }
 
 
     val listaUiState: StateFlow<ListaUiState> =

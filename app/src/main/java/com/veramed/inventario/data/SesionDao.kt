@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SesionDao {
     @Query("SELECT * from sesion ")
-    fun getSesionActual(): Flow<List<Sesion>>
+    fun getSesionActual(): Flow<Sesion>
 
     @Query("DELETE FROM sesion ")
     suspend fun iniciarSesion(sesion:Sesion) {
