@@ -56,24 +56,23 @@ fun ListaTransmitirScreen(
 
             )
         }, floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    visible=true
-                    if (PostListaHomeServer(
-                        lista=viewModel.listaTUiState.toLista(0),
-                        listaItem=listaArticulosUiState.itemList))
-                    {
-                        viewModel.guardarLista()
-                        navigateBack()
-                    } else {visible=false}
-                          },
-                modifier = Modifier.navigationBarsPadding()
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Send,
-                    contentDescription = stringResource(R.string.item_entry_title),
-                    tint = MaterialTheme.colors.onPrimary
-                )
+            if (!viewModel.envioExitoso) {
+                FloatingActionButton(
+                    onClick = {
+                        visible = true
+                        PostListaHomeServer(
+                            lista = viewModel.listaTUiState.toLista(0),
+                            listaItem = listaArticulosUiState.itemList, viewModel
+                        )
+                    },
+                    modifier = Modifier.navigationBarsPadding(),
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Send,
+                        contentDescription = stringResource(R.string.item_entry_title),
+                        tint = MaterialTheme.colors.onPrimary
+                    )
+                }
             }
         },
     ) { innerPadding ->
@@ -88,10 +87,14 @@ fun ListaTransmitirScreen(
                 Column(modifier= Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center) {
-                    if (visible) {
-                        LinearProgressIndicator(modifier=Modifier.fillMaxWidth())
+                    if (viewModel.envioExitoso) {
+                        LinearProgressIndicator( color= androidx.compose.ui.graphics.Color.Green,
+                            modifier=Modifier.fillMaxWidth())
+                        viewModel.guardarLista()
+                        Text(text="Transmision existosa....")
+                        //navigateBack()
                     }
-                    if (!visible) {
+                    if (!viewModel.envioExitoso) {
                         LinearProgressIndicator(
                             color= androidx.compose.ui.graphics.Color.Red,
                             modifier=Modifier.fillMaxWidth())

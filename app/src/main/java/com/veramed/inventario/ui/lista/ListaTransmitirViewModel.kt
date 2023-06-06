@@ -27,6 +27,8 @@ class ListaTransmitirViewModel(
 
     var listaId: Int = checkNotNull(savedStateHandle[ListaAgregarItemDestination.itemIdArg])
 
+    var envioExitoso by mutableStateOf(false)
+
     var listaTUiState by mutableStateOf(ListaTUiState())
         private set
 

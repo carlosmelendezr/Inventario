@@ -2,6 +2,11 @@ package com.veramed.inventario.data
 
 import android.util.Log
 import com.veramed.inventario.data.Api.*
+import com.veramed.inventario.ui.lista.ListaTransmitirViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -9,7 +14,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-fun PostListaHomeServer(lista: Lista,listaItem: List<ListaItems>):Boolean {
+fun PostListaHomeServer(lista: Lista,listaItem: List<ListaItems>,
+                        viewModel: ListaTransmitirViewModel) {
     var exito = false
     var url = "http://192.10.47.88:8090/"
     // on below line we are creating a retrofit
@@ -29,36 +35,38 @@ fun PostListaHomeServer(lista: Lista,listaItem: List<ListaItems>):Boolean {
     val retrofitapi = retrofit.create(RetrofitAPI::class.java)
 
     val llamarLista: Call<Lista?>? = retrofitapi.postListaApi(lista)
+    CoroutineScope(Dispatchers.IO).launch {
+        llamarLista!!.enqueue(object : Callback<Lista?> {
 
-    llamarLista!!.enqueue(object:Callback<Lista?> {
+            override fun onResponse(llamarLista: Call<Lista?>?, response: Response<Lista?>) {
 
-        override fun onResponse(llamarLista: Call<Lista?>?, response: Response<Lista?>) {
+                idCreado = response.body()?.id ?: 0
 
-            idCreado = response.body()?.id ?: 0
+                val resp = "ID = " + idCreado +
+                        "Response Code : " + response.message()
 
-            val resp = "ID = " + idCreado +
-                    "Response Code : " + response.message()
+                Log.d("APIV", resp)
 
-            Log.d("APIV", resp)
+                listaItem.forEach {
+                    var itm = it
+                    itm.idlista = idCreado
+                    PostListaItems(itm)
+                }
+                viewModel.envioExitoso=true
+                Log.e("APIV", "ENVIO EXITOSO : ")
 
-            listaItem.forEach {
-                var itm = it
-                itm.idlista = idCreado
-                PostListaItems(itm)
             }
-            exito=true
 
-        }
+            override fun onFailure(call: Call<Lista?>?, t: Throwable) {
+                // we get error response from API.
+                Log.e("APIV", "Error found is : " + t.message)
+                viewModel.envioExitoso=false
 
-        override fun onFailure(call: Call<Lista?>?, t: Throwable) {
-            // we get error response from API.
-            Log.e("APIV", "Error found is : " + t.message)
-            exito= false
+            }
 
-        }
-
-    })
-    return exito
+        })
+    }
+    Log.e("APIV", "RESULTADO : " + exito)
 
 }
 
@@ -79,6 +87,7 @@ fun PostListaItems(listaItem: ListaItems) {
 
     val retrofitapi = retrofit.create(RetrofitAPI::class.java)
     val llamar: Call<ListaItems?>? = retrofitapi.postListaItemApi(listaItem)
+
 
     llamar!!.enqueue(object : Callback<ListaItems?> {
 
