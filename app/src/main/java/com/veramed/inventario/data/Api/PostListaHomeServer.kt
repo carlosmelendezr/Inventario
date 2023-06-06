@@ -35,7 +35,7 @@ fun PostListaHomeServer(lista: Lista,listaItem: List<ListaItems>,
     val retrofitapi = retrofit.create(RetrofitAPI::class.java)
 
     val llamarLista: Call<Lista?>? = retrofitapi.postListaApi(lista)
-    CoroutineScope(Dispatchers.IO).launch {
+
         llamarLista!!.enqueue(object : Callback<Lista?> {
 
             override fun onResponse(llamarLista: Call<Lista?>?, response: Response<Lista?>) {
@@ -65,7 +65,7 @@ fun PostListaHomeServer(lista: Lista,listaItem: List<ListaItems>,
             }
 
         })
-    }
+
     Log.e("APIV", "RESULTADO : " + exito)
 
 }
