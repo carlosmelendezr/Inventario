@@ -170,9 +170,10 @@ fun EditItemInputForm(
                 enabled = true,
                 singleLine = true
             )
-
+            //val validEntry:Regex = Regex("^\\d{2}[-]\\d{4}")
             OutlinedTextField(
                 value = datosVence.fecvenc,
+                //onValueChange = { if (it.matches(validEntry )) onValueChange(datosVence.copy(fecvenc = it)) },
                 onValueChange = { onValueChange(datosVence.copy(fecvenc = it)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 label = { Text(stringResource(R.string.item_vencimiento)) },
