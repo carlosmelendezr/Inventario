@@ -170,9 +170,10 @@ fun EditItemInputForm(
                 enabled = true,
                 singleLine = true
             )
-
+            val maskRegex = Regex("^[0-9][0-9]-[0-9]*$")
             OutlinedTextField(
                 value = datosVence.fecvenc,
+                //onValueChange = { if (it.contains(maskRegex)) onValueChange(datosVence.copy(fecvenc = it)) },
                 onValueChange = { onValueChange(datosVence.copy(fecvenc = it)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 label = { Text(stringResource(R.string.item_vencimiento)) },
