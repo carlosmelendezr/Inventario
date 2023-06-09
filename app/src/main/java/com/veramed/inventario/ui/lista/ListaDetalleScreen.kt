@@ -132,7 +132,7 @@ fun EditItemInputForm(
     enabled: Boolean = true
 ) {
 
-    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(5.dp)) {
         OutlinedTextField(
              value = itemDetails.name,
              onValueChange = { },
@@ -144,6 +144,7 @@ fun EditItemInputForm(
         Row() {
             OutlinedTextField(
                 value = itemDetails.sap,
+                modifier = Modifier.width(150.dp),
                 onValueChange = {},
                 label = { Text(stringResource(R.string.sap)) },
                 enabled = false,
@@ -152,6 +153,7 @@ fun EditItemInputForm(
             OutlinedTextField(
                 value = itemDetails.barra,
                 onValueChange = { },
+                modifier = Modifier.width(220.dp),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 label = { Text(stringResource(R.string.barra)) },
                 enabled = false,
@@ -163,6 +165,7 @@ fun EditItemInputForm(
         Row() {
             OutlinedTextField(
                 value = itemDetails.quantity,
+                modifier = Modifier.width(120.dp),
                 onValueChange = { onValueChange(datosVence.copy(quantity =it.toInt())) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 label = { Text(stringResource(R.string.quantity_req)) },
@@ -171,6 +174,7 @@ fun EditItemInputForm(
             )
             OutlinedTextField(
                 value = datosVence.lote,
+                modifier = Modifier.width(200.dp),
                 onValueChange = { onValueChange(datosVence.copy(lote = it.uppercase())) },
                 label = { Text(stringResource(R.string.item_lote)) },
                 enabled = true,
@@ -226,8 +230,7 @@ fun ItemInputLote(
                     onValueChange = { onValueChange(datosVence.copy(mes = it)) },
 
                     label={Text("Mes Vence")},
-                    modifier = Modifier
-
+                    modifier = Modifier.width(100.dp)
                         .clickable {
                             mesexpan = !mesexpan
                         },
@@ -272,8 +275,7 @@ fun ItemInputLote(
                     onValueChange = {onValueChange(datosVence.copy(year = it))
                         },
                     label={Text("Año Vence")},
-                    modifier = Modifier
-
+                    modifier = Modifier.width(100.dp)
                         .clickable {
                             yearexpan = !yearexpan
                         },

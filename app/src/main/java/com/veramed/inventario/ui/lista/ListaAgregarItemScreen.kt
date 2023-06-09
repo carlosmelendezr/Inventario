@@ -118,7 +118,7 @@ fun AgregarItemEntryBody(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(5.dp),
         verticalArrangement = Arrangement.spacedBy(32.dp)
     ) {
         //CameraPreview()
@@ -204,7 +204,7 @@ fun AgregarItemInputForm(
                 }
             ),
             label = { Text(stringResource(R.string.quantity_req)) },
-            modifier = Modifier.focusRequester(cantFocusRequester).width(100.dp),
+            modifier = Modifier.focusRequester(cantFocusRequester).width(120.dp),
             enabled = enabled,
             singleLine = true,
 
