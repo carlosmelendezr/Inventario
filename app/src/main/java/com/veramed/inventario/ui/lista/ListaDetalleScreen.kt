@@ -202,8 +202,9 @@ fun ItemInputLote(
     enabled: Boolean = true
 ) {
     val meses = listOf("01","02","03","04","05","06","07","08","09","10","11","12")
-    val formatter = DateTimeFormatter.ofPattern("yyyy")
-    val current = LocalDateTime.now().format(formatter).toInt()-5
+   // val formatter = DateTimeFormatter.ofPattern("yyyy")
+    //val current = LocalDateTime.now().format(formatter).toInt()-5
+    val current = 2018
     val years = mutableListOf<String>()
     for( i in current..current+10) {
         years.add(i.toString())

@@ -145,14 +145,12 @@ fun AgregarItemInputForm(
     var enableBarra = !enabled;
     val cantFocusRequester = remember { FocusRequester() }
 
-
-
     val colorEstado: Color
     if (itemDetails.descrip.contains("ERROR"))
         {colorEstado=androidx.compose.ui.graphics.Color.Red} else {colorEstado=androidx.compose.ui.graphics.Color.Green}
 
 
-    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(2.dp)) {
         TextField(
             value = itemDetails.descrip,
             modifier = Modifier
@@ -164,50 +162,54 @@ fun AgregarItemInputForm(
             singleLine = true
         )
 
-                Card(modifier = modifier
-                    .height(150.dp)
-                    .fillMaxWidth()) {
+        Card(
+            modifier = modifier
+                .height(150.dp)
+                .fillMaxWidth()
+        ) {
 
-                    CameraPreview(itemDetails, onValueChange)
+            CameraPreview(itemDetails, onValueChange)
+        }
+
+    Row() {
+
+        OutlinedTextField(
+            value = itemDetails.barra,
+            onValueChange = { onValueChange(itemDetails.copy(barra = it)) },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Send
+            ),
+            keyboardActions = KeyboardActions(
+                onSend = {
+                    onItemBuscar
                 }
-               Row() {
-                   OutlinedTextField(
-                       value = itemDetails.barra,
-                       onValueChange = { onValueChange(itemDetails.copy(barra = it)) },
-                       keyboardOptions = KeyboardOptions(
-                           keyboardType = KeyboardType.Number,
-                           imeAction = ImeAction.Send
-                       ),
-                       keyboardActions = KeyboardActions(
-                           onSend = {
-                               onItemBuscar
-                           }
-                       ),
+            ),
+            modifier = Modifier.width(200.dp),
+            label = { Text(stringResource(R.string.item_barra_req)) },
+            enabled = enableBarra,
+            singleLine = true
+        )
+        OutlinedTextField(
+            value = itemDetails.quantity,
+            onValueChange = { onValueChange(itemDetails.copy(quantity = it)) },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Send
+            ),
+            keyboardActions = KeyboardActions(
+                onSend = {
+                    onSaveClick()
+                    cantFocusRequester.freeFocus()
+                }
+            ),
+            label = { Text(stringResource(R.string.quantity_req)) },
+            modifier = Modifier.focusRequester(cantFocusRequester).width(100.dp),
+            enabled = enabled,
+            singleLine = true,
 
-                       label = { Text(stringResource(R.string.item_barra_req)) },
-                       enabled = enableBarra,
-                       singleLine = true
-                   )
-                   OutlinedTextField(
-                       value = itemDetails.quantity,
-                       onValueChange = { onValueChange(itemDetails.copy(quantity = it)) },
-                       keyboardOptions = KeyboardOptions(
-                           keyboardType = KeyboardType.Number,
-                           imeAction = ImeAction.Send
-                       ),
-                       keyboardActions = KeyboardActions(
-                           onSend = {
-                               onSaveClick()
-                               cantFocusRequester.freeFocus()
-                           }
-                       ),
-                       label = { Text(stringResource(R.string.quantity_req)) },
-                       modifier = Modifier.focusRequester(cantFocusRequester),
-                       enabled = enabled,
-                       singleLine = true,
-
-                       )
-               }
+            )
+    }
 
                 SideEffect {
                     if (enabled) {
