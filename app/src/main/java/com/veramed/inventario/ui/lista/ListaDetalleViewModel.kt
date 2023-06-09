@@ -3,6 +3,7 @@ package com.veramed.inventario.ui.lista
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -25,6 +26,7 @@ class ListaDetalleViewModel(
     var venceUiState by mutableStateOf(DatosVence())
     var detalleUiState by mutableStateOf(ListaItemDetalleUiState())
 
+
     init {
 
         viewModelScope.launch {
@@ -36,6 +38,8 @@ class ListaDetalleViewModel(
                             itemDetalle = it.toItemDetails())
                         venceUiState = DatosVence(lote=it.lote,
                             fecvenc = it.fecvence,
+                            mes=it.fecvence.substringBefore("-"),
+                            year=it.fecvence.substringAfter("-"),
                             idlista = it.idlista)
                     }
 
@@ -48,8 +52,10 @@ class ListaDetalleViewModel(
     fun actualizaUiState(datosVence: DatosVence) {
 
       venceUiState = DatosVence(lote = datosVence.lote,
-            fecvenc = datosVence.fecvenc,
-            quantity = datosVence.quantity, idlista = datosVence.idlista)
+            fecvenc = datosVence.mes+"-"+datosVence.year,
+            quantity = datosVence.quantity,
+            idlista = datosVence.idlista,
+            mes=datosVence.mes,year=datosVence.year)
 
 
     }
@@ -84,10 +90,12 @@ data class ListaItemDetalleUiState(
 )
 
 data class DatosVence(
-    val lote:String="",
     val fecvenc:String="",
     val quantity:Int=0,
-    val idlista:Int=0
+    val idlista:Int=0,
+    val mes:String="",
+    val year:String="",
+    val lote:String= "$mes-$year",
     )
 
 /**

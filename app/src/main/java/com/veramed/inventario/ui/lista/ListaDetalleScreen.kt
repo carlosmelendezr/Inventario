@@ -2,16 +2,21 @@ package com.veramed.inventario.ui.lista
 
 
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -22,6 +27,9 @@ import com.veramed.inventario.ui.navigation.NavigationDestination
 import com.veramed.inventario.ui.theme.InventoryTheme
 
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 object ListaDetalleDestination : NavigationDestination {
     override val route = "lista_detalle"
@@ -161,17 +169,20 @@ fun EditItemInputForm(
                 enabled = false,
                 singleLine = true
             )
-        }
-        Row() {
             OutlinedTextField(
                 value = datosVence.lote,
-                onValueChange = { onValueChange(datosVence.copy(lote=it)) },
+                onValueChange = { onValueChange(datosVence.copy(lote = it.uppercase())) },
                 label = { Text(stringResource(R.string.item_lote)) },
                 enabled = true,
                 singleLine = true
             )
-            //val validEntry:Regex = Regex("^\\d{2}[-]\\d{4}")
-            OutlinedTextField(
+        }
+
+        Row() {
+
+            ItemInputLote(datosVence, onValueChange=onValueChange, enabled = enabled)
+        }
+            /*OutlinedTextField(
                 value = datosVence.fecvenc,
                 //onValueChange = { if (it.matches(validEntry )) onValueChange(datosVence.copy(fecvenc = it)) },
                 onValueChange = { onValueChange(datosVence.copy(fecvenc = it)) },
@@ -179,10 +190,123 @@ fun EditItemInputForm(
                 label = { Text(stringResource(R.string.item_vencimiento)) },
                 enabled = true,
                 singleLine = true
-            )
+            )*/
         }
-    }
+
 }
+
+@Composable
+fun ItemInputLote(
+    datosVence: DatosVence,
+    onValueChange: (DatosVence) -> Unit ,
+    enabled: Boolean = true
+) {
+    val meses = listOf("01","02","03","04","05","06","07","08","09","10","11","12")
+    val formatter = DateTimeFormatter.ofPattern("yyyy")
+    val current = LocalDateTime.now().format(formatter).toInt()-5
+    val years = mutableListOf<String>()
+    for( i in current..current+10) {
+        years.add(i.toString())
+    }
+    var mesexpan by remember { mutableStateOf(false) }
+    var yearexpan by remember { mutableStateOf(false) }
+
+
+
+        Box() {
+            Row(modifier = Modifier
+                .clickable {
+                    mesexpan = !mesexpan
+                }
+                .align(Alignment.Center)) {
+
+                TextField(
+                    value = datosVence.mes,
+                    onValueChange = { onValueChange(datosVence.copy(mes = it)) },
+
+                    label={Text("Mes Vence")},
+                    modifier = Modifier
+
+                        .clickable {
+                            mesexpan = !mesexpan
+                        },
+                    enabled = false,
+                    readOnly = true,
+                    singleLine = true)
+
+                Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = null)
+                DropdownMenu(
+                    expanded = mesexpan,
+                    onDismissRequest = {  mesexpan = false },
+
+                ) {
+
+
+                    meses.forEach {
+
+                        DropdownMenuItem(
+                            onClick = {onValueChange(datosVence.copy(mes = it))
+                            mesexpan = false}
+                        ) {
+
+                            Text(modifier = Modifier.fillMaxWidth(),text = it)
+
+                        }
+                    }
+
+                }
+            }
+
+        }
+
+        Box() {
+            Row(modifier = Modifier
+                .clickable {
+                    yearexpan = !yearexpan
+                }
+                .align(Alignment.Center)) {
+
+                TextField(
+                    value = datosVence.year,
+                    onValueChange = {onValueChange(datosVence.copy(year = it))
+                        },
+                    label={Text("Año Vence")},
+                    modifier = Modifier
+
+                        .clickable {
+                            yearexpan = !yearexpan
+                        },
+                    enabled = false,
+                    readOnly = true,
+                    singleLine = true)
+
+                Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = null)
+                DropdownMenu(
+                    expanded = yearexpan,
+                    onDismissRequest = { yearexpan = false },
+
+                ) {
+
+                    years.forEach {
+
+                        DropdownMenuItem(onClick = {
+                            onValueChange(datosVence.copy(year = it))
+                            yearexpan = false
+                        }) {
+                            Text(modifier = Modifier.fillMaxWidth(),text = it)
+                        }
+                    }
+
+                }
+            }
+
+        }
+
+
+
+}
+
+
 
 
 @Composable
