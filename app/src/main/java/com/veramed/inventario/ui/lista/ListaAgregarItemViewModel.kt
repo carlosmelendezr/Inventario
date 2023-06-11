@@ -68,8 +68,7 @@ class ListaAgregarItemViewModel(
         }
 
     fun buscarBarra() {
-            Log.d("INVBAR","Buscando barra")
-            buscarItem()
+        buscarItem()
 
     }
 
@@ -77,8 +76,6 @@ class ListaAgregarItemViewModel(
          * Inserts an [Item] in the Room database
          */
         suspend fun saveItem() {
-            Log.d("INVBAR","Intentando guardar")
-
             if (validateInput()) {
                 existe = false
                 listaitemsRepository.insertItem(listaItemUiState.listaitemDetails.toItem(listaId))
@@ -90,17 +87,15 @@ class ListaAgregarItemViewModel(
     private fun buscarItem() {
 
         error = false
-        Log.d("INVBAR","Buscando barra "+listaItemUiState.listaitemDetails.barra)
-         viewModelScope.launch {
+        viewModelScope.launch {
              launch {
              try {
 
-                 articulo = itemsRepository.getItembyBarra(listaItemUiState.listaitemDetails.barra)
+                 articulo = itemsRepository.getItembyBarra(
+                     listaItemUiState.listaitemDetails.barra.trim())
                      .catch { emit(Item(id = -1, name = "ERROR", 0.0, 0, "-1", "","",""))}
-                     .onEmpty { Log.d("INVBAR", "La lista esta vacia") }
                      .filterNotNull()
                      .first()
-
 
                  existe = true
                  listaItemUiState =
@@ -113,23 +108,16 @@ class ListaAgregarItemViewModel(
                          ), isEntryValid = true
                      )
 
-
-
-                 Log.d("INVBAR", "Articulo SAP =" + articulo.sap)
              } catch (e: Exception) {
                  Log.d("INVBAR", "Articulo No existe =" + e.message)
 
              } finally {
-                 Log.d("INVBAR", "Articulo No existe finally")
                  error = false
              }
          }
 
-
-
              if (!existe ) {
 
-                Log.d("INVBAR","BARRA NO EXISTE "+listaItemUiState.listaitemDetails.barra)
                 listaItemUiState =
                     AgregarItemUiState(
                         listaitemDetails = ListaItemDetails(
@@ -142,22 +130,6 @@ class ListaAgregarItemViewModel(
             }
 
         }
-
-       /* if (!existe && listaItemUiState.listaitemDetails.barra.isNotBlank()) {
-
-            android.util.Log.d("INVBAR","BARRA NO EXISTE "+listaItemUiState.listaitemDetails.barra)
-            listaItemUiState =
-                AgregarItemUiState(
-                    listaitemDetails = ListaItemDetails(
-                        barra = listaItemUiState.listaitemDetails.barra,
-                        descrip = "ERROR: ARTICULO "+listaItemUiState.listaitemDetails.barra+" NO EXISTE"
-                    ), isEntryValid = false
-                )
-            mp.start()
-
-        }*/
-
-
 
     }
 
@@ -205,20 +177,7 @@ fun ListaItemDetails.toItem(listaId:Int): ListaItems = ListaItems(
 
 )
 
-/*fun ListaItemDetails.toListaItemUiState(isEntryValid: Boolean = false): AgregarItemUiState = AgregarItemUiState(
-    listaitemDetails = this.toListaItemDetails(),
-    isEntryValid = isEntryValid
-)*/
 
-/*fun ListaItemDetails.toListaItemDetails(): ListaItemDetails = ListaItemDetails(
-    id = id,
-    name = name,
-    quantity = quantity.toString(),
-    barra = barra,
-    sap = sap,
-    lote = lote,
-    fecvenc = fecvenc
-)*/
 
 
 

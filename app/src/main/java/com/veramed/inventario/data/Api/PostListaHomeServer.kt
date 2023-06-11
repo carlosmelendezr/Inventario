@@ -35,7 +35,6 @@ fun PostListaHomeServer(lista: Lista,listaItem: List<ListaItems>,
     val retrofitapi = retrofit.create(RetrofitAPI::class.java)
 
     val llamarLista: Call<Lista?>? = retrofitapi.postListaApi(lista)
-
         llamarLista!!.enqueue(object : Callback<Lista?> {
 
             override fun onResponse(llamarLista: Call<Lista?>?, response: Response<Lista?>) {
@@ -66,8 +65,6 @@ fun PostListaHomeServer(lista: Lista,listaItem: List<ListaItems>,
 
         })
 
-    Log.e("APIV", "RESULTADO : " + exito)
-
 }
 
 fun PostListaItems(listaItem: ListaItems) {
@@ -95,12 +92,8 @@ fun PostListaItems(listaItem: ListaItems) {
                 llamar: Call<ListaItems?>?,
                 response: Response<ListaItems?>
             ) {
-
                 val id = response.code()
-                val resp = "ID = " + id +
-                        "Response Code : " + response.code()
 
-                Log.d("APIV", resp)
             }
             override fun onFailure(call: Call<ListaItems?>?, t: Throwable) {
                 // we get error response from API.

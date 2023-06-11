@@ -8,10 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.veramed.inventario.ui.home.HomeDestination
-import com.veramed.inventario.ui.home.HomeLista
-import com.veramed.inventario.ui.home.HomeListaDestino
-import com.veramed.inventario.ui.home.HomeScreen
+import com.veramed.inventario.ui.home.*
 import com.veramed.inventario.ui.item.*
 import com.veramed.inventario.ui.lista.*
 import com.veramed.inventario.ui.usuario.UsuarioEntryDestination
@@ -30,7 +27,7 @@ fun InventoryNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = UsuarioLoginDestination.route,
+        startDestination = SplashDestino.route,
         modifier = modifier
     ) {
 
