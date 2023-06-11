@@ -25,9 +25,10 @@ fun InventoryNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
+
     NavHost(
         navController = navController,
-        startDestination = SplashDestino.route,
+        startDestination = UsuarioLoginDestination.route,
         modifier = modifier
     ) {
 
