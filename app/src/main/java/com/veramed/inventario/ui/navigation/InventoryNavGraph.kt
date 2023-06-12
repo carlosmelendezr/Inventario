@@ -28,10 +28,16 @@ fun InventoryNavHost(
 
     NavHost(
         navController = navController,
-        startDestination = UsuarioLoginDestination.route,
+        //startDestination = UsuarioLoginDestination.route,
+        startDestination = SplashDestino.route,
         modifier = modifier
     ) {
 
+        composable(route = SplashDestino.route) {
+            AnimatedSplashScreen(
+               navController=navController
+            )
+        }
         composable(route = HomeListaDestino.route) {
             HomeLista(
                 navigateToListaEntry = { navController.navigate(ListaEntryDestination.route) },
