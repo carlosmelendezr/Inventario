@@ -1,25 +1,27 @@
 package com.veramed.inventario.ui.home
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import android.media.Image
+import androidx.compose.foundation.Image
+
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
+import androidx.compose.material.Text
+
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role.Companion.Image
+
+
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+
 import androidx.navigation.NavHostController
 import com.veramed.inventario.R
 import com.veramed.inventario.ui.navigation.NavigationDestination
@@ -62,12 +64,18 @@ fun Splash(alpha: Float) {
         contentAlignment = Alignment.Center
     ) {
 
-        Image(
-            painterResource(R.drawable.ic_xxxx),
-            contentDescription = "",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
-        )
+
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(text="FARMACIA VERAMED")
+            Text(text="Aplicación Móvil de Inventario")
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Image(painterResource(R.drawable.logoveramed),
+                "Veramed")
+            Text(text="Version 1.0")
+
+        }
+
 
     }
 }
