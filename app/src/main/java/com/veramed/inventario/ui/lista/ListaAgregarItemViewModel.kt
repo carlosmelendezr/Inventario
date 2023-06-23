@@ -15,6 +15,7 @@ import com.veramed.inventario.data.Item
 import com.veramed.inventario.data.ItemsRepository
 import com.veramed.inventario.data.ListaItemRepository
 import com.veramed.inventario.data.ListaItems
+import com.veramed.inventario.data.api.GetArticuloRMH
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -117,15 +118,30 @@ class ListaAgregarItemViewModel(
          }
 
              if (!existe ) {
-
-                listaItemUiState =
-                    AgregarItemUiState(
-                        listaitemDetails = ListaItemDetails(
-                            barra = listaItemUiState.listaitemDetails.barra,
-                            descrip = "ERROR: ARTICULO "+listaItemUiState.listaitemDetails.barra+" NO EXISTE"
-                        ), isEntryValid = false
-                    )
-                mp.start()
+                 Log.d("RMH","Buscando RMH")
+                 val newItem = GetArticuloRMH(listaItemUiState.listaitemDetails.barra)
+                 if (newItem.sap.isNotBlank()) {
+                     existe = true
+                     listaItemUiState =
+                         AgregarItemUiState(
+                             listaitemDetails = ListaItemDetails(
+                                 name = newItem.name,
+                                 barra = newItem.barra,
+                                 sap = newItem.sap, descrip = newItem.name,
+                                 quantity = listaItemUiState.listaitemDetails.quantity
+                             ), isEntryValid = true
+                         )
+                     itemsRepository.insertItem(newItem)
+                 } else {
+                     listaItemUiState =
+                         AgregarItemUiState(
+                             listaitemDetails = ListaItemDetails(
+                                 barra = listaItemUiState.listaitemDetails.barra,
+                                 descrip = "ERROR: ARTICULO " + listaItemUiState.listaitemDetails.barra + " NO EXISTE"
+                             ), isEntryValid = false
+                         )
+                     mp.start()
+                 }
 
             }
 

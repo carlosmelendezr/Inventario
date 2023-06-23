@@ -1,12 +1,8 @@
 package com.veramed.inventario.data
 
 import android.util.Log
-import com.veramed.inventario.data.Api.*
+import com.veramed.inventario.data.api.*
 import com.veramed.inventario.ui.lista.ListaTransmitirViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
