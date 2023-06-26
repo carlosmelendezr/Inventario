@@ -33,17 +33,11 @@ fun GetArticuloRMH(viewModel: ListaAgregarItemViewModel,  itemsRepository: Items
 
 
     val retrofitapi = retrofit.create(RMHApi::class.java)
-    //val llamar: Call<JsonObject> = retrofitapi.getArticulo("8427030003153")
 
-    //val response = llamar.execute()
-   // Log.d("RMH", response.raw().toString())
 
     val llamar: Call<Articulos> = retrofitapi.getArticulo(viewModel.listaItemUiState.listaitemDetails.barra)
-    Log.d("RMH", "Iniciando llamada "+viewModel.listaItemUiState.listaitemDetails.barra)
-/*
-    val response = llamar!!.execute()
+    //Log.d("RMH", "Iniciando llamada "+viewModel.listaItemUiState.listaitemDetails.barra)
 
-    val articulos: Articulos? = response.body()*/
 
     llamar!!.enqueue(object : Callback<Articulos> {
 
@@ -52,10 +46,10 @@ fun GetArticuloRMH(viewModel: ListaAgregarItemViewModel,  itemsRepository: Items
              response: Response<Articulos>
          ) {
              if (!response.isSuccessful) {
-                 Log.d("RMH", "Codigo de Respuesta "+response.code())
+                 //Log.d("RMH", "Codigo de Respuesta "+response.code())
                  //Log.d("RMH", response.body().toString()+" url = "+llamar.request().toString())
              } else {
-                 Log.d("RMH", response.body().toString()+" url = "+llamar.request().toString())
+                // Log.d("RMH", response.body().toString()+" url = "+llamar.request().toString())
                  //Log.d("RMH", response.body())
              }
 
@@ -66,7 +60,7 @@ fun GetArticuloRMH(viewModel: ListaAgregarItemViewModel,  itemsRepository: Items
                  if (articulos.tables != null) {
                      for (table in articulos.tables ) {
 
-                         Log.d("RMH", "Articulos ${articulos.tables.size}")
+                         //Log.d("RMH", "Articulos ${articulos.tables.size}")
 
 
                          val item = Item(id=0,
