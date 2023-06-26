@@ -21,7 +21,7 @@ interface ItemDao {
     @Query("SELECT * from items WHERE id = :id")
     fun getItem(id: Int): Flow<Item>
 
-    @Query("SELECT * from items WHERE barra=:barra LIMIT 1")
+    @Query("SELECT * from items WHERE barra LIKE :barra || '%' LIMIT 1")
     fun getItembyBarra(barra:String): Flow<Item>
 
     // Specify the conflict strategy as IGNORE, when the user tries to add an

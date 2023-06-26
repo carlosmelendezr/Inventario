@@ -182,7 +182,7 @@ fun AgregarItemInputForm(
             ),
             keyboardActions = KeyboardActions(
                 onSend = {
-                    onItemBuscar
+                    onItemBuscar()
                 }
             ),
             modifier = Modifier.width(200.dp),

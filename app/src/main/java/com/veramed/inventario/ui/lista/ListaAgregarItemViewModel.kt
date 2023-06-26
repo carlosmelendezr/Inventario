@@ -63,19 +63,22 @@ class ListaAgregarItemViewModel(
     fun updateUiState(itemDetails: ListaItemDetails) {
             listaItemUiState =
                 AgregarItemUiState(listaitemDetails = itemDetails, isEntryValid = validateInput(itemDetails))
-            if (itemDetails.barra.length>7) {
+            /*if (itemDetails.barra.length>7) {
                 buscarItem()
-            }
+            }*/
         }
 
     fun buscarBarra() {
-        buscarItem()
+        if (listaItemUiState.listaitemDetails.barra.isNotBlank()) {
+            buscarItem()
+            if (!existe) {
+                GetArticuloRMH(this, itemsRepository)
+            }
+        }
+
 
     }
 
-        /**
-         * Inserts an [Item] in the Room database
-         */
         suspend fun saveItem() {
             if (validateInput()) {
                 existe = false
@@ -86,7 +89,7 @@ class ListaAgregarItemViewModel(
         }
 
     private fun buscarItem() {
-
+        Log.d("INVBAR", "Buscando Barra =" + listaItemUiState.listaitemDetails.barra)
         error = false
         viewModelScope.launch {
              launch {
@@ -94,7 +97,7 @@ class ListaAgregarItemViewModel(
 
                  articulo = itemsRepository.getItembyBarra(
                      listaItemUiState.listaitemDetails.barra.trim())
-                     .catch { emit(Item(id = -1, name = "ERROR", 0.0, 0, "-1", "","",""))}
+                     .catch { emit( Item(id = -1, name = "", 0.0, 0, "-1", "","","") )}
                      .filterNotNull()
                      .first()
 
@@ -108,6 +111,7 @@ class ListaAgregarItemViewModel(
                              quantity = listaItemUiState.listaitemDetails.quantity
                          ), isEntryValid = true
                      )
+                 Log.d("INVBAR", "Resultadp =" + articulo.name)
 
              } catch (e: Exception) {
                  Log.d("INVBAR", "Articulo No existe =" + e.message)
@@ -116,10 +120,23 @@ class ListaAgregarItemViewModel(
                  error = false
              }
          }
+            if (!existe ) {
 
-             if (!existe ) {
-                 Log.d("RMH","Buscando RMH")
+                    listaItemUiState =
+                        AgregarItemUiState(
+                            listaitemDetails = ListaItemDetails(
+                                barra = listaItemUiState.listaitemDetails.barra,
+                                descrip = "ERROR: ARTICULO " + listaItemUiState.listaitemDetails.barra + " NO EXISTE"
+                            ), isEntryValid = false
+                        )
+                    mp.start()
+
+
+            }
+             /*if (!existe ) {
+                /Log.d("RMH","Buscando RMH")
                  val newItem = GetArticuloRMH(listaItemUiState.listaitemDetails.barra)
+                 Log.d("RMH","Resultado "+newItem.sap)
                  if (newItem.sap.isNotBlank()) {
                      existe = true
                      listaItemUiState =
@@ -132,6 +149,7 @@ class ListaAgregarItemViewModel(
                              ), isEntryValid = true
                          )
                      itemsRepository.insertItem(newItem)
+
                  } else {
                      listaItemUiState =
                          AgregarItemUiState(
@@ -141,10 +159,7 @@ class ListaAgregarItemViewModel(
                              ), isEntryValid = false
                          )
                      mp.start()
-                 }
-
-            }
-
+                 }*/
         }
 
     }
