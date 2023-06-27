@@ -100,18 +100,19 @@ class ListaAgregarItemViewModel(
                      .catch { emit( Item(id = -1, name = "", 0.0, 0, "-1", "","","") )}
                      .filterNotNull()
                      .first()
-
-                 existe = true
-                 listaItemUiState =
-                     AgregarItemUiState(
-                         listaitemDetails = ListaItemDetails(
-                             name = articulo.name,
-                             barra = articulo.barra,
-                             sap = articulo.sap, descrip = articulo.name,
-                             quantity = listaItemUiState.listaitemDetails.quantity
-                         ), isEntryValid = true
-                     )
-                 Log.d("INVBAR", "Resultadp =" + articulo.name)
+                 if (articulo.sap.isNotBlank()) {
+                     existe = true
+                     listaItemUiState =
+                         AgregarItemUiState(
+                             listaitemDetails = ListaItemDetails(
+                                 name = articulo.name,
+                                 barra = articulo.barra,
+                                 sap = articulo.sap, descrip = articulo.name,
+                                 quantity = listaItemUiState.listaitemDetails.quantity
+                             ), isEntryValid = true
+                         )
+                     Log.d("INVBAR", "Resultadp =" + articulo.name)
+                 }
 
              } catch (e: Exception) {
                  Log.d("INVBAR", "Articulo No existe =" + e.message)

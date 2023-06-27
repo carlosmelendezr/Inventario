@@ -12,7 +12,7 @@ import java.io.File
  * Database class with a singleton INSTANCE object.
  */
 @Database(entities = [Item::class],
-    version = 5, exportSchema = false)
+    version = 6, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class MaestroDatabase : RoomDatabase() {
 

@@ -72,7 +72,7 @@ fun Splash(alpha: Float) {
 
             Image(painterResource(R.drawable.logoveramed),
                 "Veramed")
-            Text(text="Version 1.0")
+            Text(text="Version 1.2")
 
         }
 
