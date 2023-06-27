@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 import androidx.navigation.NavHostController
+import com.veramed.inventario.BuildConfig
 import com.veramed.inventario.R
 import com.veramed.inventario.ui.navigation.NavigationDestination
 
@@ -72,7 +73,7 @@ fun Splash(alpha: Float) {
 
             Image(painterResource(R.drawable.logoveramed),
                 "Veramed")
-            Text(text="Version 1.2")
+            Text(text="Version ${BuildConfig.VERSION_NAME}")
 
         }
 
