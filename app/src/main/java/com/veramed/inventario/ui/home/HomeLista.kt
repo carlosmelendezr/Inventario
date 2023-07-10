@@ -165,12 +165,19 @@ private fun InventoryListRow(
 
                 Column(Modifier.fillMaxWidth()) {
                     // Encabezado
-
+                Row() {
                     Text(
                         text = lista.descrip,
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.h6
                     )
+                    Text(
+                        text = "ID : ${lista.idservidor.toString()}",
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Right,
+                        style = MaterialTheme.typography.h6
+                    )
+                }
                     // Subtítulo
                     Row() {
                         Text(

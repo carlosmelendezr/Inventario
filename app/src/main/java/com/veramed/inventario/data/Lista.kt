@@ -20,6 +20,8 @@ data class Lista(
     val tipo:Int,
     val centro:Int,
     @Expose(serialize = false,deserialize = false)
-    val articulos:Int?
+    val articulos:Int?,
+    @Expose(serialize = false,deserialize = false)
+    val idservidor:Int=0
 
 )
