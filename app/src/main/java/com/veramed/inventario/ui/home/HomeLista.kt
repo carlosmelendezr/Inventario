@@ -175,6 +175,7 @@ private fun InventoryListRow(
                         text = "ID : ${lista.idservidor.toString()}",
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Right,
+                        modifier=Modifier.fillMaxWidth(),
                         style = MaterialTheme.typography.h6
                     )
                 }
