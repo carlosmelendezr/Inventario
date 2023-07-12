@@ -150,7 +150,7 @@ private fun InventoryListRow(
     var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
     Row(modifier = modifier
         .fillMaxWidth()
-        .clickable {  if (lista.color<3 && lista.articulos!! < 150) onItemClick(lista) }
+        .clickable { if ( lista.color==3 && lista.articulos!! < 150) onItemClick(lista)}
         .padding(vertical = 5.dp)
     ) {
         val paddingModifier  = Modifier
@@ -227,6 +227,20 @@ private fun InventoryListRow(
 
 private data class ListaHeader(@StringRes val headerStringId: Int, val weight: Float)
 
+@Composable
+private fun clickLista( lista: Lista,
+                        onItemClick: (Lista) -> Unit) {
+    if (lista.color==3 && lista.articulos!! < 150) {
+        InformacionDialog("Ya la lista fué transmitida." )
+        return
+    }
+    if ( lista.articulos!! >= 150) {
+        InformacionDialog("Solo e permiten un maximo de 150 articulos por lista" )
+        return
+    }
+    onItemClick(lista)
+}
+
 private val headerList = listOf(
     ListaHeader(headerStringId = R.string.lista_id, weight = 1.5f),
     ListaHeader(headerStringId = R.string.lista_nombre, weight = 1.0f),
@@ -256,6 +270,21 @@ private fun DeleteConfirmationDialog(
         }
     )
 }
+
+@Composable
+private fun InformacionDialog(mensage:String
+
+) {
+    AlertDialog(
+        onDismissRequest = { /* Do nothing */ },
+        title = { Text(stringResource(R.string.attention)) },
+        text = { Text(mensage) },
+        modifier = Modifier.padding(16.dp),
+        dismissButton = {},
+        confirmButton = {}
+    )
+}
+
 
 @Preview(showBackground = true)
 @Composable
