@@ -15,12 +15,18 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 
 
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 import androidx.navigation.NavHostController
 import com.veramed.inventario.BuildConfig
@@ -65,14 +71,24 @@ fun Splash(alpha: Float) {
         contentAlignment = Alignment.Center
     ) {
 
-
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text="FARMACIA VERAMED")
-            Text(text="Aplicación Móvil de Inventario")
+        val offset = Offset(5.0f, 10.0f)
+        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+            Text(text="FARMACIA VERAMED",
+                fontWeight = FontWeight.Bold,
+                style = TextStyle(
+                    fontSize = 48.sp,
+                    shadow = Shadow(
+                        color = Color.Green,
+                        offset = offset,
+                        blurRadius = 3f
+                    ),
+                textAlign = TextAlign.Center)
+            )
+            Text(text="Aplicación Móvil de Inventario",  fontSize = 30.sp, textAlign = TextAlign.Center)
             Spacer(modifier = Modifier.height(32.dp))
 
             Image(painterResource(R.drawable.logoveramed),
-                "Veramed")
+                "Veramed", modifier = Modifier.size(150.dp))
             Text(text="Version ${BuildConfig.VERSION_NAME}")
 
         }

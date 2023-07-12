@@ -63,9 +63,9 @@ class ListaAgregarItemViewModel(
     fun updateUiState(itemDetails: ListaItemDetails) {
             listaItemUiState =
                 AgregarItemUiState(listaitemDetails = itemDetails, isEntryValid = validateInput(itemDetails))
-            /*if (itemDetails.barra.length>7) {
+            if (itemDetails.barra.length>12) {
                 buscarItem()
-            }*/
+            }
         }
 
     fun buscarBarra() {

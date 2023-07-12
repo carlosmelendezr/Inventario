@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -55,52 +56,46 @@ fun ListaTransmitirScreen(
                 canNavigateBack = true
 
             )
-        }, floatingActionButton = {
-            if (!viewModel.envioExitoso) {
-                FloatingActionButton(
-                    onClick = {
-                        visible = true
-                        PostListaHomeServer(
-                            lista = viewModel.listaTUiState.toLista(0),
-                            listaItem = listaArticulosUiState.itemList, viewModel
-                        )
-                    },
-                    modifier = Modifier.navigationBarsPadding(),
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Send,
-                        contentDescription = stringResource(R.string.item_entry_title),
-                        tint = MaterialTheme.colors.onPrimary
-                    )
-                }
-            }
-        },
-    ) { innerPadding ->
+        })
+
+     { innerPadding ->
         Column() {
             TransmitirBody(
                 listaTUiState = viewModel.listaTUiState,
                 cantArticulos = listaArticulosUiState.itemList.size,
-
                 modifier = modifier.padding(innerPadding)
             )
-
-                Column(modifier= Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center) {
-                    if (viewModel.envioExitoso) {
-                        LinearProgressIndicator( color= androidx.compose.ui.graphics.Color.Green,
-                            modifier=Modifier.fillMaxWidth())
-                        viewModel.guardarLista()
-                        Text(text="Transmision existosa....")
-                        //navigateBack()
+            Row() {
+                if (!viewModel.envioExitoso) {
+                    Button(modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            visible = true
+                            PostListaHomeServer(
+                                lista = viewModel.listaTUiState.toLista(0, 0),
+                                listaItem = listaArticulosUiState.itemList, viewModel
+                            )
+                        }) {
+                        Text(text = "COMENZAR TRANSMISION")
                     }
-                    if (!viewModel.envioExitoso) {
-                        LinearProgressIndicator(
-                            color= androidx.compose.ui.graphics.Color.Red,
-                            modifier=Modifier.fillMaxWidth())
-                    }
-
                 }
+
+                    if (visible) {
+                        LinearProgressIndicator(
+                            color = androidx.compose.ui.graphics.Color.Green,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
+                        if (viewModel.envioExitoso) {
+                            Text(text = "Transmision existosa....")
+                            viewModel.guardarLista()
+                            navigateBack()
+                        }
+                    }
+
+
+
+
+            }
             }
         }
 
@@ -123,23 +118,38 @@ fun TransmitirBody(
             backgroundColor= androidx.compose.ui.graphics.Color.DarkGray
 
         ) {
-            Row() {
+            Row {
 
-                Column(Modifier.fillMaxWidth()) {
+                Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                     // Encabezado
 
                     Text(
                         text = listaTUiState.descrip,
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.h6
-                    )
-                    Text(
-                        text = "Articulos :$cantArticulos",
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.h6
+                        fontWeight = FontWeight.Bold,textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.h5
                     )
 
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        text = "Articulos :$cantArticulos",
+                        fontWeight = FontWeight.Bold,textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.h5
+                    )
+
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text( text = "NOTA : DEBE ESTAR CONECTADO A UNA RED INTERNA LOCATEL",
+                        fontWeight = FontWeight.Bold, textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.h6)
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Text(text = "TeleEmpleado o T-Tienda",
+                        fontWeight = FontWeight.Bold,textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.h6)
+                    Spacer(modifier = Modifier.height(10.dp))
+
                 }
+
+
 
 
             }

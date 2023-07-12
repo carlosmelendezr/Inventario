@@ -13,7 +13,7 @@ import java.io.File
 @Database(entities = [
     Lista::class,Tipo::class, Usuario::class,
     Sesion::class, ListaItems::class],
-    version = 9, exportSchema = false)
+    version = 10 , exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class InventoryDatabase : RoomDatabase() {
 

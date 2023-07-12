@@ -28,6 +28,7 @@ class ListaTransmitirViewModel(
     var listaId: Int = checkNotNull(savedStateHandle[ListaAgregarItemDestination.itemIdArg])
 
     var envioExitoso by mutableStateOf(false)
+    var idservidor by mutableStateOf(0)
 
     var listaTUiState by mutableStateOf(ListaTUiState())
         private set
@@ -51,9 +52,10 @@ class ListaTransmitirViewModel(
             )
 
     fun guardarLista() {
-
-        viewModelScope.launch {
-            listaRepository.updateLista( listaTUiState.toLista(color=3))
+        if (idservidor>0) {
+            viewModelScope.launch {
+                listaRepository.updateLista(listaTUiState.toLista(color = 3, idservidor))
+            }
         }
 
     }
@@ -78,7 +80,7 @@ data class ListaTUiState(
 
 )
 
-fun ListaTUiState.toLista(color:Int): Lista = Lista(
+fun ListaTUiState.toLista(color:Int, idservidor:Int): Lista = Lista(
     id = id,
     idusuario = idusuario,
     descrip = descrip,
@@ -87,7 +89,8 @@ fun ListaTUiState.toLista(color:Int): Lista = Lista(
     feccrea = feccrea,
     tipo = tipo,
     centro = centro,
-    articulos = articulos
+    articulos = articulos,
+    idservidor = idservidor
 )
 
 fun Lista.toListaTUiState(): ListaTUiState = ListaTUiState(

@@ -42,13 +42,16 @@ fun PostListaHomeServer(lista: Lista,listaItem: List<ListaItems>,
 
                 Log.d("APIV", resp)
 
-                listaItem.forEach {
-                    var itm = it
-                    itm.idlista = idCreado
-                    PostListaItems(itm)
+                if (idCreado>0) {
+                    listaItem.forEach {
+                        var itm = it
+                        itm.idlista = idCreado
+                        PostListaItems(itm)
+                    }
+                    viewModel.envioExitoso = true
+                    viewModel.idservidor = idCreado
                 }
-                viewModel.envioExitoso=true
-                Log.e("APIV", "ENVIO EXITOSO : ")
+
 
             }
 

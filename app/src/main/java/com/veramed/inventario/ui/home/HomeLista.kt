@@ -150,7 +150,7 @@ private fun InventoryListRow(
     var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
     Row(modifier = modifier
         .fillMaxWidth()
-        .clickable {  if (lista.color<3) onItemClick(lista) }
+        .clickable {  if (lista.color<3 && lista.articulos!! < 150) onItemClick(lista) }
         .padding(vertical = 5.dp)
     ) {
         val paddingModifier  = Modifier
