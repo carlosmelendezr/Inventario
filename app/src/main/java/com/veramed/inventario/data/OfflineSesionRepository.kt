@@ -10,6 +10,7 @@ class OfflineSesionRepository(private val sesionDao: SesionDao) : SesionReposito
 
     override suspend fun insertSesion(sesion:Sesion) = sesionDao.insert(sesion)
 
+    override suspend fun deleteAll() = sesionDao.deleteAll()
     override suspend fun deleteSesion(sesion:Sesion) = sesionDao.delete(sesion)
 
     override suspend fun updateSesion(sesion:Sesion) = sesionDao.update(sesion)

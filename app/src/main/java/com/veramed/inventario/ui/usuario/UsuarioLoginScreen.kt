@@ -1,5 +1,6 @@
 package com.veramed.inventario.ui.usuario
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
@@ -59,9 +60,11 @@ fun UsuarioLoginScreen(
                     coroutineScope.launch {
                         viewModel.buscarUsuario()
                         if (viewModel.usuarioUiState.existe) {
+                            Log.d("USR","Usuario CORRECTO ${viewModel.usuarioUiState.usuarioDetails.id}")
                             viewModel.abrirSesion()
-                            navigateToListaEntry()
+                            if (viewModel.sesionOk)  navigateToListaEntry()
                         } else {
+                            Log.d("USR","Usuario no existe ${viewModel.usuarioUiState.usuarioDetails.id}")
 
                         }
                     }

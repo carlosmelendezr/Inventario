@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.veramed.inventario.data.Sesion
 import com.veramed.inventario.data.SesionRepository
 import com.veramed.inventario.data.UsuarioRepository
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -27,6 +28,7 @@ class UsuarioLoginViewModel(private val usuarioRepository: UsuarioRepository,
      */
     var usuarioUiState by mutableStateOf(UsuarioUiState())
         private set
+    var sesionOk  by mutableStateOf(false)
 
     /**
      * Updates the [usuarioUiState] with the value provided in the argument. This method also triggers
@@ -61,8 +63,14 @@ class UsuarioLoginViewModel(private val usuarioRepository: UsuarioRepository,
         val sesion = Sesion(id=usuarioUiState.usuarioDetails.id.toInt(),
             name=usuarioUiState.usuarioDetails.name,
             nivel=0)
+
+        val job = viewModelScope.launch { sesionRepository.deleteAll() }
+
+        if (job.isCompleted)
         viewModelScope.launch {
-            sesionRepository.inicarSesion(sesion)
+
+            sesionRepository.insertSesion(sesion)
+            sesionOk = true
         }
 
     }

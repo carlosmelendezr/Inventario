@@ -13,6 +13,8 @@ interface SesionRepository {
      */
     suspend fun inicarSesion(sesion:Sesion)
 
+    suspend fun deleteAll()
+
     /**
      * Insert item in the data source
      */
