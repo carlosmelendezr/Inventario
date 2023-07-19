@@ -62,7 +62,7 @@ fun UsuarioLoginScreen(
                         if (viewModel.usuarioUiState.existe) {
                             Log.d("USR","Usuario CORRECTO ${viewModel.usuarioUiState.usuarioDetails.id}")
                             viewModel.abrirSesion()
-                            if (viewModel.sesionOk)  navigateToListaEntry()
+                            navigateToListaEntry()
                         } else {
                             Log.d("USR","Usuario no existe ${viewModel.usuarioUiState.usuarioDetails.id}")
 

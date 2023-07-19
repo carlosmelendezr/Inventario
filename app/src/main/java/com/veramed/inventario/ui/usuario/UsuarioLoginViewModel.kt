@@ -13,7 +13,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-
+import kotlinx.coroutines.runBlocking
 
 
 /**
@@ -28,7 +28,6 @@ class UsuarioLoginViewModel(private val usuarioRepository: UsuarioRepository,
      */
     var usuarioUiState by mutableStateOf(UsuarioUiState())
         private set
-    var sesionOk  by mutableStateOf(false)
 
     /**
      * Updates the [usuarioUiState] with the value provided in the argument. This method also triggers
@@ -43,12 +42,12 @@ class UsuarioLoginViewModel(private val usuarioRepository: UsuarioRepository,
     fun buscarUsuario() {
             val idusr = usuarioUiState.usuarioDetails.toItem().id
             val pass = usuarioUiState.usuarioDetails.toItem().password
-            viewModelScope.launch {
-                usuarioUiState = usuarioRepository.getUsuario(idusr,pass)
-                    .filterNotNull()
-                    .first()
-                    .toUsuarioUiState(true,existe=true)
-                }
+
+        runBlocking {usuarioUiState = usuarioRepository.getUsuario(idusr,pass)
+            .filterNotNull()
+            .first()
+            .toUsuarioUiState(true,existe=true)
+        }
 
        }
 
@@ -64,14 +63,12 @@ class UsuarioLoginViewModel(private val usuarioRepository: UsuarioRepository,
             name=usuarioUiState.usuarioDetails.name,
             nivel=0)
 
-        val job = viewModelScope.launch { sesionRepository.deleteAll() }
-
-        if (job.isCompleted)
-        viewModelScope.launch {
-
+        runBlocking {
+            sesionRepository.deleteAll()
             sesionRepository.insertSesion(sesion)
-            sesionOk = true
         }
+
+
 
     }
 
