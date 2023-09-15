@@ -1,7 +1,9 @@
 package com.veramed.inventario.ui.home
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -139,6 +141,7 @@ private fun InventoryListHeader(modifier: Modifier = Modifier) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun InventoryListRow(
     lista: Lista,
@@ -148,9 +151,15 @@ private fun InventoryListRow(
 
 ) {
     var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
+
+    // if ( lista.color!=3 && lista.articulos!! < 150)
     Row(modifier = modifier
         .fillMaxWidth()
-        .clickable { if ( lista.color!=3 && lista.articulos!! < 150) onItemClick(lista)}
+        .combinedClickable (
+            onClick = {if ( lista.color!=3 && lista.articulos!! < 150) onItemClick(lista)},
+            onLongClick = { onItemClick(lista)}
+        )
+        //.clickable {  onItemClick(lista)}
         .padding(vertical = 5.dp)
     ) {
         val paddingModifier  = Modifier
