@@ -30,6 +30,7 @@ import com.veramed.inventario.ui.AppViewModelProvider
 import com.veramed.inventario.ui.navigation.NavigationDestination
 import com.veramed.inventario.ui.theme.InventoryTheme
 import com.veramed.inventario.ui.theme.colorTarjeta
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 import com.veramed.util.convertLongToTimeScreen
 
@@ -43,6 +44,8 @@ object HomeListaDestino : NavigationDestination {
 /**
  * Entry route for HomeLista
  */
+
+
 @Composable
 fun HomeLista(
     navigateToListaEntry: () -> Unit,
@@ -50,7 +53,7 @@ fun HomeLista(
     modifier: Modifier = Modifier,
     viewModel: HomeListaViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val listaUiState by viewModel.listaUiState.collectAsState()
+    val listaUiState by viewModel.listaUiState.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -76,6 +79,7 @@ fun HomeLista(
             itemList = listaUiState.listas,
             //onItemClick = navigateToItemUpdate,
             onItemClick = navigateToListaAgregarItem,
+            onLongItemClick = viewModel::liberarLista,
             modifier = modifier.padding(innerPadding),
             onDelete = viewModel::deleteLista
 
@@ -87,6 +91,7 @@ fun HomeLista(
 private fun HomeListaBody(
     itemList: List<Lista>,
     onItemClick: (Int) -> Unit,
+    onLongItemClick: (Lista) -> Unit,
     modifier: Modifier = Modifier,
     onDelete: (Lista) -> Unit,
 ) {
@@ -106,6 +111,7 @@ private fun HomeListaBody(
         } else {
             ListaInventario(itemList = itemList,
                 onItemClick = { onItemClick(it.id) },
+                onLongItemClick = onLongItemClick,
                 onDelete = onDelete
                 )
         }
@@ -116,13 +122,16 @@ private fun HomeListaBody(
 private fun ListaInventario(
     itemList: List<Lista>,
     onItemClick: (Lista) -> Unit,
+    onLongItemClick: (Lista) -> Unit,
     modifier: Modifier = Modifier,
     onDelete: (Lista) -> Unit,
 ) {
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(3.dp)) {
         items(items = itemList, key = { it.id }) { listaitem ->
             InventoryListRow(lista = listaitem,
-                onItemClick = onItemClick,onDelete=onDelete
+                onItemClick = onItemClick,
+                onLongItemClick=onLongItemClick,
+                onDelete=onDelete
                 )
         }
     }
@@ -146,6 +155,7 @@ private fun InventoryListHeader(modifier: Modifier = Modifier) {
 private fun InventoryListRow(
     lista: Lista,
     onItemClick: (Lista) -> Unit,
+    onLongItemClick: (Lista) -> Unit,
     modifier: Modifier = Modifier,
     onDelete: (Lista) -> Unit,
 
@@ -156,8 +166,8 @@ private fun InventoryListRow(
     Row(modifier = modifier
         .fillMaxWidth()
         .combinedClickable (
-            onClick = {if ( lista.color!=3 && lista.articulos!! < 150) onItemClick(lista)},
-            onLongClick = { onItemClick(lista)}
+            onClick = {if ( lista.color!=3 && lista.articulos!! < 250) onItemClick(lista)},
+            onLongClick = { onLongItemClick(lista.copy(color=0, idservidor = 0))}
         )
         //.clickable {  onItemClick(lista)}
         .padding(vertical = 5.dp)
@@ -306,7 +316,7 @@ fun HomeListaScreenRoutePreview() {
                     "Lista de Productos 1",1,6565656,"19/04/2023",1,1,0 ),
 
             ),
-            onItemClick = {}, onDelete = {}
+            onItemClick = {}, onLongItemClick = {}, onDelete = {}
 
         )
     }

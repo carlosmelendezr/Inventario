@@ -59,7 +59,7 @@ object AppViewModelProvider {
         // Initializer for HomeListaViewModel
         initializer {
             HomeListaViewModel(inventoryApplication().container.listaRepository,
-                inventoryApplication().container.sesionRepository)
+                inventoryApplication().container.sesion)
         }
 
         // Initializer for HomeListaViewModel
@@ -69,7 +69,8 @@ object AppViewModelProvider {
 
         initializer {
             UsuarioLoginViewModel(inventoryApplication().container.usuarioRepository,
-                inventoryApplication().container.sesionRepository)
+                inventoryApplication().container.sesionRepository,
+                appContainer = inventoryApplication().container)
         }
 
         initializer {

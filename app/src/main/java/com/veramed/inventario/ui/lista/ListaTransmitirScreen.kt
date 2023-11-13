@@ -1,6 +1,7 @@
 package com.veramed.inventario.ui.lista
 
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 
 import androidx.compose.material.*
@@ -27,6 +28,7 @@ import com.veramed.inventario.data.PostListaHomeServer
 import com.veramed.inventario.ui.AppViewModelProvider
 import com.veramed.inventario.ui.navigation.NavigationDestination
 import com.veramed.inventario.ui.theme.InventoryTheme
+import kotlinx.coroutines.launch
 
 
 object ListaTransmitirDestination : NavigationDestination {
@@ -45,6 +47,8 @@ fun ListaTransmitirScreen(
 
 ) {
     var visible by remember { mutableStateOf(false) }
+
+    val coroutineScope = rememberCoroutineScope()
 
     val listaArticulosUiState by viewModel.listaArticulosUIState.collectAsState()
 
@@ -85,10 +89,14 @@ fun ListaTransmitirScreen(
                             modifier = Modifier.fillMaxWidth()
                         )
                         Spacer(modifier = Modifier.height(10.dp))
-                        if (viewModel.envioExitoso) {
+                        if (viewModel.envioExitoso && viewModel.itemcount>0) {
                             Text(text = "Transmision existosa....")
-                            viewModel.guardarLista()
-                            navigateBack()
+                            Log.d("TRX","envio exitoso, id=${viewModel.idservidor} count ${viewModel.itemcount}")
+                            LaunchedEffect(coroutineScope){
+                                viewModel.guardarLista()
+                                navigateBack()
+
+                            }
                         }
                     }
 

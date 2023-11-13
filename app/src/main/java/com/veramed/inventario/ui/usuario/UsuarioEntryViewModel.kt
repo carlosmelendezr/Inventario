@@ -35,9 +35,7 @@ class UsuarioEntryViewModel(private val usuarioRepository: UsuarioRepository) : 
             UsuarioUiState(usuarioDetails = usuarioDetails, isEntryValid = validateInput(usuarioDetails))
     }
 
-    /**
-     * Inserts an [Item] in the Room database
-     */
+
     suspend fun saveItem() {
         if (validateInput()) {
             usuarioRepository.insertUsuario(usuarioUiState.usuarioDetails.toItem())

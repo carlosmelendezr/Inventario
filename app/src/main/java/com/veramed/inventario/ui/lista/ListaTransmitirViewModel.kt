@@ -1,6 +1,7 @@
 package com.veramed.inventario.ui.lista
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -29,6 +30,7 @@ class ListaTransmitirViewModel(
 
     var envioExitoso by mutableStateOf(false)
     var idservidor by mutableStateOf(0)
+    var itemcount by mutableStateOf(0)
 
     var listaTUiState by mutableStateOf(ListaTUiState())
         private set
@@ -51,11 +53,13 @@ class ListaTransmitirViewModel(
                 initialValue = ListaArticulosUiState()
             )
 
-    fun guardarLista() {
-        if (idservidor>0) {
-            viewModelScope.launch {
+    suspend fun guardarLista() {
+        Log.d("TRX","validando envio ${itemcount}/${listaArticulosUIState.value.itemList.size}")
+        if (idservidor>0 && itemcount==listaArticulosUIState.value.itemList.size) {
+            //viewModelScope.launch {
+            Log.d("TRX","datos OK intentando guardar, id=${idservidor}")
                 listaRepository.updateLista(listaTUiState.toLista(color = 3, idservidor))
-            }
+            //}
         }
 
     }

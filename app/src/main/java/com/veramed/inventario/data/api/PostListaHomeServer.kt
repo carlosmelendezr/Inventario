@@ -46,7 +46,7 @@ fun PostListaHomeServer(lista: Lista,listaItem: List<ListaItems>,
                     listaItem.forEach {
                         var itm = it
                         itm.idlista = idCreado
-                        PostListaItems(itm)
+                        PostListaItems(itm,viewModel)
                     }
                     viewModel.envioExitoso = true
                     viewModel.idservidor = idCreado
@@ -66,7 +66,8 @@ fun PostListaHomeServer(lista: Lista,listaItem: List<ListaItems>,
 
 }
 
-fun PostListaItems(listaItem: ListaItems) {
+fun PostListaItems(listaItem: ListaItems,
+                   viewModel: ListaTransmitirViewModel) {
 
     var url = "http://192.10.47.88:8090/"
     // on below line we are creating a retrofit
@@ -92,6 +93,8 @@ fun PostListaItems(listaItem: ListaItems) {
                 response: Response<ListaItems?>
             ) {
                 val id = response.code()
+                viewModel.itemcount++
+                Log.e("APIV", "Sumandi itemcount ${viewModel.itemcount}: " )
 
             }
             override fun onFailure(call: Call<ListaItems?>?, t: Throwable) {

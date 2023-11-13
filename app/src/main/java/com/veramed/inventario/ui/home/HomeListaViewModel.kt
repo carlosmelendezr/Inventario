@@ -1,6 +1,10 @@
 package com.veramed.inventario.ui.home
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.PrimaryKey
@@ -16,23 +20,22 @@ import kotlinx.coroutines.launch
  */
 class HomeListaViewModel(
     private val  listaRepository: ListaRepository,
-    private val sesionRepository: SesionRepository) : ViewModel() {
+    val sesion: Sesion) : ViewModel() {
 
-    var sesion = Sesion(0,"",0)
-   init {
-       viewModelScope.launch {
-           sesion = sesionRepository.getSesionActual().first()
-       }
-   }
+    val listaUiState2 = MutableLiveData<List<ListaUiState>>()
 
+    //val listaUiState = StateFlow<MutableList<ListaUiState>>(mutableListOf())
 
     val listaUiState: StateFlow<ListaUiState> =
-        listaRepository.getAllListaStream().map { ListaUiState(it)  }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                initialValue = ListaUiState()
-            )
+            listaRepository.getAllListaStream().map { ListaUiState(it) }
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+                    initialValue = ListaUiState()
+                )
+
+
+
 
 
     companion object {
@@ -42,6 +45,13 @@ class HomeListaViewModel(
     fun deleteLista(lista:Lista) {
         viewModelScope.launch {
             listaRepository.deleteLista(lista)
+        }
+
+    }
+
+    fun liberarLista(lista:Lista) {
+        viewModelScope.launch {
+            listaRepository.updateLista(lista)
         }
 
     }

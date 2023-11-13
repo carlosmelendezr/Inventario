@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.veramed.inventario.data.AppContainer
 import com.veramed.inventario.data.Sesion
 import com.veramed.inventario.data.SesionRepository
 import com.veramed.inventario.data.UsuarioRepository
@@ -20,7 +21,8 @@ import kotlinx.coroutines.runBlocking
  * View Model to validate and insert items in the Room database.
  */
 class UsuarioLoginViewModel(private val usuarioRepository: UsuarioRepository,
-                            private val sesionRepository: SesionRepository
+                            private val sesionRepository: SesionRepository,
+                            var appContainer: AppContainer
 ) : ViewModel() {
 
     /**
@@ -62,6 +64,8 @@ class UsuarioLoginViewModel(private val usuarioRepository: UsuarioRepository,
         val sesion = Sesion(id=usuarioUiState.usuarioDetails.id.toInt(),
             name=usuarioUiState.usuarioDetails.name,
             nivel=0)
+
+        appContainer.sesion = sesion
 
         runBlocking {
             sesionRepository.deleteAll()
