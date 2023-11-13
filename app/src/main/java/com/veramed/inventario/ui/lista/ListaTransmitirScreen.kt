@@ -25,6 +25,7 @@ import com.veramed.inventario.InventoryTopAppBar
 import com.veramed.inventario.R
 
 import com.veramed.inventario.data.PostListaHomeServer
+import com.veramed.inventario.data.toAPI
 import com.veramed.inventario.ui.AppViewModelProvider
 import com.veramed.inventario.ui.navigation.NavigationDestination
 import com.veramed.inventario.ui.theme.InventoryTheme
@@ -75,7 +76,7 @@ fun ListaTransmitirScreen(
                         onClick = {
                             visible = true
                             PostListaHomeServer(
-                                lista = viewModel.listaTUiState.toLista(0, 0),
+                                listaAPI = viewModel.listaTUiState.toListaAPI(0, 0),
                                 listaItem = listaArticulosUiState.itemList, viewModel
                             )
                         }) {
@@ -89,7 +90,7 @@ fun ListaTransmitirScreen(
                             modifier = Modifier.fillMaxWidth()
                         )
                         Spacer(modifier = Modifier.height(10.dp))
-                        if (viewModel.envioExitoso && viewModel.itemcount>0) {
+                        if (viewModel.envioExitoso && viewModel.tranmisionOk()) {
                             Text(text = "Transmision existosa....")
                             Log.d("TRX","envio exitoso, id=${viewModel.idservidor} count ${viewModel.itemcount}")
                             LaunchedEffect(coroutineScope){

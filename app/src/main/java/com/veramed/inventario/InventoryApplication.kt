@@ -17,6 +17,7 @@
 package com.veramed.inventario
 
 import android.app.Application
+import android.os.Bundle
 import com.veramed.inventario.data.AppContainer
 import com.veramed.inventario.data.AppDataContainer
 
@@ -34,4 +35,6 @@ class InventoryApplication : Application() {
 
 
     }
+
+
 }

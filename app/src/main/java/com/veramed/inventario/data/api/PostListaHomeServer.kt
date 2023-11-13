@@ -10,7 +10,21 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-fun PostListaHomeServer(lista: Lista,listaItem: List<ListaItems>,
+/*fun TransmitirLista(lista: Lista,listaItem: List<ListaItems>,
+                     viewModel: ListaTransmitirViewModel) {
+
+    PostListaHomeServer(lista,listaItem,viewModel)
+    if (viewModel.idservidor>0) {
+        listaItem.forEach {
+            PostListaItems(it,viewModel)
+        }
+        viewModel.envioExitoso = true
+    }
+
+
+}*/
+
+fun PostListaHomeServer(listaAPI: ListaAPI,listaItem: List<ListaItems>,
                         viewModel: ListaTransmitirViewModel) {
     var exito = false
     var url = "http://192.10.47.88:8090/"
@@ -18,6 +32,7 @@ fun PostListaHomeServer(lista: Lista,listaItem: List<ListaItems>,
     // builder and passing our base url
     val retrofit = Retrofit.Builder()
         .baseUrl(url)
+
         // as we are sending data in json format so
         // we have to add Gson converter factory
         .addConverterFactory(GsonConverterFactory.create())
@@ -30,17 +45,19 @@ fun PostListaHomeServer(lista: Lista,listaItem: List<ListaItems>,
 
     val retrofitapi = retrofit.create(RetrofitAPI::class.java)
 
-    val llamarLista: Call<Lista?>? = retrofitapi.postListaApi(lista)
-        llamarLista!!.enqueue(object : Callback<Lista?> {
+    val llamarLista: Call<ListaAPI?>? = retrofitapi.postListaApi(listaAPI)
+        llamarLista!!.enqueue(object : Callback<ListaAPI?> {
 
-            override fun onResponse(llamarLista: Call<Lista?>?, response: Response<Lista?>) {
+            override fun onResponse(llamarLista: Call<ListaAPI?>?, response: Response<ListaAPI?>) {
 
                 idCreado = response.body()?.id ?: 0
 
                 val resp = "ID = " + idCreado +
-                        "Response Code : " + response.message()
+                        "Response Code : " + response.code()
 
                 Log.d("APIV", resp)
+
+                viewModel.idservidor = idCreado
 
                 if (idCreado>0) {
                     listaItem.forEach {
@@ -55,12 +72,13 @@ fun PostListaHomeServer(lista: Lista,listaItem: List<ListaItems>,
 
             }
 
-            override fun onFailure(call: Call<Lista?>?, t: Throwable) {
+            override fun onFailure(call: Call<ListaAPI?>?, t: Throwable) {
                 // we get error response from API.
                 Log.e("APIV", "Error found is : " + t.message)
                 viewModel.envioExitoso=false
 
             }
+
 
         })
 
@@ -94,7 +112,7 @@ fun PostListaItems(listaItem: ListaItems,
             ) {
                 val id = response.code()
                 viewModel.itemcount++
-                Log.e("APIV", "Sumandi itemcount ${viewModel.itemcount}: " )
+                //Log.e("APIV", "Sumandi itemcount ${viewModel.itemcount}: " )
 
             }
             override fun onFailure(call: Call<ListaItems?>?, t: Throwable) {

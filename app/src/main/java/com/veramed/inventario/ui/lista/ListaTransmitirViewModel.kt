@@ -55,13 +55,21 @@ class ListaTransmitirViewModel(
 
     suspend fun guardarLista() {
         Log.d("TRX","validando envio ${itemcount}/${listaArticulosUIState.value.itemList.size}")
-        if (idservidor>0 && itemcount==listaArticulosUIState.value.itemList.size) {
-            //viewModelScope.launch {
+        if (idservidor>0 && tranmisionOk()) {
+
             Log.d("TRX","datos OK intentando guardar, id=${idservidor}")
                 listaRepository.updateLista(listaTUiState.toLista(color = 3, idservidor))
-            //}
+            envioExitoso = false
+            idservidor = 0
+            itemcount=0
+            Log.d("TRX","datos limpios, id=${idservidor}")
+
         }
 
+    }
+
+    fun tranmisionOk():Boolean {
+        return itemcount.equals(listaArticulosUIState.value.itemList.size)
     }
 
     companion object {
@@ -84,6 +92,17 @@ data class ListaTUiState(
 
 )
 
+fun ListaTUiState.toListaAPI(color:Int, idservidor:Int): ListaAPI = ListaAPI(
+    id = 0,
+    idusuario = idusuario,
+    descrip = descrip,
+    color = color,
+    fecha = fecha,
+    feccrea = feccrea,
+    tipo = tipo,
+    centro=centro
+)
+
 fun ListaTUiState.toLista(color:Int, idservidor:Int): Lista = Lista(
     id = id,
     idusuario = idusuario,
@@ -92,9 +111,9 @@ fun ListaTUiState.toLista(color:Int, idservidor:Int): Lista = Lista(
     fecha = fecha,
     feccrea = feccrea,
     tipo = tipo,
-    centro = centro,
-    articulos = articulos,
-    idservidor = idservidor
+    articulos=articulos,
+    centro=centro,
+    idservidor=idservidor
 )
 
 fun Lista.toListaTUiState(): ListaTUiState = ListaTUiState(
