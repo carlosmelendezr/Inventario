@@ -122,7 +122,9 @@ fun InventoryNavHost(
         composable(route =ListaEntryDestination.route) {
             ListaEntryScreen(
                 navigateBack = { navController.popBackStack() },
-                onNavigateUp = { navController.navigateUp() }
+                onNavigateUp = { navController.navigateUp() },
+                navigateToConsultor = {navController.navigate(ConsultorDestination.route)}
+            
             )
         }
 
@@ -137,6 +139,14 @@ fun InventoryNavHost(
             UsuarioLoginScreen(
                 navigateToListaEntry  = { navController.navigate(HomeListaDestino.route) },
                 navigateToUsuarioEntry = { navController.navigate(UsuarioEntryDestination.route) }
+            )
+        }
+
+        composable(route = ConsultorDestination.route) {
+            ConsultorScreen(
+                navigateBack = { navController.popBackStack() },
+                onNavigateUp = { navController.navigateUp() }
+
             )
         }
 

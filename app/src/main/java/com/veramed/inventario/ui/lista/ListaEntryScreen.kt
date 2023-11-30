@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,6 +40,7 @@ object ListaEntryDestination : NavigationDestination {
 fun ListaEntryScreen(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
+    navigateToConsultor:() ->Unit,
     modifier: Modifier = Modifier,
     canNavigateBack: Boolean = true,
     viewModel: ListaEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
@@ -51,7 +53,18 @@ fun ListaEntryScreen(
                 canNavigateBack = canNavigateBack,
                 navigateUp = onNavigateUp
             )
-        }
+        }, floatingActionButton = {
+            FloatingActionButton(
+                onClick = {navigateToConsultor()},
+                modifier = Modifier.navigationBarsPadding()
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Send,
+                    contentDescription = stringResource(R.string.item_entry_title),
+                    tint = MaterialTheme.colors.onPrimary
+                )
+            }
+        },
     ) { innerPadding ->
         ItemEntryBody(
             listaUiState = viewModel.listaUiState,
