@@ -56,18 +56,7 @@ fun ConsultorScreen(
                 canNavigateBack = true,
                 navigateUp = onNavigateUp
             )
-        }, floatingActionButton = {
-            FloatingActionButton(
-                onClick = {},
-                modifier = Modifier.navigationBarsPadding()
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Send,
-                    contentDescription = stringResource(R.string.item_entry_title),
-                    tint = MaterialTheme.colors.onPrimary
-                )
-            }
-        },
+        }
     ) { innerPadding ->
 
         ConsultorEntryBody(item = viewModel.articulo,
@@ -162,13 +151,6 @@ fun ConsultarPrecioForm(
             )
            VerPrecio(item = item )        }
 
-        SideEffect {
-            if (enabled) {
-                cantFocusRequester.requestFocus()
-            }
-        }
-
-
 
     }
 }
@@ -202,13 +184,7 @@ private fun VerPrecio(
             )
         }
         Spacer(modifier = Modifier.weight(1f,fill = true))
-        Box(modifier= Modifier.weight(1f,fill=true)) {
-            Text(
-                text = item.price.toString(),
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.h6
-            )
-        }
+
         Spacer(modifier = Modifier.weight(1f,fill = true))
         Box(modifier= Modifier.weight(2f,fill=true)) {
             Text(
@@ -217,7 +193,17 @@ private fun VerPrecio(
                 style = MaterialTheme.typography.h6
             )
         }
+        Column() {
+            Text(
+                text = "Bs. ${item.price.toString()}",
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.h6
+            )
+
+        }
+
     }
+
 }
 
 

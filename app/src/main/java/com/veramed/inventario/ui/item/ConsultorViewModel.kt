@@ -30,8 +30,6 @@ class ConsultorViewModel(
 
     private val mp: MediaPlayer = MediaPlayer.create( context, R.raw.error)
 
-    var listaId: Int = checkNotNull(savedStateHandle[ListaAgregarItemDestination.itemIdArg])
-
     var listaItemUiState by mutableStateOf(AgregarItemUiState())
         private set
 

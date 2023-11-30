@@ -124,7 +124,7 @@ fun InventoryNavHost(
                 navigateBack = { navController.popBackStack() },
                 onNavigateUp = { navController.navigateUp() },
                 navigateToConsultor = {navController.navigate(ConsultorDestination.route)}
-            
+
             )
         }
 
