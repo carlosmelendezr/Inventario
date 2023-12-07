@@ -12,7 +12,7 @@ import java.io.File
  * Database class with a singleton INSTANCE object.
  */
 @Database(entities = [Item::class],
-    version = 6, exportSchema = false)
+    version = 7, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class MaestroDatabase : RoomDatabase() {
 
@@ -32,7 +32,10 @@ abstract class MaestroDatabase : RoomDatabase() {
                      * permanently deletes all data from the tables in your database when it
                      * attempts to perform a migration with no defined migration path.
                      */
-                    .createFromAsset("database/inven_maestro.db")
+                    .createFromAsset("database/inven_maestro1.db")
+                    .createFromAsset("database/inven_maestro2.db")
+                    .createFromAsset("database/inven_maestro3.db")
+                    .createFromAsset("database/inven_maestro4.db")
                     .fallbackToDestructiveMigration()
                     .build()
                     .also { Instance = it }
