@@ -1,20 +1,13 @@
 package com.veramed.inventario.ui.item
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -22,17 +15,18 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.veramed.inventario.InventoryTopAppBar
 import com.veramed.inventario.R
 import com.veramed.inventario.camara.CameraPreview
 import com.veramed.inventario.data.Item
-import com.veramed.inventario.data.ListaItems
 import com.veramed.inventario.ui.AppViewModelProvider
 import com.veramed.inventario.ui.lista.AgregarItemUiState
 import com.veramed.inventario.ui.lista.ListaItemDetails
 import com.veramed.inventario.ui.navigation.NavigationDestination
 import com.veramed.inventario.ui.theme.InventoryTheme
+import java.text.DecimalFormat
 
 object ConsultorDestination : NavigationDestination {
     override val route = "consultor"
@@ -61,7 +55,7 @@ fun ConsultorScreen(
 
         ConsultorEntryBody(item = viewModel.articulo,
             modifier = modifier.padding(innerPadding),
-
+            onValueChange = viewModel::updateUiState,
             onItemBuscar = viewModel::buscarBarra, itemUiState = viewModel.listaItemUiState)
 
 
@@ -72,7 +66,7 @@ fun ConsultorScreen(
 fun ConsultorEntryBody(
     item:Item,
     itemUiState: AgregarItemUiState,
-    onValueChange: (ListaItemDetails) -> Unit = {},
+    onValueChange: (ListaItemDetails) -> Unit,
     onItemBuscar: () -> Unit,
     modifier: Modifier = Modifier,
 
@@ -146,7 +140,7 @@ fun ConsultarPrecioForm(
                 ),
                 modifier = Modifier.width(200.dp),
                 label = { Text("BARRA") },
-                enabled = enableBarra,
+                enabled = true,
                 singleLine = true
             )
            VerPrecio(item = item )        }
@@ -176,34 +170,48 @@ private fun VerPrecio(
             )
         }
         Spacer(modifier = Modifier.weight(1f,fill = true))
-        Box(modifier= Modifier.weight(5f,fill=true)) {
+        Box(modifier= Modifier.weight(2f,fill=true)) {
             Text(
                 text = item.name,
                 fontWeight = FontWeight.Normal,
                 style = MaterialTheme.typography.h6
             )
         }
-        Spacer(modifier = Modifier.weight(1f,fill = true))
 
-        Spacer(modifier = Modifier.weight(1f,fill = true))
-        Box(modifier= Modifier.weight(2f,fill=true)) {
-            Text(
-                text = item.barra,
-                fontWeight = FontWeight.Light,
-                style = MaterialTheme.typography.h6
-            )
+        Box(modifier= Modifier.weight(3f,fill=true)) {
+            Column() {
+                Text(
+                    text = item.barra,
+                    fontWeight = FontWeight.Light,
+                    style = MaterialTheme.typography.h6
+                )
+                Text(
+                    text = "Bs. ${currencyFormat(item.price.toString())}",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 40.sp,
+                    style = MaterialTheme.typography.h6
+                )
+                Text("PRECIO SIN IVA")
+
+            }
+
         }
-        Column() {
+       /* Column() {
             Text(
                 text = "Bs. ${item.price.toString()}",
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.h6
             )
 
-        }
+        }*/
 
     }
 
+}
+
+fun currencyFormat(amount: String): String? {
+    val formatter = DecimalFormat("###,###,##0.00")
+    return formatter.format(amount.toDouble())
 }
 
 
@@ -211,7 +219,8 @@ private fun VerPrecio(
 @Composable
 fun ListaAgregarItemScreenPreview() {
     InventoryTheme {
-        ConsultorScreen(navigateBack = { /*Do nothing*/ },
+        ConsultorScreen(
+            navigateBack = { /*Do nothing*/ },
             onNavigateUp = { /*Do nothing*/ },
         )
     }

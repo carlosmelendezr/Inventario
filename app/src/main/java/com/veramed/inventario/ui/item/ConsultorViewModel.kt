@@ -108,8 +108,11 @@ class ConsultorViewModel(
     }
 
     fun updateUiState(itemDetails: ListaItemDetails) {
+        Log.d("CONSUL",itemDetails.barra)
+        listaItemUiState =
+            AgregarItemUiState(listaitemDetails = itemDetails, isEntryValid = true)
 
-        if (itemDetails.barra.length>12) {
+        if (itemDetails.barra.length>7) {
             buscarItem()
         }
     }

@@ -19,6 +19,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.veramed.inventario.InventoryTopAppBar
 import com.veramed.inventario.R
 import com.veramed.inventario.ui.AppViewModelProvider
+import com.veramed.inventario.ui.home.HomeListaDestino
 import com.veramed.inventario.ui.item.ItemEditDestination
 import com.veramed.inventario.ui.navigation.NavigationDestination
 import com.veramed.inventario.ui.theme.InventoryTheme
@@ -38,6 +39,7 @@ fun UsuarioLoginScreen(
     navigateToListaEntry: () -> Unit,
     modifier: Modifier = Modifier,
     canNavigateBack: Boolean = true,
+    navigateToConsultor:() ->Unit,
     viewModel: UsuarioLoginViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -74,6 +76,7 @@ fun UsuarioLoginScreen(
                            navigateToUsuarioEntry()
                     }
                 },
+                navigateToConsultor=navigateToConsultor,
                 modifier = modifier.padding(innerPadding)
             )
 
@@ -86,6 +89,7 @@ fun UsuarioLoginBody(
     onUsuarioValueChange: (UsuarioDetails) -> Unit,
     onSaveClick: () -> Unit,
     onRegisterClick: () -> Unit,
+    navigateToConsultor:() ->Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -113,6 +117,14 @@ fun UsuarioLoginBody(
             enabled = !usuarioUiState.existe,
         ) {
             Text(stringResource(R.string.usuario_entry))
+        }
+
+        Button(
+            onClick =  navigateToConsultor ,
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !usuarioUiState.existe,
+        ) {
+            Text("CONSULTOR DE PRECIO")
         }
 
     }
@@ -171,7 +183,9 @@ private fun ItemLoginScreenPreview() {
             ),
             onUsuarioValueChange = {},
             onSaveClick = {},
-            onRegisterClick = {}
+            onRegisterClick = {},
+            navigateToConsultor = {}
+
         )
     }
 }

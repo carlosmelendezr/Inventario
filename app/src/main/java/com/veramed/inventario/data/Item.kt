@@ -11,7 +11,6 @@ import com.google.gson.annotations.Expose
 data class Item(
 
     @PrimaryKey(autoGenerate = true)
-    @Expose(serialize = false,deserialize = true)
     val id: Int = 0,
     val name: String,
     val price: Double,
