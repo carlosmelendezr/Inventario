@@ -74,7 +74,7 @@ class ConsultorViewModel(
                             AgregarItemUiState(
                                 listaitemDetails = ListaItemDetails(
                                     name = articulo.name,
-                                    barra = articulo.barra,
+                                    barra = "",
                                     sap = articulo.sap, descrip = articulo.name,
                                     quantity = listaItemUiState.listaitemDetails.quantity
                                 ), isEntryValid = true
@@ -112,9 +112,9 @@ class ConsultorViewModel(
         listaItemUiState =
             AgregarItemUiState(listaitemDetails = itemDetails, isEntryValid = true)
 
-        if (itemDetails.barra.length>7) {
+        /*if (itemDetails.barra.length>7) {
             buscarItem()
-        }
+        }*/
     }
 
 

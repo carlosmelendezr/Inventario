@@ -1,14 +1,20 @@
 package com.veramed.inventario.ui.item
 
+import android.util.Log
+import android.view.KeyEvent.KEYCODE_ENTER
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.HoverInteraction
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.*
+import androidx.compose.ui.input.key.Key.Companion.Enter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -87,6 +93,7 @@ fun ConsultorEntryBody(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ConsultarPrecioForm(
     item: Item,
@@ -121,7 +128,7 @@ fun ConsultarPrecioForm(
                 .fillMaxWidth()
         ) {
 
-            CameraPreview(itemDetails, onValueChange)
+            //CameraPreview(itemDetails, onValueChange)
         }
 
         Row() {
@@ -138,7 +145,14 @@ fun ConsultarPrecioForm(
                         onItemBuscar()
                     }
                 ),
-                modifier = Modifier.width(200.dp),
+                modifier = Modifier.width(200.dp)
+                .onKeyEvent {
+                    when (it.key) {
+                        Enter ->  onItemBuscar()
+                       else -> Log.d("TECLA", "TECLA DESCONOCIDA")
+                    }
+                    false
+                },
                 label = { Text("BARRA") },
                 enabled = true,
                 singleLine = true
