@@ -157,7 +157,9 @@ fun ConsultarPrecioForm(
                 enabled = true,
                 singleLine = true
             )
-           VerPrecio(item = item )        }
+            if (itemDetails.sap.isNotBlank()) {
+                VerPrecio(item = item)
+            }}
 
 
     }
@@ -203,21 +205,21 @@ private fun VerPrecio(
 
                 if (iva > 0) {
                     Text(
-                        text = "Precio sin IVA  ${currencyFormat(item.price)} Bs.",
+                        text = "Base :  ${currencyFormat(item.price)} Bs.",
                         fontWeight = FontWeight.Normal,
                         fontSize = 30.sp,
                         style = MaterialTheme.typography.h6
                     )
 
                     Text(
-                        text = "IVA ${currencyFormat(iva)} Bs.",
+                        text = "IVA : ${currencyFormat(iva)} Bs.",
                         fontWeight = FontWeight.Normal,
                         fontSize = 30.sp,
                         style = MaterialTheme.typography.h6
                     )
                 }
                 Text(
-                    text = "Precio Total ${currencyFormat(total)} Bs.",
+                    text = "Precio : ${currencyFormat(total)} Bs.",
                     fontWeight = FontWeight.Bold,
                     fontSize = 40.sp,
                     style = MaterialTheme.typography.h6
