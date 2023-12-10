@@ -169,14 +169,14 @@ fun ConsultarPrecioForm(
 @Composable
 private fun VerPrecio(
     item: Item,
-    modifier: Modifier = Modifier)
- {
-    Row(modifier = modifier
-        .fillMaxWidth()
-        .padding(vertical = 5.dp, horizontal = 5.dp)
+    modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 5.dp, horizontal = 5.dp)
 
     ) {
-        Box(modifier= Modifier.weight(2f,fill=true)) {
+        /*Box(modifier= Modifier.weight(2f,fill=true)) {
             Text(
                 text = item.sap,
                 fontWeight = FontWeight.Bold,
@@ -184,48 +184,55 @@ private fun VerPrecio(
             )
         }
         Spacer(modifier = Modifier.weight(1f,fill = true))
-        Box(modifier= Modifier.weight(2f,fill=true)) {
+        Box(modifier= Modifier.weight(3f,fill=true)) {
             Text(
                 text = item.name,
                 fontWeight = FontWeight.Normal,
                 style = MaterialTheme.typography.h6
             )
-        }
-
-        Box(modifier= Modifier.weight(3f,fill=true)) {
+        }*/
+        val iva = item.quantity * item.price / 100
+        val total = item.price + iva
+        Box(modifier = Modifier.weight(3f, fill = true)) {
             Column() {
                 Text(
                     text = item.barra,
                     fontWeight = FontWeight.Light,
                     style = MaterialTheme.typography.h6
                 )
+
+                if (iva > 0) {
+                    Text(
+                        text = "Precio sin IVA  ${currencyFormat(item.price)} Bs.",
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 30.sp,
+                        style = MaterialTheme.typography.h6
+                    )
+
+                    Text(
+                        text = "IVA ${currencyFormat(iva)} Bs.",
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 30.sp,
+                        style = MaterialTheme.typography.h6
+                    )
+                }
                 Text(
-                    text = "Bs. ${currencyFormat(item.price.toString())}",
+                    text = "Precio Total ${currencyFormat(total)} Bs.",
                     fontWeight = FontWeight.Bold,
                     fontSize = 40.sp,
                     style = MaterialTheme.typography.h6
                 )
-                Text("PRECIO SIN IVA")
-
             }
 
         }
-       /* Column() {
-            Text(
-                text = "Bs. ${item.price.toString()}",
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.h6
-            )
+        }
 
-        }*/
-
-    }
 
 }
 
-fun currencyFormat(amount: String): String? {
+fun currencyFormat(amount: Double): String? {
     val formatter = DecimalFormat("###,###,##0.00")
-    return formatter.format(amount.toDouble())
+    return formatter.format(amount)
 }
 
 

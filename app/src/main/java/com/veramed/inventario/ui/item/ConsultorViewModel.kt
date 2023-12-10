@@ -79,7 +79,7 @@ class ConsultorViewModel(
                                     quantity = listaItemUiState.listaitemDetails.quantity
                                 ), isEntryValid = true
                             )
-                        Log.d("INVBAR", "Resultadp =" + articulo.name)
+                        //Log.d("INVBAR", "Resultadp =" + articulo.name)
                     }
 
                 } catch (e: Exception) {
