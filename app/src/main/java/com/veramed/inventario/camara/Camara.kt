@@ -79,7 +79,7 @@ fun CameraPreview(   itemDetails: ListaItemDetails,
                                 .also {
                                     if (barcodeValue.isNotBlank()) {
                                         onValueChange(itemDetails.copy(barra = barcodeValue))
-                                        //Log.d("INVBAR","Barra escaneada = "+barcodeValue)
+                                        Log.d("INVBAR","Barra escaneada = "+barcodeValue)
                                         mp.start()
                                     }
                                 }
