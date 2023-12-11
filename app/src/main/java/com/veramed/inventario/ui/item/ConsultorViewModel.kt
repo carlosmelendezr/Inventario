@@ -74,12 +74,12 @@ class ConsultorViewModel(
                             AgregarItemUiState(
                                 listaitemDetails = ListaItemDetails(
                                     name = articulo.name,
-                                    barra = articulo.barra,
+                                    barra = "",
                                     sap = articulo.sap, descrip = articulo.name,
                                     quantity = listaItemUiState.listaitemDetails.quantity
                                 ), isEntryValid = true
                             )
-                        Log.d("INVBAR", "Resultadp =" + articulo.name)
+                        //Log.d("INVBAR", "Resultadp =" + articulo.name)
                     }
 
                 } catch (e: Exception) {
@@ -108,10 +108,13 @@ class ConsultorViewModel(
     }
 
     fun updateUiState(itemDetails: ListaItemDetails) {
+        Log.d("CONSUL",itemDetails.barra)
+        listaItemUiState =
+            AgregarItemUiState(listaitemDetails = itemDetails, isEntryValid = true)
 
-        if (itemDetails.barra.length>12) {
+        /*if (itemDetails.barra.length>7) {
             buscarItem()
-        }
+        }*/
     }
 
 

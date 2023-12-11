@@ -1,38 +1,38 @@
 package com.veramed.inventario.ui.item
 
-import androidx.annotation.StringRes
+import android.util.Log
+import android.view.KeyEvent.KEYCODE_ENTER
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.HoverInteraction
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.*
+import androidx.compose.ui.input.key.Key.Companion.Enter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.veramed.inventario.InventoryTopAppBar
 import com.veramed.inventario.R
 import com.veramed.inventario.camara.CameraPreview
 import com.veramed.inventario.data.Item
-import com.veramed.inventario.data.ListaItems
 import com.veramed.inventario.ui.AppViewModelProvider
 import com.veramed.inventario.ui.lista.AgregarItemUiState
 import com.veramed.inventario.ui.lista.ListaItemDetails
 import com.veramed.inventario.ui.navigation.NavigationDestination
 import com.veramed.inventario.ui.theme.InventoryTheme
+import java.text.DecimalFormat
 
 object ConsultorDestination : NavigationDestination {
     override val route = "consultor"
@@ -61,7 +61,7 @@ fun ConsultorScreen(
 
         ConsultorEntryBody(item = viewModel.articulo,
             modifier = modifier.padding(innerPadding),
-
+            onValueChange = viewModel::updateUiState,
             onItemBuscar = viewModel::buscarBarra, itemUiState = viewModel.listaItemUiState)
 
 
@@ -72,7 +72,7 @@ fun ConsultorScreen(
 fun ConsultorEntryBody(
     item:Item,
     itemUiState: AgregarItemUiState,
-    onValueChange: (ListaItemDetails) -> Unit = {},
+    onValueChange: (ListaItemDetails) -> Unit,
     onItemBuscar: () -> Unit,
     modifier: Modifier = Modifier,
 
@@ -93,6 +93,7 @@ fun ConsultorEntryBody(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ConsultarPrecioForm(
     item: Item,
@@ -127,7 +128,7 @@ fun ConsultarPrecioForm(
                 .fillMaxWidth()
         ) {
 
-            CameraPreview(itemDetails, onValueChange)
+            //CameraPreview(itemDetails, onValueChange)
         }
 
         Row() {
@@ -144,12 +145,21 @@ fun ConsultarPrecioForm(
                         onItemBuscar()
                     }
                 ),
-                modifier = Modifier.width(200.dp),
+                modifier = Modifier.width(200.dp)
+                .onKeyEvent {
+                    when (it.key) {
+                        Enter ->  onItemBuscar()
+                       else -> Log.d("TECLA", "TECLA DESCONOCIDA")
+                    }
+                    false
+                },
                 label = { Text("BARRA") },
-                enabled = enableBarra,
+                enabled = true,
                 singleLine = true
             )
-           VerPrecio(item = item )        }
+            if (itemDetails.sap.isNotBlank()) {
+                VerPrecio(item = item)
+            }}
 
 
     }
@@ -161,14 +171,14 @@ fun ConsultarPrecioForm(
 @Composable
 private fun VerPrecio(
     item: Item,
-    modifier: Modifier = Modifier)
- {
-    Row(modifier = modifier
-        .fillMaxWidth()
-        .padding(vertical = 5.dp, horizontal = 5.dp)
+    modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 5.dp, horizontal = 5.dp)
 
     ) {
-        Box(modifier= Modifier.weight(2f,fill=true)) {
+        /*Box(modifier= Modifier.weight(2f,fill=true)) {
             Text(
                 text = item.sap,
                 fontWeight = FontWeight.Bold,
@@ -176,34 +186,55 @@ private fun VerPrecio(
             )
         }
         Spacer(modifier = Modifier.weight(1f,fill = true))
-        Box(modifier= Modifier.weight(5f,fill=true)) {
+        Box(modifier= Modifier.weight(3f,fill=true)) {
             Text(
                 text = item.name,
                 fontWeight = FontWeight.Normal,
                 style = MaterialTheme.typography.h6
             )
+        }*/
+        val iva = item.quantity * item.price / 100
+        val total = item.price + iva
+        Box(modifier = Modifier.weight(3f, fill = true)) {
+            Column() {
+                Text(
+                    text = item.barra,
+                    fontWeight = FontWeight.Light,
+                    style = MaterialTheme.typography.h6
+                )
+
+                if (iva > 0) {
+                    Text(
+                        text = "Base :  ${currencyFormat(item.price)} Bs.",
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 30.sp,
+                        style = MaterialTheme.typography.h6
+                    )
+
+                    Text(
+                        text = "IVA : ${currencyFormat(iva)} Bs.",
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 30.sp,
+                        style = MaterialTheme.typography.h6
+                    )
+                }
+                Text(
+                    text = "Precio : ${currencyFormat(total)} Bs.",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 40.sp,
+                    style = MaterialTheme.typography.h6
+                )
+            }
+
         }
-        Spacer(modifier = Modifier.weight(1f,fill = true))
-
-        Spacer(modifier = Modifier.weight(1f,fill = true))
-        Box(modifier= Modifier.weight(2f,fill=true)) {
-            Text(
-                text = item.barra,
-                fontWeight = FontWeight.Light,
-                style = MaterialTheme.typography.h6
-            )
-        }
-        Column() {
-            Text(
-                text = "Bs. ${item.price.toString()}",
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.h6
-            )
-
         }
 
-    }
 
+}
+
+fun currencyFormat(amount: Double): String? {
+    val formatter = DecimalFormat("###,###,##0.00")
+    return formatter.format(amount)
 }
 
 
@@ -211,7 +242,8 @@ private fun VerPrecio(
 @Composable
 fun ListaAgregarItemScreenPreview() {
     InventoryTheme {
-        ConsultorScreen(navigateBack = { /*Do nothing*/ },
+        ConsultorScreen(
+            navigateBack = { /*Do nothing*/ },
             onNavigateUp = { /*Do nothing*/ },
         )
     }
