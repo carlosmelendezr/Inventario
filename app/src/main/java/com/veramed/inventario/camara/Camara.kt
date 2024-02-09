@@ -37,7 +37,7 @@ import java.util.concurrent.Executors
 
 @Composable
 fun CameraPreview(   itemDetails: ListaItemDetails,
-                     onValueChange: (ListaItemDetails) -> Unit = {}) {
+                     onValueChange: (ListaItemDetails) -> Unit={}) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     var preview by remember { mutableStateOf<Preview?>(null) }

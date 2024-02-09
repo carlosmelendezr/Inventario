@@ -112,9 +112,12 @@ class ConsultorViewModel(
         listaItemUiState =
             AgregarItemUiState(listaitemDetails = itemDetails, isEntryValid = true)
 
-        /*if (itemDetails.barra.length>7) {
-            buscarItem()
-        }*/
+    }
+
+    fun updateUiStateCam(itemDetails: ListaItemDetails, camara:Boolean=false) {
+        updateUiState(itemDetails)
+        buscarItem()
+
     }
 
 

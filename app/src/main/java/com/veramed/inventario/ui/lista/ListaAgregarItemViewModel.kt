@@ -60,10 +60,11 @@ class ListaAgregarItemViewModel(
     }
 
 
-    fun updateUiState(itemDetails: ListaItemDetails) {
+    fun updateUiState(itemDetails: ListaItemDetails, camara:Boolean=false) {
             listaItemUiState =
                 AgregarItemUiState(listaitemDetails = itemDetails, isEntryValid = validateInput(itemDetails))
-            if (itemDetails.barra.length>12) {
+            //if (itemDetails.barra.length>12) {
+        if (camara) {
                 buscarItem()
             }
         }
