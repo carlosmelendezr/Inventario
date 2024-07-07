@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.input.key.Key.Companion.Enter
@@ -62,6 +63,7 @@ fun ConsultorScreen(
         ConsultorEntryBody(item = viewModel.articulo,
             modifier = modifier.padding(innerPadding),
             onValueChange = viewModel::updateUiState,
+            onValueChangeCam = viewModel::updateUiStateCam,
             onItemBuscar = viewModel::buscarBarra, itemUiState = viewModel.listaItemUiState)
 
 
@@ -72,7 +74,8 @@ fun ConsultorScreen(
 fun ConsultorEntryBody(
     item:Item,
     itemUiState: AgregarItemUiState,
-    onValueChange: (ListaItemDetails) -> Unit,
+    onValueChange: (ListaItemDetails) -> Unit={},
+    onValueChangeCam: (ListaItemDetails) -> Unit={} ,
     onItemBuscar: () -> Unit,
     modifier: Modifier = Modifier,
 
@@ -81,15 +84,13 @@ fun ConsultorEntryBody(
         modifier = modifier
             .fillMaxWidth()
             .padding(5.dp),
-        verticalArrangement = Arrangement.spacedBy(32.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         ConsultarPrecioForm(item= item,
             itemDetails=itemUiState.listaitemDetails,
             onValueChange=onValueChange,
+            onValueChangeCam=onValueChangeCam,
             onItemBuscar=onItemBuscar)
-
-
-
     }
 }
 
@@ -98,13 +99,14 @@ fun ConsultorEntryBody(
 fun ConsultarPrecioForm(
     item: Item,
     itemDetails: ListaItemDetails,
-    onValueChange: (ListaItemDetails) -> Unit = {},
+    onValueChange: (ListaItemDetails)->Unit={} ,
+    onValueChangeCam: (ListaItemDetails)->Unit={} ,
     onItemBuscar: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
     var enableBarra = !enabled;
-    val cantFocusRequester = remember { FocusRequester() }
+    val barraFocusRequester = remember { FocusRequester() }
 
     val colorEstado: Color
     if (item.name.contains("ERROR"))
@@ -122,14 +124,14 @@ fun ConsultarPrecioForm(
             singleLine = true
         )
 
-        Card(
+       /* Card(
             modifier = modifier
                 .height(150.dp)
                 .fillMaxWidth()
         ) {
 
-            //CameraPreview(itemDetails, onValueChange)
-        }
+            //CameraPreview(itemDetails, onValueChangeCam)
+        }*/
 
         Row() {
 
@@ -145,7 +147,7 @@ fun ConsultarPrecioForm(
                         onItemBuscar()
                     }
                 ),
-                modifier = Modifier.width(200.dp)
+                modifier = Modifier.focusRequester(barraFocusRequester).width(200.dp)
                 .onKeyEvent {
                     when (it.key) {
                         Enter ->  onItemBuscar()
@@ -161,6 +163,11 @@ fun ConsultarPrecioForm(
                 VerPrecio(item = item)
             }}
 
+
+    }
+
+    SideEffect {
+        barraFocusRequester.requestFocus()
 
     }
 }

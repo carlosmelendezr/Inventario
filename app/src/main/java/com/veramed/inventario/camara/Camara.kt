@@ -37,7 +37,7 @@ import java.util.concurrent.Executors
 
 @Composable
 fun CameraPreview(   itemDetails: ListaItemDetails,
-                     onValueChange: (ListaItemDetails) -> Unit = {}) {
+                     onValueChange: (ListaItemDetails) -> Unit={}) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     var preview by remember { mutableStateOf<Preview?>(null) }
@@ -79,7 +79,7 @@ fun CameraPreview(   itemDetails: ListaItemDetails,
                                 .also {
                                     if (barcodeValue.isNotBlank()) {
                                         onValueChange(itemDetails.copy(barra = barcodeValue))
-                                        //Log.d("INVBAR","Barra escaneada = "+barcodeValue)
+                                        Log.d("INVBAR","Barra escaneada = "+barcodeValue)
                                         mp.start()
                                     }
                                 }
