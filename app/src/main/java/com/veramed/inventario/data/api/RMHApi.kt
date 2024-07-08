@@ -10,6 +10,5 @@ import retrofit2.http.Query
 interface RMHApi {
 
     @GET("GetArticuloConsultaPrecioMovil")
-    fun getArticulo(@Query("CodigoBarra") barra:String): Call<Articulos>
-    //fun getArticulo(@Query("CodigoBarra") barra:String): Call<JsonObject>
+    fun getArticulo(@Query("CodigoBarra") barra: String): Call<Articulos>
 }
