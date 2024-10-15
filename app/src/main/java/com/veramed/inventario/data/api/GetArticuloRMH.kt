@@ -41,49 +41,49 @@ fun GetArticuloRMH(viewModel: ListaAgregarItemViewModel,  itemsRepository: Items
 
     llamar!!.enqueue(object : Callback<Articulos> {
 
-         override fun onResponse(
-             llamar: Call<Articulos>,
-             response: Response<Articulos>
-         ) {
-             if (!response.isSuccessful) {
-                 //Log.d("RMH", "Codigo de Respuesta "+response.code())
-                 //Log.d("RMH", response.body().toString()+" url = "+llamar.request().toString())
-             } else {
+        override fun onResponse(
+            llamar: Call<Articulos>,
+            response: Response<Articulos>
+        ) {
+            if (!response.isSuccessful) {
+                //Log.d("RMH", "Codigo de Respuesta "+response.code())
+                //Log.d("RMH", response.body().toString()+" url = "+llamar.request().toString())
+            } else {
                 // Log.d("RMH", response.body().toString()+" url = "+llamar.request().toString())
-                 //Log.d("RMH", response.body())
-             }
+                //Log.d("RMH", response.body())
+            }
 
-             val articulos: Articulos? = response.body()
+            val articulos: Articulos? = response.body()
 
-             if (articulos != null) {
-                 //Log.d("RMH", "Descripcion = ${articulos.tables.first().Descripcion}")
-                 if (articulos.tables != null) {
-                     for (table in articulos.tables ) {
+            if (articulos != null) {
+                //Log.d("RMH", "Descripcion = ${articulos.tables.first().Descripcion}")
+                if (articulos.tables != null) {
+                    for (table in articulos.tables ) {
 
-                         //Log.d("RMH", "Articulos ${articulos.tables.size}")
-
-
-                         val item = Item(id=0,
-                             name=table.Descripcion,
-                             barra=table.CodBarra.trimEnd(),price=0.0,
-                             sap=table.CodArticulo.trimEnd(), quantity = 0, lote = "", fecvence = "")
-
-                         GlobalScope.launch {
-                             itemsRepository.insertItem(item)
-                         }
+                        //Log.d("RMH", "Articulos ${articulos.tables.size}")
 
 
-                     }
-                 }
+                        val item = Item(id=0,
+                            name=table.Descripcion,
+                            barra=table.CodBarra.trimEnd(),price=0.0,
+                            sap=table.CodArticulo.trimEnd(), quantity = 0, lote = "", fecvence = "")
 
-             }
+                        GlobalScope.launch {
+                            itemsRepository.insertItem(item)
+                        }
 
 
-         }
-         override fun onFailure(call: Call<Articulos>?, t: Throwable) {
-             // we get error response from API.
-             Log.e("APIV", "Error found is : " + t.message)
-         }
-     })
+                    }
+                }
+
+            }
+
+
+        }
+        override fun onFailure(call: Call<Articulos>?, t: Throwable) {
+            // we get error response from API.
+            Log.e("APIV", "Error found is : " + t.message)
+        }
+    })
 
 }

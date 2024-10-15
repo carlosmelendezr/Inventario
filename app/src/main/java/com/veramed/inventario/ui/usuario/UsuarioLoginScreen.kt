@@ -124,7 +124,7 @@ fun UsuarioLoginBody(
             modifier = Modifier.fillMaxWidth(),
             enabled = !usuarioUiState.existe,
         ) {
-            Text("CONSULTOR DE PRECIO")
+            Text("INGRESO SAP")
         }
 
     }

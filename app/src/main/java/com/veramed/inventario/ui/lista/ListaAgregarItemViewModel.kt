@@ -73,7 +73,7 @@ class ListaAgregarItemViewModel(
         if (listaItemUiState.listaitemDetails.barra.isNotBlank()) {
             buscarItem()
             if (!existe) {
-                GetArticuloRMH(this, itemsRepository)
+                //GetArticuloRMH(this, itemsRepository)
             }
         }
 

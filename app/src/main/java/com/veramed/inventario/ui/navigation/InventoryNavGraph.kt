@@ -119,6 +119,18 @@ fun InventoryNavHost(
             )
         }
 
+        composable(
+            route = ListaIngresoSapDestination.routeWithArgs,
+            arguments = listOf(navArgument(ListaIngresoSapDestination.docmat) {
+                type = NavType.StringType
+            })
+        ) {
+            ListaIngrespSapScreen(
+                navigateBack = { navController.popBackStack() },
+                onNavigateUp = { navController.navigateUp() },
+            )
+        }
+
         composable(route =ListaEntryDestination.route) {
             ListaEntryScreen(
                 navigateBack = { navController.popBackStack() },
@@ -139,7 +151,7 @@ fun InventoryNavHost(
             UsuarioLoginScreen(
                 navigateToListaEntry  = { navController.navigate(HomeListaDestino.route) },
                 navigateToUsuarioEntry = { navController.navigate(UsuarioEntryDestination.route) },
-                navigateToConsultor = { navController.navigate(ConsultorDestination.route) }
+                navigateToConsultor = { navController.navigate(ListaIngresoSapDestination.route) }
             )
         }
 
