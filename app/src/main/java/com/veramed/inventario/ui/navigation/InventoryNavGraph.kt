@@ -151,7 +151,7 @@ fun InventoryNavHost(
             UsuarioLoginScreen(
                 navigateToListaEntry  = { navController.navigate(HomeListaDestino.route) },
                 navigateToUsuarioEntry = { navController.navigate(UsuarioEntryDestination.route) },
-                navigateToConsultor = { navController.navigate(ListaIngresoSapDestination.route) }
+                navigateToConsultor = { navController.navigate("${ListaIngresoSapDestination.route}/${it}") }
             )
         }
 
