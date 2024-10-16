@@ -40,7 +40,12 @@ class ListaIngresoSapViewModel(
     private var existe by mutableStateOf(false)
     private var error by mutableStateOf(false)
 
-    var listaArticulosSapUIState by mutableStateOf( ListaArticuloSapUiState(itemList= getListaIngreso()))
+    var listaArticulosSapUIState by mutableStateOf(ListaArticuloSapUiState() )
+
+     init {
+         getListaIngreso(this)
+     }
+
 
 
     companion object {
@@ -52,6 +57,6 @@ class ListaIngresoSapViewModel(
 
 
 
-data class ListaArticuloSapUiState(val itemList: List<ArticuloSap> = listOf())
+data class ListaArticuloSapUiState(var itemList: List<ArticuloSap> = listOf())
 
 

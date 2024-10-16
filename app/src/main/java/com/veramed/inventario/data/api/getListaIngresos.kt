@@ -11,6 +11,7 @@ import com.veramed.inventario.ui.lista.AgregarItemUiState
 import com.veramed.inventario.ui.lista.ListaAgregarItemViewModel
 import com.veramed.inventario.ui.lista.ListaIngresoSapViewModel
 import com.veramed.inventario.ui.lista.ListaItemDetails
+import com.veramed.inventario.ui.lista.ListaTransmitirViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.coroutineScope
@@ -22,9 +23,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-fun getListaIngreso():List<ArticuloSap> {
+fun getListaIngreso(viewModel: ListaIngresoSapViewModel) {
 
-    var articulos: List<ArticuloSap> = listOf()
+    var artleidos: ArrayList<ArticuloSap> = ArrayList()
 
     var url = "http://192.10.47.88:8090/"
 
@@ -53,10 +54,11 @@ fun getListaIngreso():List<ArticuloSap> {
                 //Log.d("RMH", response.body())
             }
 
-            articulos = response.body()!!
+            val art = response.body()!!
 
-            if (!articulos!!.isEmpty()) {
-                for (articuloSap in articulos!!) {
+            if (!art!!.isEmpty()) {
+                viewModel.listaArticulosSapUIState.itemList = art
+                for (articuloSap in art!!) {
 
                     Log.d("Ingreso", "Sap = ${articuloSap.Sap}")
                     Log.d("Ingreso", "Descripcion = ${articuloSap.Descripcion}")
@@ -66,12 +68,14 @@ fun getListaIngreso():List<ArticuloSap> {
                 }
             }
 
-
         }
 
         override fun onFailure(call: Call<List<ArticuloSap>?>, t: Throwable) {
             Log.e("APIV", "Error found is : " + t.message)
         }
-    })
-    return articulos
+
+    }
+    )
+
+
 }

@@ -80,6 +80,7 @@ fun ListaIngrespSapScreen(
             }
         },
     ) { innerPadding ->
+
         ListaIngrespSapBody(
             listaUiState = viewModel.listaArticulosSapUIState,
             modifier = modifier.padding(innerPadding),
@@ -110,6 +111,7 @@ private fun ListaArticulosSap(
     itemList: List<ArticuloSap>,
     onItemClick: (ListaItems) -> Unit,
     modifier: Modifier = Modifier) {
+    Log.d("SAP"," Tamano de articulos "+itemList.size)
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         items(items = itemList, key = { it.Sap }) { listaitem ->
             ListItemSapRow(lista = listaitem, onItemClick = onItemClick)
