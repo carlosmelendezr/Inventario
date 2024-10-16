@@ -49,6 +49,7 @@
     <string name="lista_agregar_item">Agregar Item</string>
     <string name="lista_transmitir">Transmitir Lista</string>
     <string name="lista_ingreso_sap">Ingreso SAP</string>
+    <string name="lista_leer_qr">Escanear QR</string>
 
     <string name="usuario_login">Iniciar Sesion</string>
     <string name="usuario_entry">Registrar Usuario</string>
