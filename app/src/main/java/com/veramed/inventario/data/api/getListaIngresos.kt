@@ -23,7 +23,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-fun getListaIngreso(viewModel: ListaIngresoSapViewModel) {
+fun getListaIngreso(viewModel: ListaIngresoSapViewModel, docmat:String) {
 
     var artleidos: ArrayList<ArticuloSap> = ArrayList()
 
@@ -37,7 +37,7 @@ fun getListaIngreso(viewModel: ListaIngresoSapViewModel) {
 
     val retrofitapi = retrofit.create(RetrofitAPI::class.java)
 
-    val llamar: Call<List<ArticuloSap>> = retrofitapi.getListaItemSapApi("4916380978")
+    val llamar: Call<List<ArticuloSap>> = retrofitapi.getListaItemSapApi(docmat)
 
 
     llamar!!.enqueue(object : Callback<List<ArticuloSap>?> {

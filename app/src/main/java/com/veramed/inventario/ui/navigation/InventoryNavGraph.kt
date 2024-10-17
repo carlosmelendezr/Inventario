@@ -167,7 +167,7 @@ fun InventoryNavHost(
         composable(route = ListaLeerQRDestination.route) {
             ListaLeerQRScreen(
                 onNavigateBack= { navController.popBackStack() },
-                navigateToIngresoSap = {}
+                navigateToIngresoSap = {navController.navigate("${ListaIngresoSapDestination.route}/${it}")}
             )
         }
 

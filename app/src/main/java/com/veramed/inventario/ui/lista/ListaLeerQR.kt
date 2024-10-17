@@ -1,5 +1,6 @@
 package com.veramed.inventario.ui.lista
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.veramed.inventario.R
@@ -15,9 +16,13 @@ object ListaLeerQRDestination : NavigationDestination {
 @Composable
 fun ListaLeerQRScreen(
     onNavigateBack: () -> Unit,
-    navigateToIngresoSap:(Int) ->Unit,
+    navigateToIngresoSap:(String) ->Unit,
     viewModel: ListaLeerQRViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
 
     CameraQRPreview(viewModel.codigoQRUiState,viewModel::updateUiState)
+    if (!viewModel.codigoQRUiState.texto.isEmpty()) {
+        Log.d("INVBAR", "Docmat =" + viewModel.codigoQRUiState.texto)
+        navigateToIngresoSap(viewModel.codigoQRUiState.retDocMat(viewModel.codigoQRUiState.texto));
+    }
 }

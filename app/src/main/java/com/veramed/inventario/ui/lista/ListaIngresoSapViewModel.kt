@@ -43,7 +43,9 @@ class ListaIngresoSapViewModel(
     var listaArticulosSapUIState by mutableStateOf(ListaArticuloSapUiState() )
 
      init {
-         getListaIngreso(this)
+         if (listaArticulosSapUIState.itemList.isEmpty()) {
+             getListaIngreso(this, docmat)
+         }
      }
 
 

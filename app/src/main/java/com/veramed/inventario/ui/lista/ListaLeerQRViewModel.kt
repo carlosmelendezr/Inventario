@@ -23,4 +23,10 @@ class ListaLeerQRViewModel(
 
 data class CodigoQR (
     val texto:String =""
+
 )
+
+fun CodigoQR.retDocMat(texto:String):String {
+    val list = texto.split(";")
+    return list.get(3)
+}
