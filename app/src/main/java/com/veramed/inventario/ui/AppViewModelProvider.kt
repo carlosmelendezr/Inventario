@@ -19,6 +19,7 @@ import com.veramed.inventario.ui.lista.ListaAgregarItemViewModel
 import com.veramed.inventario.ui.lista.ListaDetalleViewModel
 import com.veramed.inventario.ui.lista.ListaEntryViewModel
 import com.veramed.inventario.ui.lista.ListaIngresoSapViewModel
+import com.veramed.inventario.ui.lista.ListaLeerQRViewModel
 import com.veramed.inventario.ui.lista.ListaTransmitirViewModel
 import com.veramed.inventario.ui.usuario.UsuarioEntryViewModel
 import com.veramed.inventario.ui.usuario.UsuarioLoginViewModel
@@ -112,6 +113,12 @@ object AppViewModelProvider {
                 this.createSavedStateHandle(),
                 inventoryApplication().container.itemsRepository,
                 inventoryApplication()
+            )
+        }
+
+        initializer {
+            ListaLeerQRViewModel(
+                this.createSavedStateHandle()
             )
         }
     }
