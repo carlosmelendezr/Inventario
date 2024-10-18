@@ -10,11 +10,12 @@ class ListaLeerQRViewModel(
     savedStateHandle: SavedStateHandle) : ViewModel() {
 
     var codigoQRUiState by mutableStateOf(CodigoQR())
-        private set
+
 
     fun updateUiState(codigoQR: CodigoQR) {
         codigoQRUiState =
             CodigoQR(texto = codigoQR.texto)
+
 
     }
 

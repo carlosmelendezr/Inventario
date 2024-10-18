@@ -5,6 +5,7 @@ import android.media.MediaPlayer
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -31,6 +32,8 @@ class ListaIngresoSapViewModel(
 
     private val mp: MediaPlayer = MediaPlayer.create(context, R.raw.error)
 
+    var isFirstComposition by mutableStateOf(true)
+
     /**
      * Holds current item ui state
      */
@@ -42,10 +45,16 @@ class ListaIngresoSapViewModel(
 
     var listaArticulosSapUIState by mutableStateOf(ListaArticuloSapUiState() )
 
+
+
      init {
-         if (listaArticulosSapUIState.itemList.isEmpty()) {
-             getListaIngreso(this, docmat)
-         }
+        if (isFirstComposition) {
+            Log.d("SAP", " Iniciando... lectura")
+            getListaIngreso(this, docmat)
+            isFirstComposition = false
+            docmat = ""
+        }
+
      }
 
 

@@ -133,7 +133,7 @@ fun CameraQRPreview(   codigoQR: CodigoQR,
             }
         },
         modifier = Modifier
-            .width(400.dp).height(200.dp),
+            .width(400.dp).height(400.dp),
 
         update = { previewView ->
             val cameraSelector: CameraSelector = CameraSelector.Builder()

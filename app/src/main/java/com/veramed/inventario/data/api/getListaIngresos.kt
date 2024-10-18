@@ -58,6 +58,7 @@ fun getListaIngreso(viewModel: ListaIngresoSapViewModel, docmat:String) {
 
             if (!art!!.isEmpty()) {
                 viewModel.listaArticulosSapUIState.itemList = art
+                viewModel.isFirstComposition = false
                 for (articuloSap in art!!) {
 
                     Log.d("Ingreso", "Sap = ${articuloSap.Sap}")
