@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Send
@@ -130,35 +131,60 @@ private fun ListItemSapRow(
 ) {
     Row(modifier = modifier
         .fillMaxWidth()
-        .clickable {  }
-        .padding(vertical = 5.dp, horizontal = 5.dp).clickable {   }
+        .clickable { }
+        .padding(vertical = 5.dp, horizontal = 5.dp)
+        .clickable { }
 
 
     ) {
-        Box(modifier=Modifier.weight(2f,fill=true)) {
-            Text(
-                text = lista.Sap,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.h6
-            )
+        Column() {
+
+            Row() {
+                Box(modifier = Modifier.weight(2f, fill = true)) {
+                    Text(
+                        text = lista.Sap,
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.h6
+                    )
+                    Text(
+                        text = lista.cantidad.toString(),
+                        fontWeight = FontWeight.Bold,
+                        modifier= Modifier.align(Alignment.CenterEnd),
+                        style = MaterialTheme.typography.h6,
+
+                    )
+                }
+
+
+
+            }
+            Row() {
+                Box(modifier = Modifier.weight(5f, fill = true)) {
+                    Text(
+                        text = lista.Descripcion,
+                        fontWeight = FontWeight.Normal,
+                        style = MaterialTheme.typography.h6
+                    )
+                }
+            }
+
+            Row( modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 20.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly) {
+
+                OutlinedButton(onClick = { },
+                    colors = buttonColors(androidx.compose.ui.graphics.Color.Green),)
+                    {
+                        Text("Aceptar")
+                    }
+                OutlinedButton(onClick = { },
+                    colors = buttonColors(androidx.compose.ui.graphics.Color.Red)) {
+                    Text("Rechazar")
+                }
+            }
+
         }
-        Spacer(modifier = Modifier.weight(1f,fill = true))
-        Box(modifier=Modifier.weight(5f,fill=true)) {
-            Text(
-                text = lista.Descripcion,
-                fontWeight = FontWeight.Normal,
-                style = MaterialTheme.typography.h6
-            )
-        }
-        Spacer(modifier = Modifier.weight(1f,fill = true))
-        Box(modifier=Modifier.weight(1f,fill=true)) {
-            Text(
-                text = lista.cantidad.toString(),
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.h6
-            )
-        }
-        Spacer(modifier = Modifier.weight(1f,fill = true))
 
     }
 }
