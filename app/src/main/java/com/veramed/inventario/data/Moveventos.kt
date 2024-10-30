@@ -8,13 +8,13 @@ data class Moveventos (
     @Expose(serialize = false,deserialize = true)
     val id: Int = 0,
     @SerializedName("idingreso")
-    val idingreso: Integer,
+    val idingreso: Int,
     @SerializedName("cant")
-    val cant: Integer,
+    val cant: Int,
     @SerializedName("idcausa")
-    val idcausa: Integer,
+    val idcausa: Int,
     @SerializedName("fecha")
-    val fecha: Date
+    val fecha: String
 )
 
 

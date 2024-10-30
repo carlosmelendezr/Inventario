@@ -57,13 +57,13 @@ fun getListaIngreso(viewModel: ListaIngresoSapViewModel, docmat:String) {
             val art = response.body()!!
 
             if (!art!!.isEmpty()) {
-                viewModel.listaArticulosSapUIState.itemList = art
-                viewModel.isFirstComposition = false
-                for (articuloSap in art!!) {
 
-                    Log.d("Ingreso", "Sap = ${articuloSap.Sap}")
+                viewModel.isFirstComposition = false
+               for (articuloSap in art!!) {
+                   viewModel.mRoomList.add( articuloSap )
+                   /* Log.d("Ingreso", "Sap = ${articuloSap.Sap}")
                     Log.d("Ingreso", "Descripcion = ${articuloSap.Descripcion}")
-                    Log.d("Ingreso", "Cantidad = ${articuloSap.cantidad}")
+                    Log.d("Ingreso", "Cantidad = ${articuloSap.cantidad}")*/
 
 
                 }

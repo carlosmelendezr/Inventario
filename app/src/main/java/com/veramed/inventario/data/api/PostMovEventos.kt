@@ -11,7 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 fun PostMovEventos(moveventos: Moveventos,
-                   viewModel: ListaIngresoSapViewModel
+
 ) {
     var exito = false
     var url = "http://192.10.47.88:8090/"

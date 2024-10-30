@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.*
+
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,11 +40,15 @@ import com.veramed.inventario.camara.CameraPreview
 import com.veramed.inventario.data.ArticuloSap
 import com.veramed.inventario.data.Lista
 import com.veramed.inventario.data.ListaItems
+import com.veramed.inventario.data.Moveventos
 import com.veramed.inventario.data.PostListaHomeServer
+import com.veramed.inventario.data.api.PostMovEventos
 import com.veramed.inventario.ui.AppViewModelProvider
 import com.veramed.inventario.ui.navigation.NavigationDestination
 import com.veramed.inventario.ui.theme.InventoryTheme
+import com.veramed.util.convertLongToTime
 import kotlinx.coroutines.launch
+import java.util.Date
 
 object ListaIngresoSapDestination : NavigationDestination {
     override val route = "lista_ingreso_sap"
@@ -60,7 +65,7 @@ fun ListaIngrespSapScreen(
     modifier: Modifier = Modifier,
     viewModel: ListaIngresoSapViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-
+    val listaItems = viewModel.mRoomList
     Scaffold(
         topBar = {
             InventoryTopAppBar(
@@ -82,10 +87,11 @@ fun ListaIngrespSapScreen(
         },
     ) { innerPadding ->
 
-        ListaIngrespSapBody(
-            listaUiState = viewModel.listaArticulosSapUIState,
-            modifier = modifier.padding(innerPadding),
-        )
+
+            ListaIngrespSapBody(
+                listaUiState = listaItems,
+                modifier = modifier.padding(innerPadding), onItemOk = viewModel::guardaItemOk
+            )
 
 
     }
@@ -93,7 +99,8 @@ fun ListaIngrespSapScreen(
 
 @Composable
 fun ListaIngrespSapBody(
-    listaUiState: ListaArticuloSapUiState,
+    listaUiState: List<ArticuloSap>?,
+    onItemOk: (Int) -> Unit,
     modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
@@ -102,21 +109,27 @@ fun ListaIngrespSapBody(
         verticalArrangement = Arrangement.spacedBy(32.dp)
     ) {
 
-        ListaArticulosSap(itemList = listaUiState.itemList,{})
+        ListaArticulosSap(itemList = listaUiState,onItemOk=onItemOk)
 
     }
 }
 
 @Composable
 private fun ListaArticulosSap(
-    itemList: List<ArticuloSap>,
-    onItemClick: (ListaItems) -> Unit,
+    itemList: List<ArticuloSap>?,
+    onItemOk: (Int) -> Unit,
     modifier: Modifier = Modifier) {
-    Log.d("SAP"," Tamano de articulos "+itemList.size)
+    if (itemList != null) {
+        Log.d("SAP"," Tamano de articulos "+itemList.size)
+    }
+
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        items(items = itemList, key = { it.Sap }) { listaitem ->
-            ListItemSapRow(lista = listaitem, onItemClick = onItemClick)
-            Divider()
+        if (itemList != null) {
+            items(items = itemList.filter { it.estatus==0 }, key = { it.Sap }) { listaitem ->
+                ListItemSapRow(lista = listaitem, onItemOk = onItemOk)
+                Divider()
+
+            }
         }
     }
 }
@@ -126,9 +139,11 @@ private fun ListaArticulosSap(
 @Composable
 private fun ListItemSapRow(
     lista: ArticuloSap,
-    onItemClick: (ListaItems) -> Unit,
+    onItemOk: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    if (lista.estatus>0) return
+
     Row(modifier = modifier
         .fillMaxWidth()
         .clickable { }
@@ -154,9 +169,6 @@ private fun ListItemSapRow(
 
                     )
                 }
-
-
-
             }
             Row() {
                 Box(modifier = Modifier.weight(5f, fill = true)) {
@@ -173,7 +185,7 @@ private fun ListItemSapRow(
                 .padding(bottom = 20.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly) {
 
-                OutlinedButton(onClick = { },
+                OutlinedButton(onClick =  {onItemOk(lista.id)} ,
                     colors = buttonColors(androidx.compose.ui.graphics.Color.Green),)
                     {
                         Text("Aceptar")
