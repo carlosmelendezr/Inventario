@@ -41,7 +41,6 @@ class ListaIngresoSapViewModel(
 
     private val mp: MediaPlayer = MediaPlayer.create(context, R.raw.error)
     var mRoomList = mutableStateListOf<ArticuloSap>()
-    //val mRoomList: mutableStateListOf<ArticuloSap>()=_mRoomList
 
 
     var isFirstComposition by mutableStateOf(true)
@@ -53,12 +52,10 @@ class ListaIngresoSapViewModel(
 
     var docmat: String = checkNotNull(savedStateHandle[ListaIngresoSapDestination.docmat])
 
-    private var existe by mutableStateOf(false)
+    var itemCorregir by mutableStateOf(MovEventoDetalle())
     private var error by mutableStateOf(false)
 
     var listaArticulosSapUIState by mutableStateOf(ListaArticuloSapUiState() )
-
-
 
      init {
         if (isFirstComposition) {
@@ -69,6 +66,21 @@ class ListaIngresoSapViewModel(
         }
 
      }
+
+    fun buscaItem(idingreso:Int) {
+        for (item in mRoomList) {
+
+            if (item.id == idingreso) {
+
+                itemCorregir = MovEventoDetalle(idingreso = item.id,
+                    id=item.id, cantidad = item.cantidad.toString(),sap=item.Sap,
+                    descrip=item.Descripcion)
+
+            }
+        }
+
+
+    }
 
     fun guardaItemOk(idingreso:Int) {
 
@@ -81,7 +93,6 @@ class ListaIngresoSapViewModel(
                PostMovEventos(
                    Moveventos(idingreso=item.id,cant=item.cantidad, idcausa = 0, fecha=hoy)
                )
-               //mRoomList.remove(item)
                nuevaLista.add(item.copy(estatus = 1))
 
            } else {
@@ -99,6 +110,26 @@ class ListaIngresoSapViewModel(
 
     }
 
+    fun guardaItemError() {
+
+        PostMovEventos(itemCorregir.toMovEvento(itemCorregir))
+
+    }
+
+    fun saveItem() {
+
+    }
+
+    fun actualizaUiState(item: MovEventoDetalle) {
+
+        itemCorregir = MovEventoDetalle(idingreso = item.idingreso,
+            id=item.id, cantidad = item.cantidad,sap=item.sap,
+            barra=item.barra,descrip=item.descrip)
+
+
+    }
+
+
 
 
     companion object {
@@ -112,4 +143,23 @@ class ListaIngresoSapViewModel(
 
 data class ListaArticuloSapUiState(var itemList: List<ArticuloSap> = listOf())
 
+data class MovEventoDetalle(
+    val id: Int = 0,
+    val idingreso:Int=0,
+    val cantidad: String= "",
+    val sap: String = "",
+    val barra:String = "",
+    var descrip:String = "",
+    var idcausa:Int = 0
+)
+
+
+fun MovEventoDetalle.toMovEvento(mov:MovEventoDetalle): Moveventos = Moveventos(
+    id = id,
+    idingreso= idingreso,
+    cant = cantidad.toIntOrNull() ?: 0,
+    idcausa = idcausa,
+    fecha = ""
+
+)
 

@@ -8,6 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.veramed.inventario.data.ArticuloSap
 import com.veramed.inventario.ui.home.*
 import com.veramed.inventario.ui.item.*
 import com.veramed.inventario.ui.lista.*
@@ -128,8 +129,21 @@ fun InventoryNavHost(
             ListaIngrespSapScreen(
                 navigateBack = { navController.popBackStack() },
                 onNavigateUp = { navController.navigateUp() },
+                navigateToIngresoSapCorregir = {navController.navigate(IngrespSapCorregirDestination.route)}
             )
         }
+
+        composable(
+            route = IngrespSapCorregirDestination.route,
+
+        ){
+            IngrespSapCorregirScreen(
+                navigateBack = { navController.popBackStack() },
+
+            )
+        }
+
+
 
         composable(route =ListaEntryDestination.route) {
             ListaEntryScreen(

@@ -61,7 +61,6 @@ class ListaDetalleViewModel(
     }
     fun saveItem() {
         var itemDetalle: ListaItemDetails = detalleUiState.itemDetalle
-        Log.d("APIV","itemDetalle lote "+itemDetalle.lote)
         itemDetalle.descrip = itemDetalle.name
         itemDetalle.lote = venceUiState.lote
         itemDetalle.fecvenc = venceUiState.fecvenc

@@ -121,6 +121,13 @@ object AppViewModelProvider {
                 this.createSavedStateHandle()
             )
         }
+
+        initializer {
+            ListaIngresoSapViewModel(
+                this.createSavedStateHandle(),
+                inventoryApplication()
+            )
+        }
     }
 }
 
