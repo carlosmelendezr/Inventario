@@ -106,7 +106,6 @@ class ListaIngresoSapViewModel(
         mRoomList.clear()
 
         for (item in nuevaLista) {
-            Log.d("SAPMOV", " Estatus Desdes ${item.estatus} ${item.Sap}")
             mRoomList.add(item)
         }
 
@@ -115,6 +114,19 @@ class ListaIngresoSapViewModel(
     fun guardaItemError() {
         PostMovEventos(itemCorregir.toMovEvento(itemCorregir))
         corregir=false
+
+        var nuevaLista : ArrayList<ArticuloSap> = ArrayList()
+        for (item in  mRoomList) {
+            if (itemCorregir.idingreso != item.id) {
+                nuevaLista.add(item)
+            }
+        }
+
+        mRoomList.clear()
+
+        for (item in nuevaLista) {
+            mRoomList.add(item)
+        }
 
     }
 
