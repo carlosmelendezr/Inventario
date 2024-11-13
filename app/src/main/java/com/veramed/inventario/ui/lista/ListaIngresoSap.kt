@@ -136,19 +136,21 @@ private fun ListaArticulosSap(
             }
         )
     }
+    if ( !viewModel.corregir ) {
+        LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            if (itemList != null) {
+                items(items = itemList.filter { it.estatus == 0 }, key = { it.Sap }) { listaitem ->
+                    ListItemSapRow(
+                        lista = listaitem, onItemOk = onItemOk,
+                        viewModel = viewModel
+                    )
+                    Divider()
 
-    LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        if (itemList != null) {
-            items(items = itemList.filter { it.estatus==0 }, key = { it.Sap }) { listaitem ->
-                ListItemSapRow(lista = listaitem, onItemOk = onItemOk,
-                    viewModel=viewModel)
-                Divider()
-
+                }
             }
         }
+
     }
-
-
 
 
 }
