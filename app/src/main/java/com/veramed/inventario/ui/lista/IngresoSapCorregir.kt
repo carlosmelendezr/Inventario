@@ -32,10 +32,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-object IngrespSapCorregirDestination : NavigationDestination {
-    override val route = "ingreso_sap_corregir"
-    override val titleRes = R.string.item_detail_title
-  }
+
 
 @Composable
 fun IngrespSapCorregirScreen(
@@ -69,7 +66,7 @@ fun IngrespSapCorregirScreen(
 }
 
 @Composable
-private fun ItemCorregirBody(
+public fun ItemCorregirBody(
     itemCorregir: MovEventoDetalle,
     onSaveItem: () -> Unit,
     onValueChange: (MovEventoDetalle) -> Unit ,
@@ -103,6 +100,11 @@ fun EditItemSapInputForm(
     enabled: Boolean = true
 ) {
 
+    val list = listOf("1-UNIDADES INCORRECTAS",
+        "2-ARTICULO DEFECTUOSO")
+
+    var expanded by remember { mutableStateOf(false) }
+
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(5.dp)) {
         OutlinedTextField(
             value = itemCorregir.descrip,
@@ -131,9 +133,50 @@ fun EditItemSapInputForm(
                 onValueChange = { onValueChange(itemCorregir.copy(cantidad =it)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 label = { Text(stringResource(R.string.quantity_req)) },
-                enabled = false,
+                enabled = true,
                 singleLine = true
             )
+
+        }
+
+        Box(modifier = Modifier.fillMaxWidth()) {
+            Row(modifier = Modifier.clickable {
+                expanded = !expanded
+            }.align(Alignment.Center)) {
+
+                OutlinedTextField(
+                    value = itemCorregir.idcausa,
+                    onValueChange = {onValueChange(itemCorregir.copy(idcausa =it))},
+                    label={Text("Causales")},
+                    modifier = Modifier.fillMaxWidth().clickable {
+                        expanded = !expanded
+                    },
+                    enabled = false,
+                    readOnly = true,
+                    singleLine = true)
+
+                Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = null)
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+
+
+                    list.forEach {
+
+                        DropdownMenuItem(onClick = {
+                            onValueChange(itemCorregir.copy(idcausa=it))
+                            expanded = false
+                        }) {
+
+                            Text(modifier = Modifier.fillMaxWidth(),text = it)
+
+                        }
+                    }
+
+                }
+            }
 
         }
 

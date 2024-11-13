@@ -62,7 +62,6 @@ object ListaIngresoSapDestination : NavigationDestination {
 fun ListaIngrespSapScreen(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
-    navigateToIngresoSapCorregir: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ListaIngresoSapViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
@@ -92,7 +91,7 @@ fun ListaIngrespSapScreen(
             ListaIngrespSapBody(
                 listaUiState = listaItems,
                 modifier = modifier.padding(innerPadding), onItemOk = viewModel::guardaItemOk,
-                navigateToIngresoSapCorregir = navigateToIngresoSapCorregir
+                viewModel = viewModel
             )
 
 
@@ -103,7 +102,7 @@ fun ListaIngrespSapScreen(
 fun ListaIngrespSapBody(
     listaUiState: List<ArticuloSap>?,
     onItemOk: (Int) -> Unit,
-    navigateToIngresoSapCorregir: () -> Unit,
+    viewModel: ListaIngresoSapViewModel,
     modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
@@ -113,7 +112,7 @@ fun ListaIngrespSapBody(
     ) {
 
         ListaArticulosSap(itemList = listaUiState,onItemOk=onItemOk,
-            navigateToIngresoSapCorregir=navigateToIngresoSapCorregir)
+            viewModel=viewModel)
 
     }
 }
@@ -122,22 +121,36 @@ fun ListaIngrespSapBody(
 private fun ListaArticulosSap(
     itemList: List<ArticuloSap>?,
     onItemOk: (Int) -> Unit,
-    navigateToIngresoSapCorregir: () -> Unit,
+    viewModel: ListaIngresoSapViewModel,
     modifier: Modifier = Modifier) {
     if (itemList != null) {
         Log.d("SAP"," Tamano de articulos "+itemList.size)
+    }
+
+    if ( viewModel.corregir ) {
+        ItemCorregirBody(
+            itemCorregir = viewModel.itemCorregir,
+            onValueChange = viewModel::actualizaUiState,
+            onSaveItem = {
+                viewModel.guardaItemError()
+            }
+        )
     }
 
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         if (itemList != null) {
             items(items = itemList.filter { it.estatus==0 }, key = { it.Sap }) { listaitem ->
                 ListItemSapRow(lista = listaitem, onItemOk = onItemOk,
-                    navigateToIngresoSapCorregir=navigateToIngresoSapCorregir)
+                    viewModel=viewModel)
                 Divider()
 
             }
         }
     }
+
+
+
+
 }
 
 
@@ -146,10 +159,11 @@ private fun ListaArticulosSap(
 private fun ListItemSapRow(
     lista: ArticuloSap,
     onItemOk: (Int) -> Unit,
-    navigateToIngresoSapCorregir: () -> Unit,
+    viewModel: ListaIngresoSapViewModel,
     modifier: Modifier = Modifier
 ) {
     if (lista.estatus>0) return
+
 
     Row(modifier = modifier
         .fillMaxWidth()
@@ -197,10 +211,11 @@ private fun ListItemSapRow(
                     {
                         Text("Aceptar")
                     }
-                OutlinedButton(onClick = {navigateToIngresoSapCorregir() },
+                OutlinedButton(onClick = {viewModel.corregirItem(lista)},
                     colors = buttonColors(androidx.compose.ui.graphics.Color.Red)) {
                     Text("Rechazar")
                 }
+
             }
 
         }
@@ -223,7 +238,6 @@ fun ListaIngrespSapScreenPreview() {
     InventoryTheme {
         ListaIngrespSapScreen(navigateBack = { /*Do nothing*/ },
             onNavigateUp = { /*Do nothing*/ },
-            navigateToIngresoSapCorregir = {}
 
         )
     }

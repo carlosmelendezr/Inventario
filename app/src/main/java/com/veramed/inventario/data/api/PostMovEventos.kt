@@ -50,6 +50,7 @@ fun PostMovEventos(moveventos: Moveventos,
         override fun onFailure(call: Call<Moveventos?>?, t: Throwable) {
             // we get error response from API.
             Log.e("MOVEVENTOS", "Error found is : " + t.message)
+            Log.e("MOVEVENTOS", moveventos.toString())
             //viewModel.envioExitoso=false
         }
 

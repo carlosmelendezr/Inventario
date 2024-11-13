@@ -129,19 +129,10 @@ fun InventoryNavHost(
             ListaIngrespSapScreen(
                 navigateBack = { navController.popBackStack() },
                 onNavigateUp = { navController.navigateUp() },
-                navigateToIngresoSapCorregir = {navController.navigate(IngrespSapCorregirDestination.route)}
-            )
-        }
-
-        composable(
-            route = IngrespSapCorregirDestination.route,
-
-        ){
-            IngrespSapCorregirScreen(
-                navigateBack = { navController.popBackStack() },
 
             )
         }
+
 
 
 

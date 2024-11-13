@@ -2,6 +2,7 @@ package com.veramed.inventario.ui.lista
 
 import android.content.Context
 import android.media.MediaPlayer
+import android.text.TextUtils.substring
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -51,6 +52,7 @@ class ListaIngresoSapViewModel(
      */
 
     var docmat: String = checkNotNull(savedStateHandle[ListaIngresoSapDestination.docmat])
+    var corregir by mutableStateOf(false)
 
     var itemCorregir by mutableStateOf(MovEventoDetalle())
     private var error by mutableStateOf(false)
@@ -111,20 +113,30 @@ class ListaIngresoSapViewModel(
     }
 
     fun guardaItemError() {
-
         PostMovEventos(itemCorregir.toMovEvento(itemCorregir))
+        corregir=false
 
     }
 
     fun saveItem() {
-
+        //corregir=false
     }
 
     fun actualizaUiState(item: MovEventoDetalle) {
 
-        itemCorregir = MovEventoDetalle(idingreso = item.idingreso,
+        itemCorregir = MovEventoDetalle(idingreso = item.id,
             id=item.id, cantidad = item.cantidad,sap=item.sap,
-            barra=item.barra,descrip=item.descrip)
+            barra="",descrip=item.descrip, idcausa = item.idcausa, fecha=hoy)
+
+    }
+
+    fun corregirItem(item: ArticuloSap) {
+
+        itemCorregir = MovEventoDetalle(idingreso = item.id,
+            id=item.id, cantidad = item.cantidad.toString(),sap=item.Sap,
+            barra="",descrip=item.Descripcion, fecha=hoy)
+
+        corregir=true
 
 
     }
@@ -150,7 +162,8 @@ data class MovEventoDetalle(
     val sap: String = "",
     val barra:String = "",
     var descrip:String = "",
-    var idcausa:Int = 0
+    var idcausa:String = "",
+    var fecha:String=""
 )
 
 
@@ -158,8 +171,8 @@ fun MovEventoDetalle.toMovEvento(mov:MovEventoDetalle): Moveventos = Moveventos(
     id = id,
     idingreso= idingreso,
     cant = cantidad.toIntOrNull() ?: 0,
-    idcausa = idcausa,
-    fecha = ""
+    idcausa = idcausa.substring(0,idcausa.indexOf("-")).toInt(),
+    fecha = fecha
 
 )
 
