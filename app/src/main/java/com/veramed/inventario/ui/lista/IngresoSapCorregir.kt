@@ -59,7 +59,6 @@ fun IngrespSapCorregirScreen(
                 viewModel.guardaItemError()
                 navigateBack()
             },
-
             modifier = modifier.padding(innerPadding)
         )
     }
@@ -90,6 +89,7 @@ public fun ItemCorregirBody(
         ) {
             Text(stringResource(R.string.save_action))
         }
+
     }
 }
 @Composable

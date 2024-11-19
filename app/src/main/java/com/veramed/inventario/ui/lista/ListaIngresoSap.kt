@@ -15,6 +15,7 @@ import androidx.compose.material.*
 import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.*
 
@@ -66,10 +67,11 @@ fun ListaIngrespSapScreen(
     viewModel: ListaIngresoSapViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val listaItems = viewModel.mRoomList
+    val despuesto = viewModel.puesto
     Scaffold(
         topBar = {
             InventoryTopAppBar(
-                title = stringResource(ListaAgregarItemDestination.titleRes) ,
+                title = despuesto.substring(despuesto.indexOf("-")+1) ,
                 canNavigateBack = true,
                 navigateUp = onNavigateUp
             )
@@ -110,9 +112,14 @@ fun ListaIngrespSapBody(
             .padding(5.dp),
         verticalArrangement = Arrangement.spacedBy(32.dp)
     ) {
-
-        ListaArticulosSap(itemList = listaUiState,onItemOk=onItemOk,
-            viewModel=viewModel)
+        if (viewModel.puesto.isNotBlank()) {
+            ListaArticulosSap(
+                itemList = listaUiState, onItemOk = onItemOk,
+                viewModel = viewModel
+            )
+        }else{
+            SeleccionarPuesto(viewModel = viewModel)
+        }
 
     }
 }
@@ -222,6 +229,62 @@ private fun ListItemSapRow(
 
         }
 
+    }
+}
+
+@Composable
+fun SeleccionarPuesto(
+    viewModel: ListaIngresoSapViewModel,
+    modifier: Modifier = Modifier
+) {
+
+    val list = listOf("3-SANTA MONICA PCP",
+        "2-SANTA MONICA TIENDA")
+
+    var expanded by remember { mutableStateOf(false) }
+
+    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+
+        Box(modifier = Modifier.fillMaxWidth()) {
+            Row(modifier = Modifier.clickable {
+                expanded = !expanded
+            }.align(Alignment.Center)) {
+
+                OutlinedTextField(
+                    value = viewModel.puesto,
+                    onValueChange = {viewModel.puesto =it},
+                    label={Text("Puesto")},
+                    modifier = Modifier.fillMaxWidth().clickable {
+                        expanded = !expanded
+                    },
+                    enabled = false,
+                    readOnly = true,
+                    singleLine = true)
+
+                Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = null)
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+
+
+                    list.forEach {
+
+                        DropdownMenuItem(onClick = {
+                            viewModel.puesto =it
+                            expanded = false
+                        }) {
+
+                            Text(modifier = Modifier.fillMaxWidth(),text = it)
+
+                        }
+                    }
+
+                }
+            }
+
+        }
     }
 }
 

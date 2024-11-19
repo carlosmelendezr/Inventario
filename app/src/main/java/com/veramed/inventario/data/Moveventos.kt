@@ -14,7 +14,9 @@ data class Moveventos (
     @SerializedName("idcausa")
     val idcausa: Int,
     @SerializedName("fecha")
-    val fecha: String
+    val fecha: String,
+    @SerializedName("idpuesto")
+    val idpuesto: Int
 )
 
 

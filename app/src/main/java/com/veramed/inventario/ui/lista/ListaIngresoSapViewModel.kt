@@ -53,6 +53,7 @@ class ListaIngresoSapViewModel(
 
     var docmat: String = checkNotNull(savedStateHandle[ListaIngresoSapDestination.docmat])
     var corregir by mutableStateOf(false)
+    var puesto by mutableStateOf("")
 
     var itemCorregir by mutableStateOf(MovEventoDetalle())
     private var error by mutableStateOf(false)
@@ -93,7 +94,9 @@ class ListaIngresoSapViewModel(
 
            if (item.id==idingreso) {
                PostMovEventos(
-                   Moveventos(idingreso=item.id,cant=item.cantidad, idcausa = 0, fecha=hoy)
+                   Moveventos(idingreso=item.id,
+                       cant=item.cantidad, idcausa = 0,
+                       fecha=hoy, idpuesto = puesto.substring(0,puesto.indexOf("-")).toInt())
                )
                nuevaLista.add(item.copy(estatus = 1))
 
@@ -112,7 +115,9 @@ class ListaIngresoSapViewModel(
     }
 
     fun guardaItemError() {
-        PostMovEventos(itemCorregir.toMovEvento(itemCorregir))
+        val itemGuadar = itemCorregir.copy(idpuesto = puesto)
+        Log.d("SAP", " Item guardar puesto = "+itemGuadar.idpuesto)
+        PostMovEventos(itemGuadar.toMovEvento(itemGuadar))
         corregir=false
 
         var nuevaLista : ArrayList<ArticuloSap> = ArrayList()
@@ -175,7 +180,8 @@ data class MovEventoDetalle(
     val barra:String = "",
     var descrip:String = "",
     var idcausa:String = "",
-    var fecha:String=""
+    var fecha:String="",
+    var idpuesto:String=""
 )
 
 
@@ -184,7 +190,8 @@ fun MovEventoDetalle.toMovEvento(mov:MovEventoDetalle): Moveventos = Moveventos(
     idingreso= idingreso,
     cant = cantidad.toIntOrNull() ?: 0,
     idcausa = idcausa.substring(0,idcausa.indexOf("-")).toInt(),
-    fecha = fecha
+    fecha = fecha,
+    idpuesto = idpuesto.substring(0,idpuesto.indexOf("-")).toInt()
 
 )
 
