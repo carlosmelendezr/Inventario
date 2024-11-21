@@ -57,6 +57,7 @@ class ListaIngresoSapViewModel(
 
     var itemCorregir by mutableStateOf(MovEventoDetalle())
     private var error by mutableStateOf(false)
+    private var cantant=""
 
     var listaArticulosSapUIState by mutableStateOf(ListaArticuloSapUiState() )
 
@@ -115,6 +116,7 @@ class ListaIngresoSapViewModel(
     }
 
     fun guardaItemError() {
+
         val itemGuadar = itemCorregir.copy(idpuesto = puesto)
         Log.d("SAP", " Item guardar puesto = "+itemGuadar.idpuesto)
         PostMovEventos(itemGuadar.toMovEvento(itemGuadar))
@@ -140,12 +142,20 @@ class ListaIngresoSapViewModel(
     }
 
     fun actualizaUiState(item: MovEventoDetalle) {
+        if (corregir) {
+            if (item.cantidad == cantant  ) {
+                Log.d("SAPMOV", " Estatus Antes ${item.cantidad} ${itemCorregir.cantidad}")
+                return
+            }
+        }
 
         itemCorregir = MovEventoDetalle(idingreso = item.id,
             id=item.id, cantidad = item.cantidad,sap=item.sap,
             barra="",descrip=item.descrip, idcausa = item.idcausa, fecha=hoy)
 
     }
+
+
 
     fun corregirItem(item: ArticuloSap) {
 
@@ -154,6 +164,7 @@ class ListaIngresoSapViewModel(
             barra="",descrip=item.Descripcion, fecha=hoy)
 
         corregir=true
+        cantant=itemCorregir.cantidad
 
 
     }

@@ -54,7 +54,7 @@ fun IngrespSapCorregirScreen(
         ) { innerPadding ->
         ItemCorregirBody(
             itemCorregir = uiState,
-            onValueChange = viewModel::actualizaUiState ,
+            onValueChange = viewModel::actualizaUiState,
             onSaveItem = {
                 viewModel.guardaItemError()
                 navigateBack()
@@ -71,6 +71,7 @@ public fun ItemCorregirBody(
     onValueChange: (MovEventoDetalle) -> Unit ,
     modifier: Modifier = Modifier
 ) {
+
     Column(
         modifier = modifier
             .padding(16.dp)
@@ -84,7 +85,7 @@ public fun ItemCorregirBody(
 
         Button(
             onClick = onSaveItem,
-            enabled = true,
+            enabled =  itemCorregir.idcausa.isNotBlank(),
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(stringResource(R.string.save_action))
@@ -102,6 +103,7 @@ fun EditItemSapInputForm(
 
     val list = listOf("1-UNIDADES INCORRECTAS",
         "2-ARTICULO DEFECTUOSO")
+
 
     var expanded by remember { mutableStateOf(false) }
 
